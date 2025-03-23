@@ -1,2 +1,12 @@
 @import "tailwindcss";
 @source "../views";
+@font-face {
+    font-family: 'Geist Variable';
+    src: url('../fonts/geist/Geist-VariableFont_wght.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+}
+body {
+    font-family: 'Geist Variable', sans-serif;
+    font-weight: 400;
+}
