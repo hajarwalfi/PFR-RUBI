@@ -14,5 +14,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Admin.Users.users');
+});
+Route::get('/userDetails', function () {
+    return view('Admin.Users.userDetails');
+});
+Route::get('/donationDetails', function () {
+    return view('Admin.Users.DonationDetails');
+});
+Route::get('/modifyDonation', function () {
+    return view('Admin.Users.ModifyDonationDetails');
+});
+Route::get('/addDonation', function () {
+    return view('Admin.Users.AddDonation');
+});
+Route::get('/modifyUser', function () {
+    return view('Admin.Users.ModifyUserInformation');
 });
