@@ -25,8 +25,8 @@
         <div class="bg-white rounded-lg border border-gray-200 p-3 px-4">
             <div class="flex justify-between items-center mb-1">
                 <h2 class="font-semibold text-sm">Donneurs Éligibles</h2>
-                <div class="p-2 rounded-full">
-                    <i class="fas fa-user text-gray-600"></i>
+                <div class="px-2 py-0.5 rounded-full bg-green-100">
+                    <span class="text-green-600 font-semibold">{{ $statistics['eligible'] }}</span>
                 </div>
             </div>
             <div class="text-2xl font-semibold mb-1">{{ $statistics['eligible_percent'] }} %</div>
@@ -37,8 +37,8 @@
         <div class="bg-white rounded-lg border border-gray-200 p-3 px-4">
             <div class="flex justify-between items-center mb-1">
                 <h2 class="font-semibold text-sm">Non Éligibles</h2>
-                <div class="p-2 rounded-full">
-                    <i class="fas fa-user text-gray-600"></i>
+                <div class="px-2 py-0.5 rounded-full bg-red-100">
+                    <span class="text-red-600 font-semibold">{{ $statistics['ineligible'] }}</span>
                 </div>
             </div>
             <div class="text-2xl font-semibold mb-1">{{ $statistics['ineligible_percent'] }} %</div>
@@ -49,8 +49,8 @@
         <div class="bg-white rounded-lg border border-gray-200 p-3 px-4">
             <div class="flex justify-between items-center mb-1">
                 <h2 class="font-semibold text-sm">Non Confirmés</h2>
-                <div class="p-2 rounded-full">
-                    <i class="fas fa-user text-gray-600"></i>
+                <div class="px-2 py-0.5 rounded-full bg-amber-100">
+                    <span class="text-amber-600 font-semibold">{{ $statistics['unconfirmed'] }}</span>
                 </div>
             </div>
             <div class="text-2xl font-semibold mb-1">{{ $statistics['unconfirmed'] }}</div>

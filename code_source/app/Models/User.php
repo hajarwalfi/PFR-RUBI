@@ -60,4 +60,8 @@ class User extends Authenticatable
     {
         return $this->roles()->where('name', $role)->exists();
     }
+    public function donations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Donation::class);
+    }
 }

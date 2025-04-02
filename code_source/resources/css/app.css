@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import '@fortawesome/fontawesome-free/css/all.min.css';
 @source "../views";
 @font-face {
     font-family: 'Geist Variable';
@@ -21,3 +22,4 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
