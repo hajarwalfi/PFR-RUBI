@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Donation;
@@ -43,7 +42,7 @@ class DonationController extends Controller
             $user = User::findOrFail($user_id);
         }
 
-        return view('Admin.donations.create', compact('user'));
+        return view('Admin.Users.createDonation', compact('user'));
     }
 
     /**
@@ -62,14 +61,12 @@ class DonationController extends Controller
             'serology.hb' => 'nullable|in:positive,negative,pending',
             'serology.hc' => 'nullable|in:positive,negative,pending',
             'serology.vih' => 'nullable|in:positive,negative,pending',
-            'observations' => 'nullable|array',
-            'observations.*.comment' => 'required|string',
         ]);
 
         $donation = $this->donationService->createDonation($validated);
 
         return redirect()->route('Donations.show', $donation->id)
-            ->with('success', 'Don créé avec succès.');
+            ->with('success', 'Donation created successfully.');
     }
 
     /**
@@ -77,7 +74,7 @@ class DonationController extends Controller
      */
     public function show(Donation $donation)
     {
-        // Charger les relations nécessaires si elles ne sont pas déjà chargées
+        // Load necessary relationships if they are not already loaded
         if (!$donation->relationLoaded('serology')) {
             $donation->load(['serology', 'observations', 'user']);
         }
@@ -93,7 +90,7 @@ class DonationController extends Controller
         $donation = $this->donationService->getDonationById($id);
 
         if (!$donation) {
-            return redirect()->route('Donations.index')->with('error', 'Don non trouvé.');
+            return redirect()->route('Donations.index')->with('error', 'Donation not found.');
         }
 
         return view('Admin.Users.editDonation', compact('donation'));
@@ -112,9 +109,9 @@ class DonationController extends Controller
         $result = $this->donationService->updateDonation($id, $validated);
 
         if ($result) {
-            return redirect()->back()->with('success', 'Don mis à jour avec succès.');
+            return redirect()->back()->with('success', 'Donation updated successfully.');
         } else {
-            return redirect()->back()->with('error', 'Erreur lors de la mise à jour du don.')->withInput();
+            return redirect()->back()->with('error', 'Error updating donation.')->withInput();
         }
     }
 
@@ -127,6 +124,6 @@ class DonationController extends Controller
         $this->donationService->deleteDonation($donation->id);
 
         return redirect()->route('Users.show', $user_id)
-            ->with('success', 'Don supprimé avec succès.');
+            ->with('success', 'Donation deleted successfully.');
     }
 }

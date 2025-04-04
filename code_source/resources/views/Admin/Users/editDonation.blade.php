@@ -6,14 +6,18 @@
     <main class="flex-1 p-6">
         <!-- Breadcrumb -->
         <div class="flex items-center text-sm text-gray-600 mb-6">
-            <a href="#" class="flex items-center">
-                <i class="fas fa-arrow-left h-4 w-4 mr-2"></i>
-            </a>
-            <a href="{{ route('Users.index') }}" class="hover:underline">Donors</a>
-            <span class="mx-2">></span>
-            <a href="{{ route('Users.show', $donation->user_id) }}" class="hover:underline">Medical Record</a>
-            <span class="mx-2">></span>
-            <span class="font-medium">Donation Details</span>
+            <div class="flex items-center space-x-2 text-xs">
+                <a href="{{ route('Users.show', $donation->user_id) }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                    <i class="fas fa-arrow-left h-2 w-4"></i>
+                </a>
+                <div class="flex items-center text-gray-500">
+                    <a href="{{ route('Users.index') }}" class="hover:text-black hover:underline">Donors</a>
+                    <span class="mx-2">&gt;</span>
+                    <a href="{{ route('Users.show', $donation->user_id) }}" class="hover:text-black hover:underline">{{ $donation->user->first_name }} {{ $donation->user->last_name }}</a>
+                    <span class="mx-2">&gt;</span>
+                    <a href="{{ route('Donations.show', $donation->id) }}" class="hover:text-black hover:underline">Donation Details</a>
+                </div>
+            </div>
         </div>
 
         <!-- Page Title -->
@@ -61,8 +65,7 @@
                         </label>
                         <select id="type" name="type" class="w-full px-3 py-2 border @error('type') border-red-500 @else border-gray-300 @enderror rounded-md">
                             <option value="Voluntary" {{ old('type', $donation->type) == 'Voluntary' ? 'selected' : '' }}>Voluntary</option>
-                            <option value="Family" {{ old('type', $donation->type) == 'Family' ? 'selected' : '' }}>Family</option>
-                            <option value="Paid" {{ old('type', $donation->type) == 'Paid' ? 'selected' : '' }}>Paid</option>
+                            <option value="Compensated" {{ old('type', $donation->type) == 'Compensated' ? 'selected' : '' }}>Compensated</option>
                         </select>
                         @error('type')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -117,8 +120,7 @@
             </div>
         </form>
 
-        <<form action="{{ route('Serology.update', $donation->serology->id ?? 0) }}" method="POST" style="display: inline;">
-            @csrf
+        <form action="{{ route('Serology.update', $donation->serology->id ?? 0) }}" method="POST" style="display: inline;">            @csrf
             @method('PUT')
             <input type="hidden" name="donation_id" value="{{ $donation->id }}">
 

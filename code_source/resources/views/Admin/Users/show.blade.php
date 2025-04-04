@@ -1,5 +1,5 @@
 @extends('Admin.layouts.aside')
-@section('title', 'RUBI Admin - Dossier Médical')
+@section('title', 'RUBI Admin - Medical Record')
 
 @section('content')
     <main class="flex-1">
@@ -11,7 +11,7 @@
                         <i class="fas fa-arrow-left h-5 w-5"></i>
                     </a>
                     <div class="flex items-center text-gray-500">
-                        <a href="{{ route('Users.index') }}" class="hover:text-black hover:underline">Donneurs</a>
+                        <a href="{{ route('Users.index') }}" class="hover:text-black hover:underline">Donors</a>
                         <span class="mx-2">&gt;</span>
                         <a href="{{ route('Users.show', $user->id) }}" class="hover:text-black hover:underline">{{ $user->first_name }} {{ $user->last_name }}</a>
                     </div>
@@ -19,13 +19,13 @@
 
                 <a href="{{ route('Users.edit', $user->id) }}" class="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2">
                     <i class="fas fa-edit h-5 w-5"></i>
-                    <span>Modifier le profil</span>
+                    <span>Edit Profile</span>
                 </a>
             </div>
 
-            <!-- Informations du donneur -->
+            <!-- Donor Information -->
             <div class="p-6">
-                <!-- Nom et statut -->
+                <!-- Name and status -->
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold mb-1">{{ $user->first_name }} {{ $user->last_name }}</h2>
                     <div class="flex items-center space-x-4">
@@ -40,22 +40,22 @@
                     </div>
                 </div>
 
-                <!-- Sections d'information avec grid personnalisée -->
+                <!-- Information sections with custom grid -->
                 <div class="grid grid-cols-12 gap-6">
-                    <!-- Informations personnelles -->
+                    <!-- Personal Information -->
                     <div class="col-span-12 md:col-span-4 border border-gray-200 rounded-lg overflow-hidden">
-                        <!-- Titre de la section -->
+                        <!-- Section title -->
                         <div class="p-4 border-b border-gray-200 flex items-center space-x-3">
                             <div class="bg-gray-100 p-2 rounded-full">
                                 <i class="fas fa-user h-5 w-5"></i>
                             </div>
                             <div class="space-y-1">
-                                <h3 class="font-bold">Informations Personnelles</h3>
-                                <p class="text-xs text-gray-500">Coordonnées et détails du donneur</p>
+                                <h3 class="font-bold">Personal Information</h3>
+                                <p class="text-xs text-gray-500">Contact details and donor information</p>
                             </div>
                         </div>
 
-                        <!-- Groupe sanguin -->
+                        <!-- Blood group -->
                         <div class="p-4 border-b border-gray-200 flex">
                             <div class="flex items-center justify-center w-16 h-16">
                                 <div class="text-red-500">
@@ -68,36 +68,36 @@
                                     $isEligible = $userService->isUserEligible($user);
                                 @endphp
                                 <div class="text-{{ $isEligible ? 'green' : 'red' }}-600 font-medium">
-                                    {{ $isEligible ? 'Éligible' : 'Inéligible' }}
+                                    {{ $isEligible ? 'Eligible' : 'Ineligible' }}
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Identité CIN -->
+                        <!-- Identity Card -->
                         <div class="p-4 border-b border-gray-200">
                             <div class="flex items-center mb-1">
                                 <i class="fas fa-id-card h-5 w-5 text-gray-400 mr-2"></i>
-                                <span class="text-gray-600 text-xs ">Identité CIN</span>
+                                <span class="text-gray-600 text-xs">Identity Card</span>
                             </div>
-                            <p class="font-medium text-sm pl-7">{{ $user->cni ?? 'Non renseigné' }}</p>
+                            <p class="font-medium text-sm pl-7">{{ $user->cni ?? 'Not provided' }}</p>
                         </div>
 
-                        <!-- Date de naissance -->
+                        <!-- Birth Date -->
                         <div class="p-4 border-b border-gray-200">
                             <div class="flex items-center mb-1">
                                 <i class="fas fa-birthday-cake h-5 w-5 text-gray-400 mr-2"></i>
-                                <span class="text-gray-600 text-xs">Date de naissance</span>
+                                <span class="text-gray-600 text-xs">Birth Date</span>
                             </div>
-                            <p class="font-medium pl-7 text-sm">{{ $user->birth_date ? $user->birth_date->format('d/m/Y') : 'Non renseignée' }}</p>
+                            <p class="font-medium pl-7 text-sm">{{ $user->birth_date ? $user->birth_date->format('m/d/Y') : 'Not provided' }}</p>
                         </div>
 
-                        <!-- Téléphone -->
+                        <!-- Phone -->
                         <div class="p-4 border-b border-gray-200">
                             <div class="flex items-center mb-1">
                                 <i class="fas fa-phone h-5 w-5 text-gray-400 mr-2"></i>
-                                <span class="text-gray-600 text-xs">Téléphone</span>
+                                <span class="text-gray-600 text-xs">Phone</span>
                             </div>
-                            <p class="font-medium pl-7 text-sm">{{ $user->phone ?? 'Non renseigné' }}</p>
+                            <p class="font-medium pl-7 text-sm">{{ $user->phone ?? 'Not provided' }}</p>
                         </div>
 
                         <!-- Email -->
@@ -109,36 +109,36 @@
                             <p class="font-medium pl-7 text-sm">{{ $user->email }}</p>
                         </div>
 
-                        <!-- Adresse -->
+                        <!-- Address -->
                         <div class="p-4">
                             <div class="flex items-center mb-1">
                                 <i class="fas fa-map-marker-alt h-5 w-5 text-gray-400 mr-2"></i>
-                                <span class="text-gray-600 text-xs">Adresse</span>
+                                <span class="text-gray-600 text-xs">Address</span>
                             </div>
-                            <p class="font-medium pl-7 text-sm">{{ $user->address ?? 'Non renseignée' }}</p>
+                            <p class="font-medium pl-7 text-sm">{{ $user->address ?? 'Not provided' }}</p>
                         </div>
                     </div>
 
-                    <!-- Historique des dons -->
+                    <!-- Donation History -->
                     <div class="col-span-12 md:col-span-8 border border-gray-200 rounded-lg overflow-hidden">
-                        <!-- Titre de la section -->
+                        <!-- Section title -->
                         <div class="p-4 border-b border-gray-200 flex items-center justify-between">
                             <div class="flex items-center space-x-3">
                                 <div class="bg-gray-100 p-2 rounded-full">
                                     <i class="fas fa-history h-5 w-5"></i>
                                 </div>
                                 <div class="space-y-1">
-                                    <h3 class="font-bold">Historique des dons</h3>
-                                    <p class="text-xs text-gray-500">Historique des dons de sang</p>
+                                    <h3 class="font-bold">Donation History</h3>
+                                    <p class="text-xs text-gray-500">Blood donation history</p>
                                 </div>
                             </div>
                             <a href="{{ route('Donations.create', ['user_id' => $user->id]) }}" class="bg-black text-white px-3 py-2 rounded-md flex items-center text-sm">
                                 <i class="fas fa-plus h-5 w-5 mr-1"></i>
-                                Ajouter un don
+                                Add Donation
                             </a>
                         </div>
 
-                        <!-- Tableau des dons -->
+                        <!-- Donations table -->
                         <div>
                             <table class="min-w-full divide-y divide-gray-200 rounded-md">
                                 <thead>
@@ -146,7 +146,7 @@
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sérologie</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Serology</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                                 </tr>
                                 </thead>
@@ -154,7 +154,7 @@
                                 @forelse($user->donations as $donation)
                                     <tr>
                                         <td class="px-6 py-4 text-xs text-left text-gray-900">{{ $donation->identifier }}</td>
-                                        <td class="px-6 py-4 text-xs text-left text-gray-500">{{ $donation->date->format('d/m/Y') }}</td>
+                                        <td class="px-6 py-4 text-xs text-left text-gray-500">{{ $donation->date->format('m/d/Y') }}</td>
                                         <td class="px-6 py-4 text-xs text-left text-gray-500">{{ $donation->type }}</td>
                                         <td class="px-6 py-4">
                                             @if($donation->serology)
@@ -164,12 +164,12 @@
                                                     @else
                                                         <i class="fas fa-check-circle h-5 w-5 mr-1"></i>
                                                     @endif
-                                                    {{ $donation->serology->result === 'positive' ? 'Positive' : 'Négative' }}
+                                                    {{ $donation->serology->result === 'positive' ? 'Positive' : 'Negative' }}
                                                 </span>
                                             @else
                                                 <span class="flex items-center text-xs text-gray-500">
                                                     <i class="fas fa-clock h-5 w-5 mr-1"></i>
-                                                    En attente
+                                                    Pending
                                                 </span>
                                             @endif
                                         </td>
@@ -181,10 +181,10 @@
                                                 <div class="donation-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-10">
                                                     <div class="py-1">
                                                         <a href="{{ route('Donations.show', $donation->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                            <i class="far fa-eye mr-2"></i> Voir détails
+                                                            <i class="far fa-eye mr-2"></i> View details
                                                         </a>
                                                         <a href="{{ route('Donations.edit', $donation->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                            <i class="far fa-edit mr-2"></i> Modifier
+                                                            <i class="far fa-edit mr-2"></i> Edit
                                                         </a>
                                                     </div>
                                                 </div>
@@ -193,7 +193,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">Aucun don enregistré pour ce donneur.</td>
+                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">No donations recorded for this donor.</td>
                                     </tr>
                                 @endforelse
                                 </tbody>

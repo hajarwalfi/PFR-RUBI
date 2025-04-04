@@ -10,7 +10,7 @@ class UserController extends Controller
     protected UserService $userService;
 
     /**
-     * Constructeur avec injection de dépendance du UserService
+     * Constructor with UserService dependency injection
      */
     public function __construct(UserService $userService)
     {
@@ -19,45 +19,45 @@ class UserController extends Controller
     }
 
     /**
-     * Affiche la liste des utilisateurs
+     * Display the list of users
      */
     public function index(Request $request)
     {
-        // Récupérer les filtres de la requête
+        // Get filters from the request
         $filters = [
             'search' => $request->input('search'),
             'eligibility' => $request->input('eligibility'),
             'per_page' => $request->input('per_page', 10)
         ];
 
-        // Utiliser le service pour récupérer les données
+        // Use the service to retrieve data
         $users = $this->userService->getAllUsers($filters);
         $statistics = $this->userService->getUsersStatistics();
 
-        // Passer le service à la vue pour utiliser ses méthodes
+        // Pass the service to the view to use its methods
         return view('Admin.Users.index', [
             'users' => $users,
             'statistics' => $statistics,
             'request' => $request,
-            'userService' => $this->userService // Important pour utiliser les méthodes du service dans la vue
+            'userService' => $this->userService // Important to use service methods in the view
         ]);
     }
 
     /**
-     * Affiche les détails d'un utilisateur
+     * Display user details
      */
     public function show($id)
     {
-        // Utiliser le service pour récupérer l'utilisateur
+        // Use the service to retrieve the user
         $user = $this->userService->getUserById($id);
 
-        // Vérifier si l'utilisateur existe
+        // Check if the user exists
         if (!$user) {
             return redirect()->route('Admin.Users.index')
-                ->with('error', 'Utilisateur non trouvé');
+                ->with('error', 'User not found');
         }
 
-        // Passer le service à la vue
+        // Pass the service to the view
         return view('Admin.Users.show', [
             'user' => $user,
             'userService' => $this->userService
@@ -65,25 +65,25 @@ class UserController extends Controller
     }
 
     /**
-     * Supprime un utilisateur
+     * Delete a user
      */
     public function destroy($id)
     {
-        // Utiliser le service pour supprimer l'utilisateur
+        // Use the service to delete the user
         $result = $this->userService->deleteUser($id);
 
-        // Rediriger avec un message de succès ou d'erreur
+        // Redirect with a success or error message
         if ($result) {
             return redirect()->route('Admin.Users.index')
-                ->with('success', 'Utilisateur supprimé avec succès');
+                ->with('success', 'User deleted successfully');
         } else {
             return redirect()->route('Admin.Users.index')
-                ->with('error', 'Erreur lors de la suppression de l\'utilisateur');
+                ->with('error', 'Error deleting user');
         }
     }
 
     /**
-     * Affiche le formulaire pour créer un nouvel utilisateur
+     * Display the form to create a new user
      */
     public function create()
     {
@@ -91,11 +91,11 @@ class UserController extends Controller
     }
 
     /**
-     * Enregistre un nouvel utilisateur
+     * Save a new user
      */
     public function store(Request $request)
     {
-        // Valider les données du formulaire
+        // Validate form data
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -108,15 +108,15 @@ class UserController extends Controller
             'gender' => 'nullable|in:male,female',
         ]);
 
-        // Utiliser le service pour créer l'utilisateur
+        // Use the service to create the user
         $user = $this->userService->createUser($validated);
 
         return redirect()->route('Admin.Users.index')
-            ->with('success', 'Utilisateur créé avec succès');
+            ->with('success', 'User created successfully');
     }
 
     /**
-     * Affiche le formulaire pour modifier un utilisateur
+     * Display the form to edit a user
      */
     public function edit($id)
     {
@@ -124,18 +124,15 @@ class UserController extends Controller
 
         if (!$user) {
             return redirect()->route('Admin.Users.index')
-                ->with('error', 'Utilisateur non trouvé');
+                ->with('error', 'User not found');
         }
 
-        return view('Admin.Users.edit', compact('user'));
+        return view('Admin.Users.editUser', compact('user'));
     }
 
-    /**
-     * Met à jour un utilisateur
-     */
     public function update(Request $request, $id)
     {
-        // Valider les données du formulaire
+        // Validate form data
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -147,15 +144,16 @@ class UserController extends Controller
             'gender' => 'nullable|in:male,female',
         ]);
 
-        // Utiliser le service pour mettre à jour l'utilisateur
+        // Use the service to update the user
         $result = $this->userService->updateUser($id, $validated);
 
         if ($result) {
-            return redirect()->route('Admin.Users.index')
-                ->with('success', 'Utilisateur mis à jour avec succès');
+            // Redirect to the user's medical record instead of the users list
+            return redirect()->route('Users.show', $id)
+                ->with('success', 'User updated successfully');
         } else {
             return redirect()->route('Admin.Users.edit', $id)
-                ->with('error', 'Erreur lors de la mise à jour de l\'utilisateur');
+                ->with('error', 'Error updating user');
         }
     }
 }

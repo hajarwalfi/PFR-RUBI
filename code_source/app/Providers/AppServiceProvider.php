@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Repositories\Eloquent\ArticleRepository;
 use App\Repositories\Eloquent\DonationRepository;
 use App\Repositories\Eloquent\ObservationRepository;
 use App\Repositories\Eloquent\SerologyRepository;
 use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Interfaces\ArticleRepositoryInterface;
 use App\Repositories\Interfaces\DonationRepositoryInterface;
 use App\Repositories\Interfaces\ObservationRepositoryInterface;
 use App\Repositories\Interfaces\SerologyRepositoryInterface;
@@ -31,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SerologyService::class, function ($app) {
             return new SerologyService($app->make(SerologyRepositoryInterface::class));
         });
+        $this->app->bind(ArticleRepositoryInterface::class, ArticleRepository::class);
+
     }
 
     /**

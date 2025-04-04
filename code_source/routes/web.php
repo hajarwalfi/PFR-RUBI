@@ -30,9 +30,10 @@ use App\Http\Controllers\UserController;
 //Route::get('/addDonation', function () {
 //    return view('Admin.Users.AddDonation');
 //});
-//Route::get('/modifyUser', function () {
-//    return view('Admin.Users.ModifyUserInformation');
-//});
+Route::get('/posts', function () {
+   return view('Admin.Posts.index');
+});
+Route::resource('articles', App\Http\Controllers\ArticleController::class);
 
 
 
