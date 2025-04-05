@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\DonationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -30,11 +31,8 @@ use App\Http\Controllers\UserController;
 //Route::get('/addDonation', function () {
 //    return view('Admin.Users.AddDonation');
 //});
-Route::get('/posts', function () {
-   return view('Admin.Posts.index');
-});
-Route::resource('articles', App\Http\Controllers\ArticleController::class);
 
+Route::resource('articles', ArticleController::class);
 
 
 Route::put('/serology/{id}', [App\Http\Controllers\SerologyController::class, 'update'])->name('Serology.update');

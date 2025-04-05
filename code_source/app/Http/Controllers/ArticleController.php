@@ -50,13 +50,13 @@ class ArticleController extends Controller
 
         $this->articleService->createArticle($validated);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Publication créée avec succès');
+        return redirect()->route('admin.Articles.index')->with('success', 'Publication créée avec succès');
     }
 
     public function show($id)
     {
         $article = $this->articleService->getArticleById($id);
-        return view('admin.articles.show', compact('article'));
+        return view('Admin.Articles.show', compact('article'));
     }
 
     public function edit($id)

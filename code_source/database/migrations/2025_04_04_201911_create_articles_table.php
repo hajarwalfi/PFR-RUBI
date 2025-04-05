@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('picture');
             $table->longText('content');
             $table->enum('status', ['published', 'draft', 'archived'])->default('draft');
             $table->date('date');
