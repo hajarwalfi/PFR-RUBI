@@ -69,7 +69,7 @@
                         <p class="text-sm text-gray-500">Consultez et gérez les articles enregistrés dans l'application RUBI</p>
                     </div>
                     <div>
-                        <a href="/admin/articles/create" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 px-3">
+                        <a href="{{ route('articles.create') }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-black text-white hover:bg-gray-800 h-9 px-3">
                             <i class="fas fa-plus mr-2"></i>
                             Ajouter un article
                         </a>

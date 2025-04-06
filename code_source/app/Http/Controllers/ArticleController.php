@@ -36,21 +36,53 @@ class ArticleController extends Controller
 
     public function create()
     {
-        return view('admin.articles.create');
+        return view('Admin.Articles.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'status' => 'required|in:published,draft,archived',
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
+            'status' => 'required|in:draft,published,archived',
             'date' => 'required|date',
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $this->articleService->createArticle($validated);
+        // Traitement de l'image principale
+        if ($request->hasFile('picture')) {
+            $picturePath = $request->file('picture')->store('articles/pictures', 'public');
+            $validatedData['picture'] = $picturePath;
+        }
 
-        return redirect()->route('admin.Articles.index')->with('success', 'Publication créée avec succès');
+        // Solution temporaire : définir user_id = 1 (admin) pour tous les articles
+        $validatedData['user_id'] = 1;
+
+        // Création de l'article
+        $article = $this->articleService->createArticle($validatedData);
+
+        return redirect()->route('articles.show', $article->id)
+            ->with('success', 'Article créé avec succès.');
+    }
+
+    public function uploadTrixAttachment(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            $request->validate([
+                'file' => 'required|file|image|max:5000',
+            ]);
+
+            // Stocker toutes les images dans le même dossier 'articles/pictures'
+            $path = $file->store('articles/pictures', 'public');
+
+            return response()->json([
+                'url' => asset('storage/' . $path)
+            ]);
+        }
+
+        return response()->json(['error' => 'Aucun fichier n\'a été téléchargé.'], 422);
     }
 
     public function show($id)
@@ -62,26 +94,47 @@ class ArticleController extends Controller
     public function edit($id)
     {
         $article = $this->articleService->getArticleById($id);
-        return view('admin.articles.edit', compact('article'));
+        return view('Admin.Articles.edit', compact('article'));
     }
 
     public function update(Request $request, $id)
     {
+        $article = $this->articleService->getArticleById($id);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'status' => 'required|in:published,draft,archived',
             'date' => 'required|date',
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // L'image est optionnelle lors de l'édition
         ]);
 
+        // Traitement de l'image principale si une nouvelle est téléchargée
+        if ($request->hasFile('picture')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($article->picture && file_exists(storage_path('app/public/' . $article->picture))) {
+                unlink(storage_path('app/public/' . $article->picture));
+            }
+
+            // Stocker la nouvelle image
+            $picturePath = $request->file('picture')->store('articles/pictures', 'public');
+            $validated['picture'] = $picturePath;
+        } else {
+            // Ne pas modifier l'image si aucune nouvelle n'est fournie
+            unset($validated['picture']);
+        }
+
+        // Mise à jour de l'article
         $this->articleService->updateArticle($id, $validated);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Publication mise à jour avec succès');
+        return redirect()->route('articles.show', $id)
+            ->with('success', 'Article mis à jour avec succès');
     }
 
     public function destroy($id)
     {
         $this->articleService->deleteArticle($id);
-        return redirect()->route('admin.articles.index')->with('success', 'Publication supprimée avec succès');
+        return redirect()->route('Admin.Articles.index')->with('success', 'Publication supprimée avec succès');
     }
+
 }

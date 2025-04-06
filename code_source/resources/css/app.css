@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import '@fortawesome/fontawesome-free/css/all.min.css';
+@import 'trix/dist/trix.css';
 @source "../views";
 @font-face {
     font-family: 'Geist Variable';
@@ -22,4 +23,28 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+/* Personnalisation de l'éditeur Trix */
+trix-editor {
+    min-height: 300px;
+    border-radius: 0.375rem;
+    border-color: #e5e7eb;
+    padding: 0.5rem;
+}
 
+trix-editor:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.trix-button-group {
+    border-color: #e5e7eb;
+}
+
+.trix-button {
+    border-bottom: none;
+}
+
+.trix-button.trix-active {
+    background: #f3f4f6;
+}

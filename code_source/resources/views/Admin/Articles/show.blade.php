@@ -17,7 +17,7 @@
                         <span class="text-gray-800">Détails de l'article</span>
                     </div>
                 </div>
-                <a href="/admin/articles/{{ $article->id }}/edit" class="inline-flex items-center justify-center rounded-md bg-black text-white px-4 py-2 text-sm font-medium">
+                <a href="{{ route('articles.edit', $article->id) }}" class="inline-flex items-center justify-center rounded-md bg-black text-white px-4 py-2 text-sm font-medium">
                     <i class="fas fa-edit mr-2"></i>
                     Modifier l'article
                 </a>
@@ -97,10 +97,15 @@
                             </form>
                         @endif
 
-                        <button class="flex-1 flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700" onclick="document.getElementById('deleteDialog').classList.add('show')">
-                            <i class="fas fa-trash mr-2"></i>
-                            Supprimer
-                        </button>
+
+                        <form action="{{ route('articles.destroy', $article->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                                <button class="flex-1 flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700" onclick="document.getElementById('deleteDialog').classList.add('show')">
+                                    <i class="fas fa-trash mr-2"></i>
+                                    Supprimer
+                                </button>
+                        </form>
                     </div>
                 </div>
 
