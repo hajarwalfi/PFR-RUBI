@@ -5,7 +5,9 @@ use App\Http\Controllers\DonationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
-
+Route::get('/posts', function () {
+    return view('Admin.Posts.index');
+});
 Route::resource('articles', ArticleController::class);
 
 Route::post('/admin/upload-trix-attachment', [ArticleController::class, 'uploadTrixAttachment'])->name('upload.trix-attachment');

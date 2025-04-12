@@ -97,10 +97,21 @@
                             </div>
                             <p class="font-medium pl-7 text-sm">{{ $article->updated_at->format('d/m/Y') }}</p>
                         </div>
+                        <!-- Modified Date -->
+                        <div class="p-4 border-t border-gray-200">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-image h-5 w-5 text-gray-400 mr-2"></i>
+                                <span class="text-gray-600 text-xs">Article Image</span>
+                            </div>
+                            <div class="mt-2">
+                                <img src="{{ asset('storage/' . $article->picture) }}" alt="{{ $article->title }}" class="w-full rounded-md object-cover">
+                            </div>
+                        </div>
 
                         <!-- Action Buttons -->
+                        <!-- Action Buttons -->
                         <div class="p-4 space-y-2">
-                            @if($article->status != 'archived')
+                            @if($article->status == 'published')
                                 <form action="{{ route('articles.archive', $article->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
@@ -125,6 +136,7 @@
                                 Delete
                             </button>
                         </div>
+
                     </div>
 
                     <!-- Article Content -->

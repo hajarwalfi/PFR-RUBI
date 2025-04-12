@@ -1,7 +1,8 @@
 @extends('Admin.layouts.aside')
-@section('title', 'RUBI Admin - Ajouter un article')
+@section('title', 'RUBI Admin - Add Article')
 
 @section('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css" />
     <style>
         trix-editor {
             min-height: 300px;
@@ -19,128 +20,161 @@
 @endsection
 
 @section('content')
-    <!-- Main Content -->
-    <main class="flex-1 overflow-auto">
-        <div class="p-4 bg-gray-100 border-b border-gray-200">
-            <h1 class="text-lg font-medium text-gray-500">Ajouter un article</h1>
-        </div>
-
-        <div class="p-6">
-            <!-- Fil d'Ariane -->
-            <div class="flex items-center gap-2 mb-6">
-                <a href="{{ route('articles.index') }}" class="inline-flex items-center justify-center rounded-md border border-gray-200 bg-white h-8 w-8 p-0">
-                    <i class="fas fa-arrow-left text-gray-600"></i>
-                </a>
-                <div class="text-sm">
-                    <a href="{{ route('articles.index') }}" class="text-gray-600 hover:underline">Articles</a>
-                    <span class="text-gray-400 mx-1">></span>
-                    <span class="text-gray-800">Nouvelle publication</span>
-                </div>
-            </div>
-
-            <!-- Titre et sous-titre -->
-            <div class="mb-6">
-                <h1 class="text-2xl font-bold mb-1">Créer un nouvel article</h1>
-                <p class="text-sm text-gray-500">Créez une nouvelle publication pour informer les utilisateurs de l'application RUBI</p>
-            </div>
-
-            <!-- Formulaire d'article -->
-            <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data" class="bg-white border border-gray-200 rounded-md p-6 mb-6">
-                @csrf
-                <h2 class="text-lg font-medium mb-6">Informations de l'article</h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <!-- Titre de l'article -->
-                    <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Titre de l'article</label>
-                        <input
-                            type="text"
-                            id="title"
-                            name="title"
-                            placeholder="Écrivez le titre de l'article"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm @error('title') border-red-500 @enderror"
-                            value="{{ old('title') }}"
-                            required
-                        >
-                        @error('title')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Statut -->
-                    <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
-                        <select
-                            id="status"
-                            name="status"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm @error('status') border-red-500 @enderror"
-                            required
-                        >
-                            <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Brouillon</option>
-                            <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Publié</option>
-                            <option value="archived" {{ old('status') == 'archived' ? 'selected' : '' }}>Archivé</option>
-                        </select>
-                        @error('status')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Date de publication -->
-                    <div>
-                        <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date de publication</label>
-                        <input
-                            type="date"
-                            id="date"
-                            name="date"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm @error('date') border-red-500 @enderror"
-                            value="{{ old('date', date('Y-m-d')) }}"
-                            required
-                        >
-                        @error('date')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Image principale (picture) -->
-                    <div>
-                        <label for="picture" class="block text-sm font-medium text-gray-700 mb-1">Image principale (obligatoire)</label>
-                        <input
-                            type="file"
-                            id="picture"
-                            name="picture"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm @error('picture') border-red-500 @enderror"
-                            accept="image/*"
-                            required
-                        >
-                        <p class="text-xs text-gray-500 mt-1">Cette image sera utilisée comme aperçu de l'article</p>
-                        @error('picture')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <!-- Contenu avec Trix Editor -->
-                <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Contenu</label>
-                    <input id="content" type="hidden" name="content" value="{{ old('content') }}">
-                    <trix-editor input="content" class="trix-content border border-gray-300 rounded-md min-h-[300px] @error('content') border-red-500 @enderror"></trix-editor>
-                    <p class="text-xs text-gray-500 mt-1">Vous pouvez insérer du texte et des images dans le contenu</p>
-                    @error('content')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Boutons d'action -->
-                <div class="flex justify-between">
-                    <a href="{{ route('articles.index') }}" class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm">
-                        Annuler
+    <main class="flex-1">
+        <div class="flex-1">
+            <!-- Navigation -->
+            <div class="p-4 flex justify-between items-center border-b border-gray-200">
+                <div class="flex items-center space-x-2 text-xs">
+                    <a href="{{ route('articles.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                        <i class="fas fa-arrow-left h-5 w-5"></i>
                     </a>
-                    <button type="submit" class="px-4 py-2 bg-black text-white rounded-md text-sm flex items-center">
-                        <i class="fas fa-save mr-2"></i>
-                        Sauvegarder
-                    </button>
+                    <div class="flex items-center text-gray-500">
+                        <a href="{{ route('articles.index') }}" class="hover:text-black hover:underline">Articles</a>
+                        <span class="mx-2">&gt;</span>
+                        <span class="text-gray-800">New Article</span>
+                    </div>
                 </div>
-            </form>
+            </div>
+
+            <!-- Article Information -->
+            <div class="p-6">
+                <!-- Title and subtitle -->
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-1">Create New Article</h2>
+                    <p class="text-sm text-gray-500">Create a new publication to inform RUBI application users</p>
+                </div>
+
+                <!-- Form -->
+                <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <div class="grid grid-cols-12 gap-6">
+                        <!-- Article Form -->
+                        <div class="col-span-12 md:col-span-8 border border-gray-200 rounded-lg overflow-hidden">
+                            <!-- Section title -->
+                            <div class="p-4 border-b border-gray-200 flex items-center space-x-3">
+                                <div class="bg-gray-100 p-2 rounded-full">
+                                    <i class="fas fa-file-alt h-5 w-5"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h3 class="font-bold">Article Content</h3>
+                                    <p class="text-xs text-gray-500">Write the article's main content</p>
+                                </div>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="p-6">
+                                <!-- Title -->
+                                <div class="mb-4">
+                                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Article Title</label>
+                                    <input
+                                        type="text"
+                                        id="title"
+                                        name="title"
+                                        placeholder="Enter article title"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm @error('title') border-red-500 @enderror"
+                                        value="{{ old('title') }}"
+                                        required
+                                    >
+                                    @error('title')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Content with Trix Editor -->
+                                <div class="mb-4">
+                                    <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                                    <input id="content" type="hidden" name="content" value="{{ old('content') }}">
+                                    <trix-editor input="content" class="trix-content border border-gray-300 rounded-md min-h-[300px] @error('content') border-red-500 @enderror"></trix-editor>
+                                    <p class="text-xs text-gray-500 mt-1">You can insert text and images in the content</p>
+                                    @error('content')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-span-12 md:col-span-4 border border-gray-200 rounded-lg overflow-hidden">
+                            <!-- Section title -->
+                            <div class="p-4 border-b border-gray-200 flex items-center space-x-3">
+                                <div class="bg-gray-100 p-2 rounded-full">
+                                    <i class="fas fa-cog h-5 w-5"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h3 class="font-bold">Article Settings</h3>
+                                    <p class="text-xs text-gray-500">Configure article properties</p>
+                                </div>
+                            </div>
+
+                            <!-- Settings -->
+                            <div class="p-4 space-y-4">
+                                <!-- Status -->
+                                <div>
+                                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                    <select
+                                        id="status"
+                                        name="status"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm @error('status') border-red-500 @enderror"
+                                        required
+                                    >
+                                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                                        <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
+                                        <option value="archived" {{ old('status') == 'archived' ? 'selected' : '' }}>Archived</option>
+                                    </select>
+                                    @error('status')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Publication Date -->
+                                <div>
+                                    <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Publication Date</label>
+                                    <input
+                                        type="date"
+                                        id="date"
+                                        name="date"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm @error('date') border-red-500 @enderror"
+                                        value="{{ old('date', date('Y-m-d')) }}"
+                                        required
+                                    >
+                                    @error('date')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Main Image -->
+                                <div>
+                                    <label for="picture" class="block text-sm font-medium text-gray-700 mb-1">Main Image (required)</label>
+                                    <input
+                                        type="file"
+                                        id="picture"
+                                        name="picture"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm @error('picture') border-red-500 @enderror"
+                                        accept="image/*"
+                                        required
+                                    >
+                                    <p class="text-xs text-gray-500 mt-1">This image will be used as the article preview</p>
+                                    @error('picture')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="pt-4 border-t border-gray-200 space-y-2">
+                                    <button type="submit" class="w-full flex items-center justify-center rounded-md bg-black text-white px-4 py-2 text-sm font-medium">
+                                        <i class="fas fa-save mr-2"></i>
+                                        Save Article
+                                    </button>
+                                    <a href="{{ route('articles.index') }}" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </main>
 @endsection
@@ -149,9 +183,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Trix Editor initialisé');
+            console.log('Trix Editor initialized');
 
-            // Configurer l'événement d'upload de fichier
             document.addEventListener('trix-attachment-add', function(event) {
                 if (event.attachment.file) {
                     uploadFileAttachment(event.attachment);
@@ -160,16 +193,16 @@
         });
 
         function uploadFileAttachment(attachment) {
-            console.log('Début upload fichier:', attachment.file.name);
+            console.log('Starting file upload:', attachment.file.name);
 
-            // Récupérer le token CSRF depuis la balise meta
+            // Get CSRF token from meta tag
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             const formData = new FormData();
             formData.append('file', attachment.file);
             formData.append('_token', token);
 
-            // Afficher la progression de l'upload
+            // Show upload progress
             attachment.setUploadProgress(0);
 
             fetch('/admin/upload-trix-attachment', {
@@ -181,30 +214,29 @@
                 }
             })
                 .then(response => {
-                    console.log('Statut de la réponse:', response.status);
+                    console.log('Response status:', response.status);
                     if (!response.ok) {
-                        throw new Error('Erreur réseau: ' + response.status);
+                        throw new Error('Network error: ' + response.status);
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Données reçues:', data);
+                    console.log('Data received:', data);
                     if (data.url) {
-                        console.log('URL de l\'image:', data.url);
+                        console.log('Image URL:', data.url);
                         attachment.setAttributes({
                             url: data.url,
                             href: data.url
                         });
                     } else {
-                        throw new Error('URL non trouvée dans la réponse');
+                        throw new Error('URL not found in response');
                     }
                 })
                 .catch(error => {
-                    console.error('Erreur lors de l\'upload:', error);
+                    console.error('Error during upload:', error);
                     attachment.remove();
                 })
                 .finally(() => {
-                    // Terminer la progression
                     attachment.setUploadProgress(100);
                 });
         }
