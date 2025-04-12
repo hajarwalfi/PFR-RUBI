@@ -18,5 +18,8 @@ interface ArticleRepositoryInterface
 
     public function getArticleStats();
     public function searchArticles($query, $status = null);
+    public function archiveArticle($id);
+
+    public function publishArticle($id);
 
 }

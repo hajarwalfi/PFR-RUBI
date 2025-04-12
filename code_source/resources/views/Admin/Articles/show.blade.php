@@ -1,144 +1,175 @@
 @extends('Admin.layouts.aside')
-@section('title', 'RUBI Admin - Détails de l\'article')
+@section('title', 'RUBI Admin - Article Details')
 
 @section('content')
-    <!-- Main Content -->
-    <main class="flex-1 overflow-auto">
-        <div class="p-6">
-            <!-- Fil d'Ariane et bouton modifier -->
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-2">
-                    <a href="/admin/articles" class="inline-flex items-center justify-center rounded-md border border-gray-200 bg-white h-8 w-8 p-0">
-                        <i class="fas fa-arrow-left text-gray-600"></i>
+    <main class="flex-1">
+        <div class="flex-1">
+            <!-- Navigation -->
+            <div class="p-4 flex justify-between items-center border-b border-gray-200">
+                <div class="flex items-center space-x-2 text-xs">
+                    <a href="{{ route('articles.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                        <i class="fas fa-arrow-left h-5 w-5"></i>
                     </a>
-                    <div class="text-sm">
-                        <a href="/admin/articles" class="text-gray-600 hover:underline">Articles</a>
-                        <span class="text-gray-400 mx-1">></span>
-                        <span class="text-gray-800">Détails de l'article</span>
+                    <div class="flex items-center text-gray-500">
+                        <a href="{{ route('articles.index') }}" class="hover:text-black hover:underline">Articles</a>
+                        <span class="mx-2">&gt;</span>
+                        <a href="{{ route('articles.show', $article->id) }}" class="hover:text-black hover:underline">{{ $article->title }}</a>
                     </div>
                 </div>
-                <a href="{{ route('articles.edit', $article->id) }}" class="inline-flex items-center justify-center rounded-md bg-black text-white px-4 py-2 text-sm font-medium">
-                    <i class="fas fa-edit mr-2"></i>
-                    Modifier l'article
+
+                <a href="{{ route('articles.edit', $article->id) }}" class="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2">
+                    <i class="fas fa-edit h-5 w-5"></i>
+                    <span>Edit Article</span>
                 </a>
             </div>
 
-            <!-- Titre et date de publication -->
-            <div class="mb-6">
-                <h1 class="text-2xl font-bold mb-2">{{ $article->title }}</h1>
-                <div class="flex items-center text-sm text-gray-500">
-                    <i class="far fa-calendar-alt mr-2"></i>
-                    <span>Publié le {{ $article->date->format('d/m/Y') }}</span>
-                </div>
-            </div>
-
-            <!-- Contenu principal en deux colonnes -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Colonne de gauche -->
-                <div class="flex flex-col">
-                    <!-- Informations sur l'article -->
-                    <div class="bg-white border border-gray-200 rounded-md p-6 mb-4">
-                        <div class="flex items-center mb-6">
-                            <i class="fas fa-info-circle text-gray-500 mr-2"></i>
-                            <h2 class="text-lg font-medium">Informations sur l'article</h2>
+            <!-- Article Information -->
+            <div class="p-6">
+                <!-- Title and publication date -->
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-1">{{ $article->title }}</h2>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center text-xs">
+                            <i class="far fa-calendar-alt h-3 w-5 text-gray-500 mr-1"></i>
+                            <span class="text-gray-600 ">Updated at {{ $article->updated_at->format('d/m/Y') }}</span>
                         </div>
-
-                        <div class="space-y-4">
-                            <div class="flex items-center">
-                                <i class="fas fa-spinner text-gray-400 mr-3"></i>
-                                <span class="text-gray-600 w-32">Statut:</span>
-                                <span class="{{ $article->status == 'published' ? 'text-green-600' : ($article->status == 'draft' ? 'text-yellow-600' : 'text-gray-600') }} font-medium">
-                                    @if($article->status == 'published')Publié
-                                        @elseif($article->status == 'draft')Brouillon
-                                        @else Archivé
-                                    @endif
-                                </span>
-                            </div>
-
-                            <div class="flex items-center">
-                                <i class="far fa-calendar-alt text-gray-400 mr-3"></i>
-                                <span class="text-gray-600 w-32">Date de publication</span>
-                                <span>{{ $article->date->format('d/m/Y') }}</span>
-                            </div>
-
-                            <div class="flex items-center">
-                                <i class="far fa-clock text-gray-400 mr-3"></i>
-                                <span class="text-gray-600 w-32">Créé le</span>
-                                <span>{{ $article->created_at->format('d/m/Y') }}</span>
-                            </div>
-
-                            <div class="flex items-center">
-                                <i class="fas fa-pencil-alt text-gray-400 mr-3"></i>
-                                <span class="text-gray-600 w-32">Modifié le</span>
-                                <span>{{ $article->updated_at->format('d/m/Y') }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Boutons d'action -->
-                    <div class="flex gap-2">
-                        @if($article->status != 'archived')
-                            <form action="/admin/articles/{{ $article->id }}/archive" method="POST" class="flex-1">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                    <i class="fas fa-archive mr-2"></i>
-                                    Archiver
-                                </button>
-                            </form>
-                        @else
-                            <form action="/admin/articles/{{ $article->id }}/publish" method="POST" class="flex-1">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                    <i class="fas fa-check-circle mr-2"></i>
-                                    Publier
-                                </button>
-                            </form>
-                        @endif
-
-
-                        <form action="{{ route('articles.destroy', $article->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                                <button class="flex-1 flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700" onclick="document.getElementById('deleteDialog').classList.add('show')">
-                                    <i class="fas fa-trash mr-2"></i>
-                                    Supprimer
-                                </button>
-                        </form>
+                        <span class="{{ $article->status == 'published' ? 'bg-green-100 text-green-800' : ($article->status == 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800') }} px-3 py-1 rounded-full text-sm">
+                            @if($article->status == 'published')Published
+                            @elseif($article->status == 'draft')Draft
+                            @else Archived
+                            @endif
+                        </span>
                     </div>
                 </div>
 
-                <!-- Contenu de l'article -->
-                <div class="bg-white border border-gray-200 rounded-md p-6 md:col-span-2">
-                    <h2 class="text-xl font-bold mb-4">{{ $article->title }}</h2>
+                <!-- Information sections with custom grid -->
+                <div class="grid grid-cols-12 gap-6">
+                    <!-- Article Information -->
+                    <div class="col-span-12 md:col-span-4 border border-gray-200 rounded-lg overflow-hidden">
+                        <!-- Section title -->
+                        <div class="p-4 border-b border-gray-200 flex items-center space-x-3">
+                            <div class="bg-gray-100 p-2 rounded-full">
+                                <i class="fas fa-info-circle h-5 w-5"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="font-bold">Article Information</h3>
+                                <p class="text-xs text-gray-500">Details and metadata</p>
+                            </div>
+                        </div>
 
-                    <div class="prose max-w-none">
-                        {!! $article->content !!}
+                        <!-- Status -->
+                        <div class="p-4 border-b border-gray-200">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-spinner h-5 w-5 text-gray-400 mr-2"></i>
+                                <span class="text-gray-600 text-xs">Status</span>
+                            </div>
+                            <p class="font-medium text-sm pl-7 {{ $article->status == 'published' ? 'text-green-600' : ($article->status == 'draft' ? 'text-yellow-600' : 'text-gray-600') }}">
+                                @if($article->status == 'published')Published
+                                @elseif($article->status == 'draft')Draft
+                                @else Archived
+                                @endif
+                            </p>
+                        </div>
+
+                        <!-- Publication Date -->
+                        <div class="p-4 border-b border-gray-200">
+                            <div class="flex items-center mb-1">
+                                <i class="far fa-calendar-alt h-5 w-5 text-gray-400 mr-2"></i>
+                                <span class="text-gray-600 text-xs">Publication Date</span>
+                            </div>
+                            <p class="font-medium pl-7 text-sm">{{ $article->date->format('d/m/Y') }}</p>
+                        </div>
+
+                        <!-- Created Date -->
+                        <div class="p-4 border-b border-gray-200">
+                            <div class="flex items-center mb-1">
+                                <i class="far fa-clock h-5 w-5 text-gray-400 mr-2"></i>
+                                <span class="text-gray-600 text-xs">Created on</span>
+                            </div>
+                            <p class="font-medium pl-7 text-sm">{{ $article->created_at->format('d/m/Y') }}</p>
+                        </div>
+
+                        <!-- Modified Date -->
+                        <div class="p-4 border-b border-gray-200">
+                            <div class="flex items-center mb-1">
+                                <i class="fas fa-pencil-alt h-5 w-5 text-gray-400 mr-2"></i>
+                                <span class="text-gray-600 text-xs">Modified on</span>
+                            </div>
+                            <p class="font-medium pl-7 text-sm">{{ $article->updated_at->format('d/m/Y') }}</p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="p-4 space-y-2">
+                            @if($article->status != 'archived')
+                                <form action="{{ route('articles.archive', $article->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                        <i class="fas fa-archive mr-2"></i>
+                                        Archive
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('articles.publish', $article->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                        <i class="fas fa-check-circle mr-2"></i>
+                                        Publish
+                                    </button>
+                                </form>
+                            @endif
+
+                            <button class="w-full flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700" onclick="document.getElementById('deleteDialog').classList.add('show')">
+                                <i class="fas fa-trash mr-2"></i>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Article Content -->
+                    <div class="col-span-12 md:col-span-8 border border-gray-200 rounded-lg overflow-hidden">
+                        <!-- Section title -->
+                        <div class="p-4 border-b border-gray-200 flex items-center space-x-3">
+                            <div class="bg-gray-100 p-2 rounded-full">
+                                <i class="fas fa-file-alt h-5 w-5"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="font-bold">Article Content</h3>
+                                <p class="text-xs text-gray-500">Full text of the article</p>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-6">
+                            <div class="prose max-w-none text-sm">
+                                {!! $article->content !!}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Boîte de dialogue de confirmation de suppression -->
+    <!-- Delete Confirmation Dialog -->
     <div class="dialog" id="deleteDialog">
         <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
             <div class="p-6">
-                <h2 class="text-lg font-semibold">Confirmer la suppression</h2>
+                <h2 class="text-lg font-semibold">Confirm Deletion</h2>
                 <p class="text-sm text-gray-500 mt-2">
-                    Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible.
+                    Are you sure you want to delete this article? This action cannot be undone.
                 </p>
             </div>
             <div class="flex items-center justify-end gap-2 p-4 border-t border-gray-200">
                 <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm" onclick="document.getElementById('deleteDialog').classList.remove('show')">
-                    Annuler
+                    Cancel
                 </button>
-                <form action="/admin/articles/{{ $article->id }}" method="POST">
+                <form action="{{ route('articles.destroy', $article->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md text-sm hover:bg-red-700">
-                        Supprimer
+                        Delete
                     </button>
                 </form>
             </div>
@@ -162,17 +193,10 @@
         .dialog.show {
             display: flex;
         }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 12px;
-        }
     </style>
 
     <script>
-        // Fermer les dialogues en cliquant à l'extérieur
+        // Close dialogs when clicking outside
         document.querySelectorAll('.dialog').forEach(dialog => {
             dialog.addEventListener('click', (e) => {
                 if (e.target === dialog) {

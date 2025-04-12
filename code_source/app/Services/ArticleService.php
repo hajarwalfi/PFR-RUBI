@@ -59,5 +59,16 @@ class ArticleService
     {
         return $this->articleRepository->searchArticles($query, $status);
     }
+    // In App\Services\ArticleService.php
+
+    public function archiveArticle($id)
+    {
+        return $this->articleRepository->archiveArticle($id);
+    }
+
+    public function publishArticle($id)
+    {
+        return $this->articleRepository->publishArticle($id);
+    }
 
 }

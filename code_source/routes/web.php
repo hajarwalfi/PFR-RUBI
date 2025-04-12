@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 
 Route::resource('articles', ArticleController::class);
 
-Route::post('/admin/upload-trix-attachment', [App\Http\Controllers\ArticleController::class, 'uploadTrixAttachment'])->name('upload.trix.attachment');
+Route::post('/admin/upload-trix-attachment', [ArticleController::class, 'uploadTrixAttachment'])->name('upload.trix-attachment');
 
 Route::put('/serology/{id}', [App\Http\Controllers\SerologyController::class, 'update'])->name('Serology.update');
 
@@ -29,3 +29,6 @@ Route::get('Donations/{donation}/edit', [DonationController::class, 'edit'])->na
 Route::put('Donations/{donation}', [DonationController::class, 'update'])->name('Donations.update');
 Route::get('/donations/{id}/edit', [App\Http\Controllers\DonationController::class, 'edit'])->name('Donations.edit');
 Route::put('/donations/{id}', [App\Http\Controllers\DonationController::class, 'update'])->name('Donations.update');
+
+Route::patch('/articles/{id}/archive', [ArticleController::class, 'archive'])->name('articles.archive');
+Route::patch('/articles/{id}/publish', [ArticleController::class, 'publish'])->name('articles.publish');

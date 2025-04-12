@@ -22,13 +22,10 @@ class ArticleController extends Controller
         $search = $request->query('search');
 
         if ($search) {
-            // If we have a search query, use the search method (which can also filter by status)
             $articles = $this->articleService->searchArticles($search, $status);
         } elseif ($status) {
-            // If we only have status, use the status filter method
             $articles = $this->articleService->getArticlesByStatus($status);
         } else {
-            // Otherwise, get all articles
             $articles = $this->articleService->getAllArticles();
         }
 
@@ -52,16 +49,13 @@ class ArticleController extends Controller
             'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Traitement de l'image principale
         if ($request->hasFile('picture')) {
             $picturePath = $request->file('picture')->store('articles/pictures', 'public');
             $validatedData['picture'] = $picturePath;
         }
 
-        // Solution temporaire : définir user_id = 1 (admin) pour tous les articles
         $validatedData['user_id'] = 1;
 
-        // Création de l'article
         $article = $this->articleService->createArticle($validatedData);
 
         return redirect()->route('articles.show', $article->id)
@@ -77,15 +71,16 @@ class ArticleController extends Controller
                 'file' => 'required|file|image|max:5000',
             ]);
 
-            // Stocker toutes les images dans le même dossier 'articles/pictures'
+            // Store the file in the public storage
             $path = $file->store('articles/pictures', 'public');
 
+            // Return the URL to the stored file
             return response()->json([
                 'url' => asset('storage/' . $path)
             ]);
         }
 
-        return response()->json(['error' => 'Aucun fichier n\'a été téléchargé.'], 422);
+        return response()->json(['error' => 'No file was uploaded.'], 422);
     }
 
     public function show($id)
@@ -112,22 +107,17 @@ class ArticleController extends Controller
             'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // L'image est optionnelle lors de l'édition
         ]);
 
-        // Traitement de l'image principale si une nouvelle est téléchargée
         if ($request->hasFile('picture')) {
-            // Supprimer l'ancienne image si elle existe
             if ($article->picture && file_exists(storage_path('app/public/' . $article->picture))) {
                 unlink(storage_path('app/public/' . $article->picture));
             }
 
-            // Stocker la nouvelle image
             $picturePath = $request->file('picture')->store('articles/pictures', 'public');
             $validated['picture'] = $picturePath;
         } else {
-            // Ne pas modifier l'image si aucune nouvelle n'est fournie
             unset($validated['picture']);
         }
 
-        // Mise à jour de l'article
         $this->articleService->updateArticle($id, $validated);
 
         return redirect()->route('articles.show', $id)
@@ -137,7 +127,27 @@ class ArticleController extends Controller
     public function destroy($id)
     {
         $this->articleService->deleteArticle($id);
-        return redirect()->route('Admin.Articles.index')->with('success', 'Publication supprimée avec succès');
+        return redirect()->route('articles.index')->with('success', 'Publication supprimée avec succès');
+    }
+
+    public function archive($id)
+    {
+        $article = $this->articleService->getArticleById($id);
+
+        $this->articleService->archiveArticle($id);
+
+        return redirect()->route('articles.show', $id)
+            ->with('success', 'Article has been archived.');
+    }
+
+    public function publish($id)
+    {
+        $article = $this->articleService->getArticleById($id);
+
+        $this->articleService->publishArticle($id);
+
+        return redirect()->route('articles.show', $id)
+            ->with('success', 'Article has been published.');
     }
 
 }
