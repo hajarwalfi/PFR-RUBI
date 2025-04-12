@@ -55,11 +55,9 @@ class ArticleService
         return $this->articleRepository->getArticleStats();
     }
 
-    public function searchArticles($query)
+    public function searchArticles($query, $status = null)
     {
-        // Implémentation de la recherche
-        return Article::where('title', 'like', "%{$query}%")
-            ->orWhere('content', 'like', "%{$query}%")
-            ->get();
+        return $this->articleRepository->searchArticles($query, $status);
     }
+
 }

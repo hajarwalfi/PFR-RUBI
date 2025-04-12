@@ -18,14 +18,17 @@ class ArticleController extends Controller
 
     public function index(Request $request)
     {
-        $status = $request->query('status', null);
-        $search = $request->query('search', null);
+        $status = $request->query('status');
+        $search = $request->query('search');
 
-        if ($status) {
+        if ($search) {
+            // If we have a search query, use the search method (which can also filter by status)
+            $articles = $this->articleService->searchArticles($search, $status);
+        } elseif ($status) {
+            // If we only have status, use the status filter method
             $articles = $this->articleService->getArticlesByStatus($status);
-        } elseif ($search) {
-            $articles = $this->articleService->searchArticles($search);
         } else {
+            // Otherwise, get all articles
             $articles = $this->articleService->getAllArticles();
         }
 

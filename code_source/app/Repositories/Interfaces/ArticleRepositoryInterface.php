@@ -17,4 +17,6 @@ interface ArticleRepositoryInterface
     public function deleteArticle($id);
 
     public function getArticleStats();
+    public function searchArticles($query, $status = null);
+
 }

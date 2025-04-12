@@ -6,7 +6,7 @@
         <!-- Header -->
         <div class="mb-6">
             <h1 class="text-2xl font-bold">Articles</h1>
-            <p class="text-sm text-gray-500">Gérez les publications officielles dans l'application RUBI</p>
+            <p class="text-sm text-gray-500">Manage official publications in the RUBI application</p>
         </div>
 
         <!-- Stats Cards -->
@@ -20,43 +20,43 @@
                     </div>
                 </div>
                 <div class="text-2xl font-bold">{{ $stats['total'] }}</div>
-                <p class="text-xs text-gray-500">Tous les articles enregistrés</p>
+                <p class="text-xs text-gray-500">All registered articles</p>
             </div>
 
-            <!-- Publiés -->
+            <!-- Published -->
             <div class="bg-white rounded-lg border border-gray-200 p-4">
                 <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-sm font-medium">Publiés</h2>
+                    <h2 class="text-sm font-medium">Published</h2>
                     <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
                     {{ $stats['published'] }}
                 </span>
                 </div>
                 <div class="text-2xl font-bold">{{ $stats['published_percentage'] }} %</div>
-                <p class="text-xs text-gray-500">Publications actives</p>
+                <p class="text-xs text-gray-500">Active publications</p>
             </div>
 
-            <!-- Brouillons -->
+            <!-- Drafts -->
             <div class="bg-white rounded-lg border border-gray-200 p-4">
                 <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-sm font-medium">Brouillons</h2>
+                    <h2 class="text-sm font-medium">Drafts</h2>
                     <span class="inline-flex items-center rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-semibold text-yellow-700">
                     {{ $stats['draft'] }}
                 </span>
                 </div>
                 <div class="text-2xl font-bold">{{ $stats['draft_percentage'] }} %</div>
-                <p class="text-xs text-gray-500">En cours de rédaction</p>
+                <p class="text-xs text-gray-500">In progress</p>
             </div>
 
-            <!-- Archivés -->
+            <!-- Archived -->
             <div class="bg-white rounded-lg border border-gray-200 p-4">
                 <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-sm font-medium">Archivés</h2>
+                    <h2 class="text-sm font-medium">Archived</h2>
                     <span class="inline-flex items-center rounded-full bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
                     {{ $stats['archived'] }}
                 </span>
                 </div>
                 <div class="text-2xl font-bold">{{ $stats['archived_percentage'] }} %</div>
-                <p class="text-xs text-gray-500">Publications inactives</p>
+                <p class="text-xs text-gray-500">Inactive publications</p>
             </div>
         </div>
 
@@ -65,13 +65,13 @@
             <div class="p-4 border-b border-gray-200">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h2 class="text-lg font-semibold">Gestion des articles</h2>
-                        <p class="text-sm text-gray-500">Consultez et gérez les articles enregistrés dans l'application RUBI</p>
+                        <h2 class="text-lg font-semibold">Article Management</h2>
+                        <p class="text-sm text-gray-500">View and manage articles registered in the RUBI application</p>
                     </div>
                     <div>
                         <a href="{{ route('articles.create') }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-black text-white hover:bg-gray-800 h-9 px-3">
                             <i class="fas fa-plus mr-2"></i>
-                            Ajouter un article
+                            Add Article
                         </a>
                     </div>
                 </div>
@@ -79,32 +79,34 @@
 
             <!-- Search and Filters -->
             <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <form action="/admin/articles" method="GET" class="relative w-full sm:w-64">
+                <form action="{{ route('articles.index') }}" method="GET" class="relative w-full sm:w-64">
                     <i class="fas fa-search absolute left-2.5 top-2.5 h-4 w-4 text-gray-500"></i>
                     <input
                         type="search"
                         name="search"
-                        placeholder="Rechercher un article..."
+                        placeholder="Search for an article..."
                         value="{{ request('search') }}"
                         class="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8"
                     />
+                    @if(request('status'))
+                        <input type="hidden" name="status" value="{{ request('status') }}" />
+                    @endif
                 </form>
                 <div class="flex gap-2">
-                    <a href="/admin/articles" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ !request('status') ? 'bg-gray-100' : '' }}">
-                        Tous
+                    <a href="{{ route('articles.index', ['search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ !request('status') ? 'bg-gray-100' : '' }}">
+                        All
                     </a>
-                    <a href="/admin/articles?status=published" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'published' ? 'bg-gray-100' : '' }}">
-                        Publiés
+                    <a href="{{ route('articles.index', ['status' => 'published', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'published' ? 'bg-gray-100' : '' }}">
+                        Published
                     </a>
-                    <a href="/admin/articles?status=draft" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'draft' ? 'bg-gray-100' : '' }}">
-                        Brouillons
+                    <a href="{{ route('articles.index', ['status' => 'draft', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'draft' ? 'bg-gray-100' : '' }}">
+                        Drafts
                     </a>
-                    <a href="/admin/articles?status=archived" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'archived' ? 'bg-gray-100' : '' }}">
-                        Archivés
+                    <a href="{{ route('articles.index', ['status' => 'archived', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'archived' ? 'bg-gray-100' : '' }}">
+                        Archived
                     </a>
                 </div>
             </div>
-
             <!-- Articles Grid -->
             <div class="p-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -115,15 +117,15 @@
                                 <div class="flex justify-between items-start">
                                     @if($article->status == 'published')
                                         <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
-                                Publié
+                                Published
                             </span>
                                     @elseif($article->status == 'draft')
                                         <span class="inline-flex items-center rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-semibold text-yellow-700">
-                                Brouillon
+                                Draft
                             </span>
                                     @else
                                         <span class="inline-flex items-center rounded-full bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
-                                Archivé
+                                Archived
                             </span>
                                     @endif
                                     <div class="relative">
@@ -134,13 +136,13 @@
                                             <div class="py-1">
                                                 <div class="px-4 py-2 text-base font-medium border-b border-gray-200">Actions</div>
                                                 <a href="{{ route('articles.show', $article->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                    <i class="fas fa-eye mr-2"></i> Voir les détails
+                                                    <i class="fas fa-eye mr-2"></i> View Details
                                                 </a>
                                                 <a href="/admin/articles/{{ $article->id }}/edit" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                    <i class="fas fa-edit mr-2"></i> Modifier
+                                                    <i class="fas fa-edit mr-2"></i> Edit
                                                 </a>
                                                 <button class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left" onclick="openDeleteDialog('{{ $article->id }}')">
-                                                    <i class="fas fa-trash-alt mr-2"></i> Supprimer
+                                                    <i class="fas fa-trash-alt mr-2"></i> Delete
                                                 </button>
                                             </div>
                                         </div>
@@ -160,7 +162,7 @@
                         </div>
                     @empty
                         <div class="col-span-3 p-8 text-center">
-                            <p class="text-gray-500">Aucun article trouvé.</p>
+                            <p class="text-gray-500">No articles found.</p>
                         </div>
                     @endforelse
                 </div>
@@ -171,12 +173,12 @@
                 <div class="text-sm text-gray-500">
                     @if($articles->count() > 0)
                         @if($articles instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                            Affichage de {{ $articles->firstItem() }} à {{ $articles->lastItem() }} sur {{ $articles->total() }} articles
+                            Showing {{ $articles->firstItem() }} to {{ $articles->lastItem() }} of {{ $articles->total() }} articles
                         @else
-                            Affichage de {{ $articles->count() }} article(s)
+                            Showing {{ $articles->count() }} article(s)
                         @endif
                     @else
-                        Aucun article trouvé
+                        No articles found
                     @endif
                 </div>
                 @if($articles instanceof \Illuminate\Pagination\LengthAwarePaginator)
@@ -191,7 +193,7 @@
                             </a>
                         @endif
 
-                        <span class="text-sm">{{ $articles->currentPage() }} sur {{ $articles->lastPage() }}</span>
+                        <span class="text-sm">{{ $articles->currentPage() }} of {{ $articles->lastPage() }}</span>
 
                         @if($articles->hasMorePages())
                             <a href="{{ $articles->nextPageUrl() }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-8 w-8 p-0">
@@ -211,20 +213,20 @@
         <div class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50" id="deleteDialog">
             <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
                 <div class="p-6">
-                    <h2 class="text-lg font-semibold">Confirmer la suppression</h2>
+                    <h2 class="text-lg font-semibold">Confirm Deletion</h2>
                     <p class="text-sm text-gray-500 mt-2">
-                        Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible.
+                        Are you sure you want to delete this article? This action cannot be undone.
                     </p>
                 </div>
                 <div class="flex items-center justify-end gap-2 p-4 border-t border-gray-200">
                     <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4" onclick="document.getElementById('deleteDialog').classList.add('hidden')">
-                        Annuler
+                        Cancel
                     </button>
                     <form id="deleteForm" method="POST" action="">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-600 text-white hover:bg-red-700 h-9 px-4">
-                            Supprimer
+                            Delete
                         </button>
                     </form>
                 </div>
