@@ -112,7 +112,10 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @forelse($articles as $article)
                         <!-- Article Card -->
-                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
+                            <!-- Clickable area covering the entire card except the dropdown button -->
+                            <a href="{{ route('articles.show', $article->id) }}" class="absolute inset-0 z-10" style="cursor: pointer;"></a>
+
                             <div class="p-4 pb-2">
                                 <div class="flex justify-between items-start">
                                     @if($article->status == 'published')
@@ -128,7 +131,7 @@
                                 Archived
                             </span>
                                     @endif
-                                    <div class="relative">
+                                    <div class="relative z-20">
                                         <button class="text-gray-500 hover:text-gray-700 action-btn p-1" onclick="toggleDropdown(this)">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
@@ -138,7 +141,7 @@
                                                 <a href="{{ route('articles.show', $article->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                     <i class="fas fa-eye mr-2"></i> View Details
                                                 </a>
-                                                <a href="/admin/articles/{{ $article->id }}/edit" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                <a href="{{ route('articles.edit', $article->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                     <i class="fas fa-edit mr-2"></i> Edit
                                                 </a>
                                                 <button class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left" onclick="openDeleteDialog('{{ $article->id }}')">
@@ -240,7 +243,7 @@
             position: absolute;
             right: 0;
             top: 100%;
-            z-index: 10;
+            z-index: 30;
         }
 
         .dropdown.show {
