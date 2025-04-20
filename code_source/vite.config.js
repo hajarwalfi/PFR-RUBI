@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
 
 
 export default defineConfig({
@@ -11,4 +12,7 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    alias: {
+        remixicon: path.resolve(__dirname, 'node_modules/remixicon'),
+    },
 });

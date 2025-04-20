@@ -8,90 +8,90 @@
         <div class="max-w-7xl mx-auto">
             <!-- Header -->
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-red-800 mb-1">Moderation</h1>
+                <h1 class="text-3xl font-bold mb-1">Moderation</h1>
                 <p class="text-gray-700 text-sm">Manage and moderate user posts and comments</p>
             </div>
 
-            <!-- Statistics -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-
+            <!-- ------------------------------------------ Statistics ------------------------------------------------------->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <!-- Pending -->
-                <div class="bg-yellow-50 border border-yellow-100 rounded-lg p-5 flex justify-between items-center">
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg py-3 px-5 flex justify-between items-center">
                     <div>
-                        <h3 class="text-gray-700 text-base mb-1">Pending</h3>
-                        <p class="text-4xl font-bold">{{ $pendingCount }}</p>
+                        <h3 class="text-gray-500 text-sm font-medium text-muted-foreground mb-0.5">Pending</h3>
+                        <p class="text-2xl font-semibold leading-tight">{{ $pendingCount }}</p>
                     </div>
-                    <div class="text-yellow-400">
-                        <i class="far fa-clock text-2xl"></i>
+                    <div class="text-yellow-500">
+                        <i class="fa-regular fa-clock fa-lg"></i>
                     </div>
                 </div>
 
                 <!-- Approved -->
-                <div class="bg-green-50 border border-green-100 rounded-lg p-5 flex justify-between items-center">
+                <div class="bg-green-50 border border-green-200 rounded-lg py-3 px-5 flex justify-between items-center">
                     <div>
-                        <h3 class="text-gray-700 text-base mb-1">Approved</h3>
-                        <p class="text-4xl font-bold">{{ $approvedCount }}</p>
+                        <h3 class="text-gray-500 text-sm font-medium text-muted-foreground mb-0.5">Approved</h3>
+                        <p class="text-2xl font-semibold leading-tight">{{ $approvedCount }}</p>
                     </div>
                     <div class="text-green-500">
-                        <i class="fas fa-check-circle text-2xl"></i>
+                        <i class="fa-regular fa-circle-check fa-lg"></i>
                     </div>
                 </div>
 
                 <!-- Rejected -->
-                <div class="bg-red-50 border border-red-100 rounded-lg p-5 flex justify-between items-center">
+                <div class="bg-red-50 border border-red-200 rounded-lg py-3 px-5 flex justify-between items-center">
                     <div>
-                        <h3 class="text-gray-700 text-base mb-1">Rejected</h3>
-                        <p class="text-4xl font-bold">{{ $rejectedCount }}</p>
+                        <h3 class="text-gray-500 text-sm font-medium text-muted-foreground mb-0.5">Rejected</h3>
+                        <p class="text-2xl font-semibold leading-tight">{{ $rejectedCount }}</p>
                     </div>
                     <div class="text-red-500">
-                        <i class="fas fa-times-circle text-2xl"></i>
+                        <i class="fa-regular fa-circle-xmark fa-lg"></i>
                     </div>
                 </div>
 
                 <!-- Archived -->
-                <div class="bg-gray-50 border border-gray-100 rounded-lg p-5 flex justify-between items-center">
+                <div class="bg-gray-50 border border-gray-200 rounded-lg py-3 px-5 flex justify-between items-center">
                     <div>
-                        <h3 class="text-gray-700 text-base mb-1">Archived</h3>
-                        <p class="text-4xl font-bold">{{ $archivedCount }}</p>
+                        <h3 class="text-gray-500 text-sm font-medium text-muted-foreground mb-0.5">Archived</h3>
+                        <p class="text-2xl font-semibold leading-tight">{{ $archivedCount }}</p>
                     </div>
                     <div class="text-gray-400">
-                        <i class="fas fa-archive text-2xl"></i>
+                        <i class="ri-archive-line ri-lg"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- Main content in two columns with unequal widths -->
+            <!--left side-->
             <div class="grid grid-cols-3 gap-6">
                 <div class="col-span-1 bg-white border border-gray-200 rounded-lg overflow-hidden">
 
-                    <div class="p-4 border-b border-gray-200">
+                    <div class="p-4 border-b border-gray-200 space-y-2">
                         <h2 class="text-xl font-bold">User Posts</h2>
-                    </div>
-
-                    <div class="bg-gray-100 rounded-lg p-1 mx-2 my-3">
-                        <div class="flex w-full justify-between">
-                            <a href="{{ route('moderation', ['status' => 'pending']) }}"
-                               class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
+                        <div class="bg-gray-100 rounded-lg p-2">
+                            <div class="flex w-full justify-between">
+                                <a href="{{ route('moderation', ['status' => 'pending']) }}"
+                                   class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
                                     {{ $status === 'pending' ? 'bg-white text-gray-800 font-medium shadow-sm' : 'text-gray-600 hover:bg-gray-200' }}">
-                                <i class="far fa-clock mr-0.5"></i>Pending
-                            </a>
-                            <a href="{{ route('moderation', ['status' => 'approved']) }}"
-                               class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
+                                    <i class="far fa-clock mr-0.5"></i>Pending
+                                </a>
+                                <a href="{{ route('moderation', ['status' => 'approved']) }}"
+                                   class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
                                     {{ $status === 'approved' ? 'bg-white text-gray-800 font-medium shadow-sm' : 'text-gray-600 hover:bg-gray-200' }}">
-                                <i class="fas fa-check-circle mr-0.5"></i>Approved
-                            </a>
-                            <a href="{{ route('moderation', ['status' => 'rejected']) }}"
-                               class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
+                                    <i class="fas fa-check-circle mr-0.5"></i>Approved
+                                </a>
+                                <a href="{{ route('moderation', ['status' => 'rejected']) }}"
+                                   class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
                                    {{ $status === 'rejected' ? 'bg-white text-gray-800 font-medium shadow-sm' : 'text-gray-600 hover:bg-gray-200' }}">
-                                <i class="fas fa-times-circle mr-0.5"></i>Rejected
-                            </a>
-                            <a href="{{ route('moderation', ['status' => 'archived']) }}"
-                               class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
+                                    <i class="fas fa-times-circle mr-0.5"></i>Rejected
+                                </a>
+                                <a href="{{ route('moderation', ['status' => 'archived']) }}"
+                                   class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
                                     {{ $status === 'archived' ? 'bg-white text-gray-800 font-medium shadow-sm' : 'text-gray-600 hover:bg-gray-200' }}">
-                                <i class="fas fa-archive mr-0.5"></i>Archived
-                            </a>
+                                    <i class="fas fa-archive mr-0.5"></i>Archived
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+
 
                     <div class="divide-y divide-gray-200">
                         @forelse($posts as $post)
@@ -104,7 +104,6 @@
                                         </a>
                                     </h3>
                                     <div class="flex space-x-3">
-                                        <!-- Contextual action buttons based on post status -->
                                         @if($post->status == 'pending')
                                             <form action="{{ route('posts.approve', $post->id) }}" method="POST" class="inline">
                                                 @csrf
@@ -155,11 +154,10 @@
                                         @endif
                                     </div>
                                 </div>
-                                <p class="text-sm text-gray-500 mb-1">By {{ $post->user->name ?? 'Unknown' }}
+                                <p class="text-xs text-gray-500 mb-1">By {{ $post->user->first_name.' '.$post->user->last_name ?? 'Unknown' }}
                                     • {{ $post->created_at->format('Y-m-d') }}</p>
                                 <p class="text-sm mb-2">{{ Str::limit($post->content, 50) ?? 'No content' }}</p>
 
-                                <!-- Only show comments and views for approved or archived posts -->
                                 @if(in_array($post->status, ['approved', 'archived']))
                                     <div class="flex text-sm text-gray-500">
                                         <span class="mr-4">{{ $post->comments->count() ?? 0 }} comments</span>
@@ -176,10 +174,17 @@
 
                 </div>
 
+
+                <!-- la partie du selected post , right-->
                 <div class="col-span-2 bg-white border border-gray-200 rounded-lg overflow-hidden">
                     @if($selectedPost)
                         <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                            <h2 class="text-xl font-bold">{{ $selectedPost->title ?? 'Untitled Post' }}</h2>
+                            <div>
+                                <h2 class="text-xl font-bold">{{ $selectedPost->title ?? 'Untitled Post' }}</h2>
+                                <p class="text-xs text-gray-500 mb-4">By {{ $selectedPost->user ? $selectedPost->user->first_name.' '.$selectedPost->user->last_name : 'Unknown' }}
+                                    •  {{ $selectedPost->created_at->format('Y-m-d') }}</p>
+                            </div>
+
                             <div class="flex items-center space-x-3">
                                 <span class="bg-{{ $selectedPost->status == 'pending' ? 'yellow' : ($selectedPost->status == 'approved' ? 'green' : ($selectedPost->status == 'rejected' ? 'red' : 'gray')) }}-100
                                    text-{{ $selectedPost->status == 'pending' ? 'yellow' : ($selectedPost->status == 'approved' ? 'green' : ($selectedPost->status == 'rejected' ? 'red' : 'gray')) }}-800
@@ -238,11 +243,13 @@
                                         </form>
                                     @endif
                                 </div>
+
                             </div>
+
                         </div>
                         <div class="p-4">
-                            <p class="text-sm text-gray-500 mb-4">By {{ $selectedPost->user ? $selectedPost->user->first_name.' '.$selectedPost->user->last_name : 'Unknown' }}
-                                • {{ $selectedPost->created_at->format('Y-m-d') }}</p>
+
+
 
                             <p class="mb-6">{{ $selectedPost->content ?? 'No content' }}</p>
 
@@ -294,8 +301,19 @@
                                         @foreach($selectedPost->comments as $comment)
                                             <div class="bg-gray-50 p-4 rounded">
                                                 <div class="flex justify-between mb-2">
-                                                    <p class="text-sm font-medium">{{ $comment->user->name ?? 'Unknown' }}</p>
-                                                    <p class="text-xs text-gray-500">{{ $comment->created_at->format('Y-m-d H:i') }}</p>
+                                                    <p class="text-sm font-medium">{{ $comment->user->first_name.' '.$comment->user->last_name  ?? 'Unknown' }}</p>
+                                                    <div class="flex items-center">
+                                                        <p class="text-xs text-gray-500 mr-3">{{ $comment->created_at->format('Y-m-d H:i') }}</p>
+
+                                                        <!-- Delete comment button -->
+                                                        <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="text-red-500 hover:text-red-700 transition-colors" title="Delete Comment">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                                 <p class="text-sm">{{ $comment->content }}</p>
                                             </div>

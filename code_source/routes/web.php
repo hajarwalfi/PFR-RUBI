@@ -53,3 +53,5 @@ Route::patch('/articles/{id}/publish', [ArticleController::class, 'publish'])->n
         ->name('posts.archive');
 Route::delete('/posts/{id}', [App\Http\Controllers\PostController::class, 'destroy'])
     ->name('posts.destroy');
+Route::delete('/comments/{id}', [App\Http\Controllers\CommentController::class, 'destroy'])
+    ->name('comments.destroy');

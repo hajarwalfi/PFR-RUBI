@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import '@fortawesome/fontawesome-free/css/all.min.css';
+@import 'remixicon/fonts/remixicon.css';
 @import 'trix/dist/trix.css';
 @source "../views";
 @font-face {

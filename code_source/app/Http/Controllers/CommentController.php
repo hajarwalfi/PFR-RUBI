@@ -18,9 +18,6 @@ class CommentController extends Controller
         $this->postService = $postService;
     }
 
-    /**
-     * Store a newly created comment in storage.
-     */
     public function store(Request $request, $postId)
     {
         $request->validate([
@@ -29,7 +26,6 @@ class CommentController extends Controller
 
         $post = $this->postService->getPostById($postId);
 
-        // Only allow comments on approved posts
         if ($post->status !== 'approved') {
             abort(403, 'You cannot comment on this post.');
         }
@@ -39,9 +35,6 @@ class CommentController extends Controller
         return back()->with('success', 'Comment added successfully.');
     }
 
-    /**
-     * Update the specified comment in storage.
-     */
     public function update(Request $request, $commentId)
     {
         $request->validate([
@@ -60,17 +53,9 @@ class CommentController extends Controller
         return back()->with('success', 'Comment updated successfully.');
     }
 
-    /**
-     * Remove the specified comment from storage.
-     */
     public function destroy($commentId)
     {
         $comment = $this->commentService->getCommentById($commentId);
-
-        // Only allow deletion of own comments or by admin
-        if ($comment->user_id !== Auth::id() && !Auth::user()->hasRole('admin')) {
-            abort(403, 'You are not authorized to delete this comment.');
-        }
 
         $this->commentService->deleteComment($commentId);
 
