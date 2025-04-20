@@ -247,14 +247,10 @@
                             </div>
 
                         </div>
-                        <div class="p-4">
-
-
-
+                        <div class="p-4 border-b border-gray-200">
                             <p class="mb-6">{{ $selectedPost->content ?? 'No content' }}</p>
-
                             @if($selectedPost->media && $selectedPost->media->count() > 0)
-                                <div class="mb-6">
+                                <div>
                                     <h3 class="text-sm font-medium mb-2">Media:</h3>
                                     <div class="grid grid-cols-2 gap-2">
                                         @foreach($selectedPost->media as $media)
@@ -278,17 +274,17 @@
                                 </div>
                             @endif
 
-                            <!-- Only show comments and views for approved or archived posts -->
+
                             @if(in_array($selectedPost->status, ['approved', 'archived']))
-                                <div class="flex items-center space-x-6 mb-6">
+                                <div class="flex items-center space-x-4">
                                     <div class="flex items-center">
-                                        <i class="far fa-comment text-gray-500 mr-2"></i>
-                                        <span>{{ $selectedPost->comments->count() }}</span>
+                                        <i class="ri-chat-4-line text-gray-400  ri-sm mr-2"></i>
+                                        <span class="text-xs text-gray-500">{{ $selectedPost->comments->count() }}</span>
                                     </div>
 
                                     <div class="flex items-center">
-                                        <i class="far fa-eye text-gray-500 mr-2"></i>
-                                        <span>{{ $selectedPost->views ?? 0 }}</span>
+                                        <i class="far fa-eye text-gray-400 fa-sm mr-2"></i>
+                                        <span class="text-xs text-gray-500">{{ $selectedPost->views ?? 0 }}</span>
                                     </div>
                                 </div>
                             @endif
