@@ -41,26 +41,15 @@ Route::patch('/articles/{id}/publish', [ArticleController::class, 'publish'])->n
 
 
 
-    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
-    Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
-    Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
-    Route::get('/my-posts', [PostController::class, 'myPosts'])->name('posts.myPosts');
-    Route::delete('/media/{id}', [PostController::class, 'removeMedia'])->name('media.destroy');
+    Route::get('/posts', [App\Http\Controllers\PostController::class, 'moderationDashboard'])
+        ->name('moderation');
 
-    Route::get('/posts/pending', [PostController::class, 'pendingPosts'])->name('posts.pending');
-    Route::get('/posts/approved', [PostController::class, 'approvedPosts'])->name('posts.approved');
-    Route::get('/posts/rejected', [PostController::class, 'rejectedPosts'])->name('posts.rejected');
-    Route::get('/posts/archived', [PostController::class, 'archivedPosts'])->name('posts.archived');
-    Route::get('/posts/{id}', [PostController::class, 'adminShow'])->name('posts.adminShow');
-    Route::post('/posts/{id}/approve', [PostController::class, 'approve'])->name('posts.approve');
-    Route::post('/posts/{id}/reject', [PostController::class, 'reject'])->name('posts.reject');
-    Route::post('/posts/{id}/archive', [PostController::class, 'archive'])->name('posts.archive');
-
-    Route::post('/posts/{postId}/comments', [CommentController::class, 'store'])->name('comments.store');
-    Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
-    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
-
+    // Post actions
+    Route::post('/posts/{id}/approve', [App\Http\Controllers\PostController::class, 'approve'])
+        ->name('posts.approve');
+    Route::post('/posts/{id}/reject', [App\Http\Controllers\PostController::class, 'reject'])
+        ->name('posts.reject');
+    Route::post('/posts/{id}/archive', [App\Http\Controllers\PostController::class, 'archive'])
+        ->name('posts.archive');
+Route::delete('/posts/{id}', [App\Http\Controllers\PostController::class, 'destroy'])
+    ->name('posts.destroy');

@@ -21,26 +21,17 @@ class PostController extends Controller
 //        ]);
     }
 
-    /**
-     * Display a listing of approved posts.
-     */
     public function index()
     {
         $posts = $this->postService->getApprovedPosts();
         return view('Admin.Posts.index', compact('posts'));
     }
 
-    /**
-     * Show the form for creating a new post.
-     */
     public function create()
     {
         return view('posts.create');
     }
 
-    /**
-     * Store a newly created post in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -62,9 +53,7 @@ class PostController extends Controller
             ->with('success', 'Post created successfully and is pending approval.');
     }
 
-    /**
-     * Display the specified post.
-     */
+
     public function show($id)
     {
         $post = $this->postService->getPostById($id);
@@ -77,9 +66,7 @@ class PostController extends Controller
         return view('posts.show', compact('post'));
     }
 
-    /**
-     * Show the form for editing the specified post.
-     */
+
     public function edit($id)
     {
         $post = $this->postService->getPostById($id);
@@ -92,9 +79,7 @@ class PostController extends Controller
         return view('posts.edit', compact('post'));
     }
 
-    /**
-     * Update the specified post in storage.
-     */
+
     public function update(Request $request, $id)
     {
         $post = $this->postService->getPostById($id);
@@ -121,89 +106,78 @@ class PostController extends Controller
             ->with('success', 'Post updated successfully and is pending approval.');
     }
 
-    /**
-     * Remove the specified post from storage.
-     */
+
     public function destroy($id)
     {
         $post = $this->postService->getPostById($id);
 
-        // Only allow deletion of own posts or by admin
-        if ($post->user_id !== Auth::id() && !Auth::user()->hasRole('admin')) {
-            abort(403, 'You are not authorized to delete this post.');
-        }
 
         $this->postService->deletePost($id);
 
-        return redirect()->route('posts.myPosts')
+        return redirect()->route('moderation')
             ->with('success', 'Post deleted successfully.');
     }
 
-    /**
-     * Display a listing of the user's posts.
-     */
+
     public function myPosts()
     {
         $posts = $this->postService->getUserPosts();
         return view('posts.my-posts', compact('posts'));
     }
 
-    /**
-     * Remove media from a post.
-     */
+
     public function removeMedia($mediaId)
     {
         $this->postService->removeMediaFromPost($mediaId);
         return back()->with('success', 'Media removed successfully.');
     }
 
-    /**
-     * ADMIN METHODS
-     */
 
-    /**
-     * Display a listing of pending posts.
-     */
-    public function pendingPosts()
+    public function moderationDashboard(Request $request)
     {
-        $posts = $this->postService->getPendingPosts();
-        return view('admin.posts.pending', compact('posts'));
-    }
+        $status = $request->query('status', 'pending');
 
-    /**
-     * Display a listing of approved posts.
-     */
-    public function approvedPosts()
-    {
-        $posts = $this->postService->getApprovedPosts();
-        return view('admin.posts.approved', compact('posts'));
-    }
+        // Get posts based on status
+        switch ($status) {
+            case 'approved':
+                $posts = $this->postService->getApprovedPosts();
+                break;
+            case 'rejected':
+                $posts = $this->postService->getRejectedPosts();
+                break;
+            case 'archived':
+                $posts = $this->postService->getArchivedPosts();
+                break;
+            case 'pending':
+            default:
+                $posts = $this->postService->getPendingPosts();
+                $status = 'pending';
+                break;
+        }
 
-    /**
-     * Display a listing of rejected posts.
-     */
-    public function rejectedPosts()
-    {
-        $posts = $this->postService->getRejectedPosts();
-        return view('admin.posts.rejected', compact('posts'));
-    }
+        $pendingCount = $this->postService->getPendingPosts()->count();
+        $approvedCount = $this->postService->getApprovedPosts()->count();
+        $rejectedCount = $this->postService->getRejectedPosts()->count();
+        $archivedCount = $this->postService->getArchivedPosts()->count();
 
-    /**
-     * Display a listing of archived posts.
-     */
-    public function archivedPosts()
-    {
-        $posts = $this->postService->getArchivedPosts();
-        return view('admin.posts.archived', compact('posts'));
-    }
+        $selectedPost = null;
+        if ($request->has('post_id')) {
+            $selectedPost = $this->postService->getPostById($request->query('post_id'));
+        } else if ($posts->count() > 0) {
+            // Default to the first post in the list
+            $selectedPost = $posts->first();
+        }
 
-    /**
-     * Show a specific post for moderation.
-     */
-    public function adminShow($id)
-    {
-        $post = $this->postService->getPostById($id);
-        return view('admin.posts.show', compact('post'));
+        // Change the view to 'Admin.Posts.moderation' to match your blade file
+        return view('Admin.Posts.index', compact(
+            'posts',
+            'selectedPost',
+            'pendingCount',
+            'approvedCount',
+            'rejectedCount',
+            'archivedCount',
+            'status'
+        ));
     }
 
     /**
@@ -212,7 +186,10 @@ class PostController extends Controller
     public function approve($id)
     {
         $this->postService->approvePost($id);
-        return redirect()->route('posts.pending')
+        $post = $this->postService->getPostById($id);
+
+        // Redirect back to moderation with the current status
+        return redirect()->route('moderation', ['status' => 'approved'])
             ->with('success', 'Post approved successfully.');
     }
 
@@ -222,7 +199,10 @@ class PostController extends Controller
     public function reject($id)
     {
         $this->postService->rejectPost($id);
-        return redirect()->route('posts.pending')
+        $post = $this->postService->getPostById($id);
+
+        // Redirect back to moderation with the current status
+        return redirect()->route('moderation', ['status' => 'rejected'])
             ->with('success', 'Post rejected successfully.');
     }
 
@@ -232,7 +212,10 @@ class PostController extends Controller
     public function archive($id)
     {
         $this->postService->archivePost($id);
-        return redirect()->route('posts.pending')
+        $post = $this->postService->getPostById($id);
+
+        // Redirect back to moderation with the current status
+        return redirect()->route('moderation', ['status' => 'archived'])
             ->with('success', 'Post archived successfully.');
     }
 }
