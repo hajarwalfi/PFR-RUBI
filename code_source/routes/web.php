@@ -55,3 +55,7 @@ Route::delete('/posts/{id}', [App\Http\Controllers\PostController::class, 'destr
     ->name('posts.destroy');
 Route::delete('/comments/{id}', [App\Http\Controllers\CommentController::class, 'destroy'])
     ->name('comments.destroy');
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Route::get('/welcome', function () {
+    return view('welcome');
+});

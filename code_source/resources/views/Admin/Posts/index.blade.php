@@ -9,7 +9,7 @@
             <!-- Header -->
             <div class="mb-8">
                 <h1 class="text-3xl font-bold mb-1">Moderation</h1>
-                <p class="text-gray-700 text-sm">Manage and moderate user posts and comments</p>
+                <p class="text-gray-500 text-md text-muted-foreground">Manage and moderate user posts and comments</p>
             </div>
 
             <!-- ------------------------------------------ Statistics ------------------------------------------------------->
@@ -178,10 +178,10 @@
                 <!-- la partie du selected post , right-->
                 <div class="col-span-2 bg-white border border-gray-200 rounded-lg overflow-hidden">
                     @if($selectedPost)
-                        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                            <div>
+                        <div class="p-4  flex justify-between items-center">
+                            <div class="space-y-2">
                                 <h2 class="text-xl font-bold">{{ $selectedPost->title ?? 'Untitled Post' }}</h2>
-                                <p class="text-xs text-gray-500 mb-4">By {{ $selectedPost->user ? $selectedPost->user->first_name.' '.$selectedPost->user->last_name : 'Unknown' }}
+                                <p class="text-sm text-gray-500 mb-4">By {{ $selectedPost->user ? $selectedPost->user->first_name.' '.$selectedPost->user->last_name : 'Unknown' }}
                                     •  {{ $selectedPost->created_at->format('Y-m-d') }}</p>
                             </div>
 
@@ -192,7 +192,6 @@
                                     {{ ucfirst($selectedPost->status) }}
                                 </span>
 
-                                <!-- Contextual action icons next to status badge -->
                                 <div class="flex space-x-2 ml-2">
                                     @if($selectedPost->status == 'pending')
                                         <form action="{{ route('posts.approve', $selectedPost->id) }}" method="POST" class="inline">
