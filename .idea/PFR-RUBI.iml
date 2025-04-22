@@ -125,6 +125,12 @@
       <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/firebase/php-jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/laravel/socialite" />
+      <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/league/oauth1-client" />
+      <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/paragonie/constant_time_encoding" />
+      <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/code_source/vendor/phpseclib/phpseclib" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

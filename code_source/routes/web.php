@@ -57,5 +57,8 @@ Route::delete('/comments/{id}', [App\Http\Controllers\CommentController::class, 
     ->name('comments.destroy');
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::get('/welcome', function () {
-    return view('welcome');
+    return view('Client.welcome');
+});
+Route::get('/login', function () {
+    return view('Client.login');
 });
