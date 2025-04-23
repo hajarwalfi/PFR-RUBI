@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Repositories\Eloquent\ArticleRepository;
+use App\Repositories\Eloquent\AuthRepository;
 use App\Repositories\Eloquent\CommentRepository;
 use App\Repositories\Eloquent\DonationRepository;
 use App\Repositories\Eloquent\ObservationRepository;
@@ -11,6 +12,7 @@ use App\Repositories\Eloquent\PostRepository;
 use App\Repositories\Eloquent\SerologyRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Interfaces\ArticleRepositoryInterface;
+use App\Repositories\Interfaces\AuthRepositoryInterface;
 use App\Repositories\Interfaces\CommentRepositoryInterface;
 use App\Repositories\Interfaces\DonationRepositoryInterface;
 use App\Repositories\Interfaces\ObservationRepositoryInterface;
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
         $this->app->bind(PostMediaRepositoryInterface::class, PostMediaRepository::class);
         $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
+        $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
     }
 
     /**

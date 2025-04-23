@@ -29,6 +29,9 @@ class User extends Authenticatable
         'blood_group',
         'gender',
         'identifier',
+        'provider',
+        'provider_id',
+        'avatar',
     ];
 
     /**
