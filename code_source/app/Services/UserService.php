@@ -168,13 +168,59 @@ class UserService
     }
 
     /**
+     * Register a new user with auto-generated identifier
+     */
+    public function registerUser(array $userData)
+    {
+        // Generate the next sequential identifier
+        $userData['identifier'] = $this->generateSequentialIdentifier();
+
+        // Hash the password
+        if (isset($userData['password'])) {
+            $userData['password'] = Hash::make($userData['password']);
+        }
+
+        // Create the user
+        return $this->userRepository->createUser($userData);
+    }
+
+    /**
+     * Generate a sequential identifier starting with DNR followed by a 3-digit number
+     */
+    private function generateSequentialIdentifier(): string
+    {
+        $latestIdentifier = $this->userRepository->getLatestUserIdentifier();
+
+        if (!$latestIdentifier) {
+            // If no users with DNR prefix exist yet, start with DNR001
+            return 'DNR001';
+        }
+
+        // Extract the numeric part
+        $numericPart = (int) substr($latestIdentifier, 3);
+
+        // Increment and format with leading zeros
+        $nextNumeric = $numericPart + 1;
+
+        // Format with leading zeros (at least 3 digits)
+        return 'DNR' . str_pad($nextNumeric, 3, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * Crée un nouvel utilisateur
      * Logique métier: hachage du mot de passe, génération d'identifiant, etc.
      */
     public function createUser(array $data)
     {
-        // Générer un identifiant unique pour l'utilisateur
-        $data['identifier'] = $this->generateUniqueIdentifier();
+        // Always use sequential identifier for all users
+        if (!isset($data['identifier'])) {
+            $data['identifier'] = $this->generateSequentialIdentifier();
+        }
+
+        // Remove use_sequential_id if it exists
+        if (isset($data['use_sequential_id'])) {
+            unset($data['use_sequential_id']);
+        }
 
         // Hacher le mot de passe
         if (isset($data['password'])) {
@@ -202,20 +248,4 @@ class UserService
         // Déléguer la mise à jour au repository
         return $this->userRepository->updateUser($id, $data);
     }
-
-    /**
-     * Génère un identifiant unique pour un utilisateur
-     * Logique métier pure
-     */
-    private function generateUniqueIdentifier()
-    {
-        // Préfixe + année + mois + 4 chiffres aléatoires
-        $prefix = 'USR';
-        $date = Carbon::now()->format('ym');
-        $random = str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
-
-        return $prefix . $date . $random;
-    }
-
-
 }

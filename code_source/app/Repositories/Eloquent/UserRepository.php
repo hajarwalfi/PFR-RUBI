@@ -23,7 +23,7 @@ class UserRepository implements UserRepositoryInterface
                     ->orWhere('last_name', 'ilike', "%{$search}%")
                     ->orWhere('email', 'ilike', "%{$search}%")
                     ->orWhere('phone', 'ilike', "%{$search}%")
-                ->orWhere('blood_group', 'ilike', "%{$search}%");
+                    ->orWhere('blood_group', 'ilike', "%{$search}%");
             });
         }
 
@@ -205,5 +205,15 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = User::findOrFail($id);
         return $user->update($data);
+    }
+
+    /**
+     * Get the latest user identifier with DNR prefix
+     */
+    public function getLatestUserIdentifier(): ?string
+    {
+        return User::where('identifier', 'like', 'DNR%')
+            ->orderBy('identifier', 'desc')
+            ->value('identifier');
     }
 }
