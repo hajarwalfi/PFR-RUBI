@@ -9,6 +9,9 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SerologyController;
 use App\Http\Controllers\Admin\UserController;
 
+// 🌷🌷🌷🌷🌷🌷🌷 USER 🌷🌷🌷🌷🌷🌷🌷
+use App\Http\Controllers\User\ArticleController as UserArticleController;
+
 // 🌷🌷🌷🌷🌷🌷🌷 GUEST 🌷🌷🌷🌷🌷🌷🌷
 
 
@@ -46,8 +49,12 @@ Route::post('/logout', [AuthController::class, 'logout'])
 // 🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 
-
-
+//🌷🌷🌷🌷🌷🌷🌷🌷🌷 Routes des articles (côté utilisateur) 🌷🌷🌷🌷🌷🌷🌷🌷🌷
+Route::prefix('articles')->name('articles.')->group(function () {
+    Route::get('/', [UserArticleController::class, 'index'])->name('index');
+    Route::get('/{id}', [UserArticleController::class, 'show'])->name('show');
+});
+//🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 
 

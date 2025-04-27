@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Repositories\Eloquent;
 
 use App\Repositories\Interfaces\ArticleRepositoryInterface;
@@ -10,17 +9,17 @@ class ArticleRepository implements ArticleRepositoryInterface
 {
     public function getAllArticles()
     {
-        return Article::with('user')->orderBy('created_at', 'desc')->get();
+        return Article::orderBy('created_at', 'desc')->get();
     }
 
     public function getArticleById($id)
     {
-        return Article::with('user')->findOrFail($id);
+        return Article::findOrFail($id);
     }
 
     public function getArticlesByStatus($status)
     {
-        return Article::with('user')->where('status', $status)->orderBy('created_at', 'desc')->get();
+        return Article::where('status', $status)->orderBy('created_at', 'desc')->get();
     }
 
     public function createArticle(array $articleData)
@@ -55,9 +54,10 @@ class ArticleRepository implements ArticleRepositoryInterface
             'archived_percentage' => $total > 0 ? round(($archived / $total) * 100, 1) : 0
         ];
     }
+
     public function searchArticles($query, $status = null)
     {
-        $articles = Article::with('user');
+        $articles = Article::query();
 
         if (!empty($query)) {
             $query = trim($query);
@@ -95,6 +95,7 @@ class ArticleRepository implements ArticleRepositoryInterface
 
         return $articles->orderBy('created_at', 'desc')->paginate(12);
     }
+
     public function archiveArticle($id)
     {
         return Article::whereId($id)->update(['status' => 'archived']);
@@ -107,16 +108,14 @@ class ArticleRepository implements ArticleRepositoryInterface
 
     public function getPublishedArticles()
     {
-        return Article::with('user')
-            ->where('status', 'published')
+        return Article::where('status', 'published')
             ->orderBy('date', 'desc')
             ->paginate(10);
     }
 
     public function getPublishedArticleById($id)
     {
-        return Article::with('user')
-            ->where('id', $id)
+        return Article::where('id', $id)
             ->where('status', 'published')
             ->firstOrFail();
     }

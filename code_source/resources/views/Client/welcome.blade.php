@@ -1,4 +1,4 @@
-@extends('Client.layouts.Template')
+@extends('User.layouts.Template')
 
 @section('title', 'Home')
 

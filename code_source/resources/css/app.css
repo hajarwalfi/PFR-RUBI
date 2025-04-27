@@ -40,7 +40,6 @@ trix-editor:focus {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* Styles communs pour les listes et images dans trix-content et article-content */
 .trix-content ul,
 .article-content ul {
     list-style-type: disc;
@@ -78,7 +77,6 @@ trix-editor:focus {
 }
 
 
-/* Styles améliorés pour la barre d'outils Trix */
 trix-toolbar {
     border-radius: 0.375rem 0.375rem 0 0;
     border: 1px solid #e5e7eb;
@@ -87,7 +85,6 @@ trix-toolbar {
     padding: 0.5rem;
 }
 
-/* Groupes de boutons */
 trix-toolbar .trix-button-group {
     border: 1px solid #e5e7eb;
     border-radius: 0.25rem;
@@ -97,7 +94,7 @@ trix-toolbar .trix-button-group {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Boutons individuels */
+
 trix-toolbar .trix-button {
     width: 2.5rem;
     height: 2.5rem;
@@ -109,35 +106,33 @@ trix-toolbar .trix-button {
     color: #4b5563;
 }
 
-/* Dernier bouton dans un groupe */
 trix-toolbar .trix-button:last-child {
     border-right: none;
 }
 
-/* Bouton au survol */
+
 trix-toolbar .trix-button:hover {
     background-color: #f3f4f6;
 }
 
-/* Bouton actif */
+
 trix-toolbar .trix-button.trix-active {
     background-color: #e5e7eb;
     color: #111827;
 }
 
-/* Bouton désactivé */
+
 trix-toolbar .trix-button:disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
 
-/* Icônes des boutons */
+
 trix-toolbar .trix-button::before {
     margin: 0;
     font-size: 1rem;
 }
 
-/* Styles spécifiques pour les boutons de liste */
 trix-toolbar .trix-button--icon-bullet-list::before {
     content: "•";
     font-size: 1.5rem;
@@ -149,19 +144,17 @@ trix-toolbar .trix-button--icon-number-list::before {
     font-size: 1rem;
 }
 
-/* Séparateur entre les groupes de boutons */
+
 trix-toolbar .trix-button-group + .trix-button-group {
     margin-left: 0.5rem;
 }
 
-/* Ajustement de l'éditeur pour correspondre à la barre d'outils */
 trix-editor {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-top: none;
 }
 
-/* Style pour le dialogue de lien */
 trix-toolbar .trix-dialog {
     background-color: white;
     border: 1px solid #e5e7eb;
@@ -234,7 +227,6 @@ trix-toolbar .trix-dialog .trix-button.trix-button--cancel:hover {
     margin: 0 auto;
 }
 
-/* Pour les images sans figure (insertion directe) */
 .trix-content img,
 .article-content img {
     display: block;
