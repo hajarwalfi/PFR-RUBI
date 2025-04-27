@@ -7,17 +7,17 @@
             <!-- Navigation -->
             <div class="p-4 flex justify-between items-center border-b border-gray-200">
                 <div class="flex items-center space-x-2 text-xs">
-                    <a href="{{ route('Users.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                    <a href="{{ route('admin.users.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
                         <i class="fas fa-arrow-left h-5 w-5"></i>
                     </a>
                     <div class="flex items-center text-gray-500">
-                        <a href="{{ route('Users.index') }}" class="hover:text-black hover:underline">Donors</a>
+                        <a href="{{ route('admin.users.index') }}" class="hover:text-black hover:underline">Donors</a>
                         <span class="mx-2">&gt;</span>
-                        <a href="{{ route('Users.show', $user->id) }}" class="hover:text-black hover:underline">{{ $user->first_name }} {{ $user->last_name }}</a>
+                        <a href="{{ route('admin.users.show', $user->id) }}" class="hover:text-black hover:underline">{{ $user->first_name }} {{ $user->last_name }}</a>
                     </div>
                 </div>
 
-                <a href="{{ route('Users.edit', $user->id) }}" class="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2">
+                <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2">
                     <i class="fas fa-edit h-5 w-5"></i>
                     <span>Edit Profile</span>
                 </a>
@@ -132,7 +132,7 @@
                                     <p class="text-xs text-gray-500">Blood donation history</p>
                                 </div>
                             </div>
-                            <a href="{{ route('Donations.create', ['user_id' => $user->id]) }}" class="bg-black text-white px-3 py-2 rounded-md flex items-center text-sm">
+                            <a href="{{ route('admin.donations.create', ['user_id' => $user->id]) }}" class="bg-black text-white px-3 py-2 rounded-md flex items-center text-sm">
                                 <i class="fas fa-plus h-5 w-5 mr-1"></i>
                                 Add Donation
                             </a>
@@ -180,10 +180,10 @@
                                                 </button>
                                                 <div class="donation-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-10">
                                                     <div class="py-1">
-                                                        <a href="{{ route('Donations.show', $donation->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                        <a href="{{ route('admin.donations.show', $donation->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                             <i class="far fa-eye mr-2"></i> View details
                                                         </a>
-                                                        <a href="{{ route('Donations.edit', $donation->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                        <a href="{{ route('admin.donations.edit', $donation->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                             <i class="far fa-edit mr-2"></i> Edit
                                                         </a>
                                                     </div>

@@ -1,68 +1,108 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
+// 🌷🌷🌷🌷🌷🌷🌷 ADMIN 🌷🌷🌷🌷🌷🌷🌷
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\DonationController;
+use App\Http\Controllers\Admin\ObservationController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\SerologyController;
+use App\Http\Controllers\Admin\UserController;
+
+// 🌷🌷🌷🌷🌷🌷🌷 GUEST 🌷🌷🌷🌷🌷🌷🌷
+
+
+// 🌷🌷🌷🌷🌷🌷🌷 Laravel Things 🌷🌷🌷🌷🌷🌷🌷
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DonationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\CommentController;
-
-Route::get('/register', function () {
-    return view('client.register');})->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
-
-Route::get('/login', function () {
-    return view('client.login');})->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
 
 
-Route::get('/posts', function () {
-    return view('Admin.Posts.index');
+// 🌷🌷🌷🌷🌷🌷🌷 Route d'accueil 🌷🌷🌷🌷🌷🌷🌷
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+
+// 🌷🌷🌷🌷🌷🌷🌷 Routes d'authentification 🌷🌷🌷🌷🌷🌷🌷
+Route::middleware('guest')->group(function () {
+    Route::get('/register', function () {
+        return view('client.register');
+    })->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+
+    Route::get('/login', function () {
+        return view('client.login');
+    })->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 });
-Route::resource('articles', ArticleController::class);
-
-Route::post('/admin/upload-trix-attachment', [ArticleController::class, 'uploadTrixAttachment'])->name('upload.trix-attachment');
-
-Route::put('/serology/{id}', [App\Http\Controllers\SerologyController::class, 'update'])->name('Serology.update');
-
-Route::post('/observations', [App\Http\Controllers\ObservationController::class, 'store'])->name('Observations.store');
-    Route::get('/users', [UserController::class, 'index'])->name('Users.index');
-    Route::get('/users/create', [UserController::class, 'create'])->name('Users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('Users.store');
-    Route::get('/users/{id}', [UserController::class, 'show'])->name('Users.show');
-    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('Users.edit');
-    Route::put('/users/{id}', [UserController::class, 'update'])->name('Users.update');
-    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('Users.destroy');
+// 🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 
-Route::get('Donations/create', [DonationController::class, 'create'])->name('Donations.create');
-Route::post('Donations', [DonationController::class, 'store'])->name('Donations.store');
-Route::get('Donations/{donation}', [DonationController::class, 'show'])->name('Donations.show');
-Route::get('Donations/{donation}/edit', [DonationController::class, 'edit'])->name('Donations.edit');
-Route::put('Donations/{donation}', [DonationController::class, 'update'])->name('Donations.update');
-Route::get('/donations/{id}/edit', [App\Http\Controllers\DonationController::class, 'edit'])->name('Donations.edit');
-Route::put('/donations/{id}', [App\Http\Controllers\DonationController::class, 'update'])->name('Donations.update');
-
-Route::patch('/articles/{id}/archive', [ArticleController::class, 'archive'])->name('articles.archive');
-Route::patch('/articles/{id}/publish', [ArticleController::class, 'publish'])->name('articles.publish');
+//🌷🌷🌷🌷🌷🌷 Route de déconnexion 🌷🌷🌷🌷🌷🌷🌷
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+// 🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 
 
 
 
-    Route::get('/posts', [App\Http\Controllers\PostController::class, 'moderationDashboard'])
-        ->name('moderation');
 
-    // Post actions
-    Route::post('/posts/{id}/approve', [App\Http\Controllers\PostController::class, 'approve'])
-        ->name('posts.approve');
-    Route::post('/posts/{id}/reject', [App\Http\Controllers\PostController::class, 'reject'])
-        ->name('posts.reject');
-    Route::post('/posts/{id}/archive', [App\Http\Controllers\PostController::class, 'archive'])
-        ->name('posts.archive');
-Route::delete('/posts/{id}', [App\Http\Controllers\PostController::class, 'destroy'])
-    ->name('posts.destroy');
-Route::delete('/comments/{id}', [App\Http\Controllers\CommentController::class, 'destroy'])
-    ->name('comments.destroy');
+
+//🌷🌷🌷🌷🌷🌷🌷🌷🌷  Routes d'administration  🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
+
+Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard admin
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    // Routes pour les utilisateurs
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{id}', [UserController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes pour les articles
+    Route::resource('articles', ArticleController::class);
+    Route::patch('/articles/{id}/archive', [ArticleController::class, 'archive'])->name('articles.archive');
+    Route::patch('/articles/{id}/publish', [ArticleController::class, 'publish'])->name('articles.publish');
+    Route::post('/upload-trix-attachment', [ArticleController::class, 'uploadTrixAttachment'])->name('articles.upload-trix-attachment');
+
+    // Routes pour les dons
+    Route::prefix('donations')->name('donations.')->group(function () {
+        Route::get('/', [DonationController::class, 'index'])->name('index');
+        Route::get('/create', [DonationController::class, 'create'])->name('create');
+        Route::post('/', [DonationController::class, 'store'])->name('store');
+        Route::get('/{donation}', [DonationController::class, 'show'])->name('show');
+        Route::get('/{donation}/edit', [DonationController::class, 'edit'])->name('edit');
+        Route::put('/{donation}', [DonationController::class, 'update'])->name('update');
+        Route::delete('/{donation}', [DonationController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes pour la sérologie
+    Route::put('/serology/{id}', [SerologyController::class, 'update'])->name('serology.update');
+
+    // Routes pour les observations
+    Route::post('/observations', [ObservationController::class, 'store'])->name('observations.store');
+
+    // Routes pour les posts et la modération
+    Route::prefix('posts')->name('posts.')->group(function () {
+        Route::get('/', [PostController::class, 'moderationDashboard'])->name('moderation');
+        Route::post('/{id}/approve', [PostController::class, 'approve'])->name('approve');
+        Route::post('/{id}/reject', [PostController::class, 'reject'])->name('reject');
+        Route::post('/{id}/archive', [PostController::class, 'archive'])->name('archive');
+        Route::delete('/{id}', [PostController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes pour les commentaires
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+});
+//🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷

@@ -7,13 +7,13 @@
     <main class="flex-1 p-6">
         <!-- Breadcrumb -->
         <div class="flex items-center space-x-2 text-xs">
-            <a href="{{ route('Users.show', $user->id) }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+            <a href="{{ route('admin.users.show', $user->id) }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
                 <i class="fas fa-arrow-left h-2 w-4"></i>
             </a>
             <div class="flex items-center text-gray-500">
-                <a href="{{ route('Users.index') }}" class="hover:text-black hover:underline">Donors</a>
+                <a href="{{ route('admin.users.index') }}" class="hover:text-black hover:underline">Donors</a>
                 <span class="mx-2">&gt;</span>
-                <a href="{{ route('Users.show', $user->id) }}" class="hover:text-black hover:underline">{{ $user->first_name }} {{ $user->last_name }}</a>
+                <a href="{{ route('admin.users.show', $user->id) }}" class="hover:text-black hover:underline">{{ $user->first_name }} {{ $user->last_name }}</a>
                 <span class="mx-2">&gt;</span>
                 <span class="hover:text-black">Edit Profile</span>
             </div>
@@ -37,7 +37,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('Users.update', $user->id) }}" method="POST">
+            <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -161,7 +161,7 @@
 
                 <!-- Buttons -->
                 <div class="flex justify-between mt-6">
-                    <a href="{{ route('Users.show', $user->id) }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium">Cancel</a>
+                    <a href="{{ route('admin.users.show', $user->id) }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium">Cancel</a>
                     <button type="submit" class="px-4 py-2 bg-black text-white rounded-md text-sm font-medium flex items-center">
                         <i class="fas fa-save h-5 w-5 mr-2"></i>
                         Save

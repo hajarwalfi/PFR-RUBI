@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Services\SerologyService;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,7 @@ class SerologyController extends Controller
     public function __construct(SerologyService $serologyService)
     {
         $this->serologyService = $serologyService;
+        $this->middleware('admin');
     }
 
     public function update(Request $request, $id)
@@ -27,11 +29,10 @@ class SerologyController extends Controller
         // Calculate overall result
         $data = $validated;
         $data['result'] = 'negative';
-        if (in_array('positive', [$data['tpha'], $data['hb'], $data['hc'], $data['vih']])) {
+        if (in_array('positive', [$data['tpha'], $data['hb'], $data['hc'], $data['vih']], true)) {
             $data['result'] = 'positive';
         }
 
-        // If ID is 0, it means there's no serology for this donation yet
         if ($id == 0) {
             $result = $this->serologyService->createSerology($data);
         } else {

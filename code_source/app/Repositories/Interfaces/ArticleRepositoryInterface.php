@@ -22,4 +22,8 @@ interface ArticleRepositoryInterface
 
     public function publishArticle($id);
 
+    public function getPublishedArticles();
+    public function getPublishedArticleById($id);
+    public function incrementViewCount($id);
+
 }

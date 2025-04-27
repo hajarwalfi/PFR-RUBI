@@ -104,4 +104,31 @@ class ArticleRepository implements ArticleRepositoryInterface
     {
         return Article::whereId($id)->update(['status' => 'published']);
     }
+
+    public function getPublishedArticles()
+    {
+        return Article::with('user')
+            ->where('status', 'published')
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+    }
+
+    public function getPublishedArticleById($id)
+    {
+        return Article::with('user')
+            ->where('id', $id)
+            ->where('status', 'published')
+            ->firstOrFail();
+    }
+
+    public function incrementViewCount($id)
+    {
+        $article = Article::find($id);
+        if ($article) {
+            $article->views = ($article->views ?? 0) + 1;
+            $article->save();
+            return true;
+        }
+        return false;
+    }
 }

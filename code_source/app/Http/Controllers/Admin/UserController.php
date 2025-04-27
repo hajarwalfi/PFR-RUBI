@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,7 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-//        $this->middleware('admin');
+        $this->middleware('admin');
     }
 
     public function index(Request $request)
@@ -25,23 +26,26 @@ class UserController extends Controller
         $users = $this->userService->getAllUsers($filters);
         $statistics = $this->userService->getUsersStatistics();
 
-        return view('Admin.Users.index', [
+        // Chemin de vue avec majuscules
+        return view('Admin.User.index', [
             'users' => $users,
             'statistics' => $statistics,
             'request' => $request,
-            'userService' => $this->userService // Important to use service methods in the view
+            'userService' => $this->userService
         ]);
     }
+
     public function show($id)
     {
         $user = $this->userService->getUserById($id);
 
         if (!$user) {
-            return redirect()->route('Admin.Users.index')
+            return redirect()->route('admin.users.index')
                 ->with('error', 'User not found');
         }
 
-        return view('Admin.Users.show', [
+        // Chemin de vue avec majuscules
+        return view('Admin.User.show', [
             'user' => $user,
             'userService' => $this->userService
         ]);
@@ -52,17 +56,17 @@ class UserController extends Controller
         $result = $this->userService->deleteUser($id);
 
         if ($result) {
-            return redirect()->route('Admin.Users.index')
+            return redirect()->route('admin.users.index')
                 ->with('success', 'User deleted successfully');
         } else {
-            return redirect()->route('Admin.Users.index')
+            return redirect()->route('admin.users.index')
                 ->with('error', 'Error deleting user');
         }
     }
 
     public function create()
     {
-        return view('Admin.Users.create');
+        return view('Admin.User.create');
     }
 
     public function store(Request $request)
@@ -83,7 +87,7 @@ class UserController extends Controller
         // Use the service to create the user
         $user = $this->userService->createUser($validated);
 
-        return redirect()->route('Admin.Users.index')
+        return redirect()->route('admin.users.index')
             ->with('success', 'User created successfully');
     }
 
@@ -92,16 +96,15 @@ class UserController extends Controller
         $user = $this->userService->getUserById($id);
 
         if (!$user) {
-            return redirect()->route('Admin.Users.index')
+            return redirect()->route('admin.users.index')
                 ->with('error', 'User not found');
         }
 
-        return view('Admin.Users.editUser', compact('user'));
+        return view('Admin.User.editUser', compact('user'));
     }
 
     public function update(Request $request, $id)
     {
-        // Validate form data
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -113,14 +116,13 @@ class UserController extends Controller
             'gender' => 'nullable|in:male,female',
         ]);
 
-        // Use the service to update the user
         $result = $this->userService->updateUser($id, $validated);
 
         if ($result) {
-            return redirect()->route('Users.show', $id)
+            return redirect()->route('admin.users.show', $id)
                 ->with('success', 'User updated successfully');
         } else {
-            return redirect()->route('Admin.Users.edit', $id)
+            return redirect()->route('admin.users.edit', $id)
                 ->with('error', 'Error updating user');
         }
     }

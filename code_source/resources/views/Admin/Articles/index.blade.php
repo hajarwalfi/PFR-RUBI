@@ -69,7 +69,7 @@
                         <p class="text-sm text-gray-500">View and manage articles registered in the RUBI application</p>
                     </div>
                     <div>
-                        <a href="{{ route('articles.create') }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-black text-white hover:bg-gray-800 h-9 px-3">
+                        <a href="{{ route('admin.articles.create') }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-black text-white hover:bg-gray-800 h-9 px-3">
                             <i class="fas fa-plus mr-2"></i>
                             Add Article
                         </a>
@@ -79,7 +79,7 @@
 
             <!-- Search and Filters -->
             <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <form action="{{ route('articles.index') }}" method="GET" class="relative w-full sm:w-64">
+                <form action="{{ route('admin.articles.index') }}" method="GET" class="relative w-full sm:w-64">
                     <i class="fas fa-search absolute left-2.5 top-2.5 h-4 w-4 text-gray-500"></i>
                     <input
                         type="search"
@@ -93,16 +93,16 @@
                     @endif
                 </form>
                 <div class="flex gap-2">
-                    <a href="{{ route('articles.index', ['search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ !request('status') ? 'bg-gray-100' : '' }}">
+                    <a href="{{ route('admin.articles.index', ['search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ !request('status') ? 'bg-gray-100' : '' }}">
                         All
                     </a>
-                    <a href="{{ route('articles.index', ['status' => 'published', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'published' ? 'bg-gray-100' : '' }}">
+                    <a href="{{ route('admin.articles.index', ['status' => 'published', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'published' ? 'bg-gray-100' : '' }}">
                         Published
                     </a>
-                    <a href="{{ route('articles.index', ['status' => 'draft', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'draft' ? 'bg-gray-100' : '' }}">
+                    <a href="{{ route('admin.articles.index', ['status' => 'draft', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'draft' ? 'bg-gray-100' : '' }}">
                         Drafts
                     </a>
-                    <a href="{{ route('articles.index', ['status' => 'archived', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'archived' ? 'bg-gray-100' : '' }}">
+                    <a href="{{ route('admin.articles.index', ['status' => 'archived', 'search' => request('search')]) }}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-200 bg-white hover:bg-gray-50 h-9 px-4 py-2 {{ request('status') == 'archived' ? 'bg-gray-100' : '' }}">
                         Archived
                     </a>
                 </div>
@@ -114,7 +114,7 @@
                         <!-- Article Card -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
                             <!-- Clickable area covering the entire card except the dropdown button -->
-                            <a href="{{ route('articles.show', $article->id) }}" class="absolute inset-0 z-10" style="cursor: pointer;"></a>
+                            <a href="{{ route('admin.articles.show', $article->id) }}" class="absolute inset-0 z-10" style="cursor: pointer;"></a>
 
                             <div class="p-4 pb-2">
                                 <div class="flex justify-between items-start">
@@ -138,10 +138,10 @@
                                         <div class="dropdown w-48 bg-white rounded-md shadow-lg border border-gray-200">
                                             <div class="py-1">
                                                 <div class="px-4 py-2 text-base font-medium border-b border-gray-200">Actions</div>
-                                                <a href="{{ route('articles.show', $article->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                <a href="{{ route('admin.articles.show', $article->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                     <i class="fas fa-eye mr-2"></i> View Details
                                                 </a>
-                                                <a href="{{ route('articles.edit', $article->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                <a href="{{ route('admin.articles.edit', $article->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                     <i class="fas fa-edit mr-2"></i> Edit
                                                 </a>
                                                 <button class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left" onclick="openDeleteDialog('{{ $article->id }}')">

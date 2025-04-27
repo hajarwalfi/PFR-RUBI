@@ -7,19 +7,19 @@
         <!-- Navigation -->
         <div class="p-4 flex justify-between items-center border-b border-gray-200">
             <div class="flex items-center space-x-2 text-xs">
-                <a href="{{ route('Users.show', $donation->user_id) }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                <a href="{{ route('admin.users.show', $donation->user_id) }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
                     <i class="fas fa-arrow-left h-2 w-4"></i>
                 </a>
                 <div class="flex items-center text-gray-500">
-                    <a href="{{ route('Users.index') }}" class="hover:text-black hover:underline">Donors</a>
+                    <a href="{{ route('admin.users.index') }}" class="hover:text-black hover:underline">Donors</a>
                     <span class="mx-2">&gt;</span>
-                    <a href="{{ route('Users.show', $donation->user_id) }}" class="hover:text-black hover:underline">{{ $donation->user->first_name }} {{ $donation->user->last_name }}</a>
+                    <a href="{{ route('admin.users.show', $donation->user_id) }}" class="hover:text-black hover:underline">{{ $donation->user->first_name }} {{ $donation->user->last_name }}</a>
                     <span class="mx-2">&gt;</span>
-                    <a href="{{ route('Donations.show', $donation->id) }}" class="hover:text-black hover:underline">Donation Details</a>
+                    <a href="{{ route('admin.donations.show', $donation->id) }}" class="hover:text-black hover:underline">Donation Details</a>
                 </div>
             </div>
 
-            <a href="{{ route('Donations.edit', $donation->id) }}" class="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2">
+            <a href="{{ route('admin.donations.edit', $donation->id) }}" class="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2">
                 <i class="fas fa-edit h-4 w-4"></i>
                 <span>Edit</span>
             </a>
@@ -190,7 +190,7 @@
                         <h3 class="font-bold">Observations</h3>
                     </div>
                     <div class="p-4 h-120 overflow-auto">
-                        <form action="{{ route('Observations.store') }}" method="POST">
+                        <form action="{{ route('admin.observations.store') }}" method="POST">
                             @csrf
                             <input type="hidden" name="donation_id" value="{{ $donation->id }}">
                             <textarea

@@ -1,37 +1,19 @@
 @extends('Admin.layouts.aside')
 @section('title', 'RUBI Admin - Edit Article')
 
-@section('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css" />
-    <style>
-        trix-editor {
-            min-height: 300px;
-            border-radius: 0.375rem;
-            border-color: #e5e7eb;
-            padding: 0.5rem;
-        }
-
-        trix-editor:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-    </style>
-@endsection
-
 @section('content')
     <main class="flex-1">
         <div class="flex-1">
             <!-- Navigation -->
             <div class="p-4 flex justify-between items-center border-b border-gray-200">
                 <div class="flex items-center space-x-2 text-xs">
-                    <a href="{{ route('articles.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                    <a href="{{ route('admin.articles.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
                         <i class="fas fa-arrow-left h-5 w-5"></i>
                     </a>
                     <div class="flex items-center text-gray-500">
-                        <a href="{{ route('articles.index') }}" class="hover:text-black hover:underline">Articles</a>
+                        <a href="{{ route('admin.articles.index') }}" class="hover:text-black hover:underline">Articles</a>
                         <span class="mx-2">&gt;</span>
-                        <a href="{{ route('articles.show', $article->id) }}" class="hover:text-black hover:underline">{{ $article->title }}</a>
+                        <a href="{{ route('admin.articles.show', $article->id) }}" class="hover:text-black hover:underline">{{ $article->title }}</a>
                         <span class="mx-2">&gt;</span>
                         <span class="text-gray-800">Edit</span>
                     </div>
@@ -47,7 +29,7 @@
                 </div>
 
                 <!-- Form -->
-                <form action="{{ route('articles.update', $article->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.articles.update', $article->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -165,13 +147,12 @@
                                     @enderror
                                 </div>
 
-                                <!-- Action Buttons -->
                                 <div class="pt-4 border-t border-gray-200 space-y-2">
                                     <button type="submit" class="w-full flex items-center justify-center rounded-md bg-black text-white px-4 py-2 text-sm font-medium">
                                         <i class="fas fa-save mr-2"></i>
                                         Update Article
                                     </button>
-                                    <a href="{{ route('articles.show', $article->id) }}" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    <a href="{{ route('admin.articles.show', $article->id) }}" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
                                         Cancel
                                     </a>
                                 </div>
@@ -185,7 +166,6 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Trix Editor initialized');
@@ -201,7 +181,6 @@
         function uploadFileAttachment(attachment) {
             console.log('Starting file upload:', attachment.file.name);
 
-            // Get CSRF token from meta tag
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             const formData = new FormData();
@@ -210,13 +189,13 @@
             // Show upload progress
             attachment.setUploadProgress(0);
 
-            fetch('{{ route("upload.trix-attachment") }}', {
+            fetch('{{ route("admin.articles.upload-trix-attachment") }}', {
                 method: 'POST',
                 body: formData,
                 headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': token
-                },
-                credentials: 'same-origin'
+                }
             })
                 .then(response => {
                     console.log('Response status:', response.status);
@@ -242,7 +221,6 @@
                     attachment.remove();
                 })
                 .finally(() => {
-                    // Complete progress
                     attachment.setUploadProgress(100);
                 });
         }

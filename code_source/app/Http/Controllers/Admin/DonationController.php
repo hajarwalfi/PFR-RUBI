@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Donation;
 use App\Models\User;
 use App\Services\DonationService;
@@ -17,6 +18,7 @@ class DonationController extends Controller
     {
         $this->donationService = $donationService;
         $this->userService = $userService;
+        $this->middleware('admin');
     }
 
     /**
@@ -65,7 +67,7 @@ class DonationController extends Controller
 
         $donation = $this->donationService->createDonation($validated);
 
-        return redirect()->route('Donations.show', $donation->id)
+        return redirect()->route('admin.donations.show', $donation->id)
             ->with('success', 'Donation created successfully.');
     }
 
@@ -90,7 +92,7 @@ class DonationController extends Controller
         $donation = $this->donationService->getDonationById($id);
 
         if (!$donation) {
-            return redirect()->route('Donations.index')->with('error', 'Donation not found.');
+            return redirect()->route('admin.donations.index')->with('error', 'Donation not found.');
         }
 
         return view('Admin.Users.editDonation', compact('donation'));
@@ -123,7 +125,7 @@ class DonationController extends Controller
         $user_id = $donation->user_id;
         $this->donationService->deleteDonation($donation->id);
 
-        return redirect()->route('Users.show', $user_id)
+        return redirect()->route('admin.users.show', $user_id)
             ->with('success', 'Donation deleted successfully.');
     }
 }

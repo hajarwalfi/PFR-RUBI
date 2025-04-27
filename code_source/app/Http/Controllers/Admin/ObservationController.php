@@ -1,8 +1,8 @@
 <?php
 
+namespace App\Http\Controllers\Admin;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Services\ObservationService;
 use Illuminate\Http\Request;
 
@@ -13,6 +13,7 @@ class ObservationController extends Controller
     public function __construct(ObservationService $observationService)
     {
         $this->observationService = $observationService;
+        $this->middleware('admin');
     }
 
     public function store(Request $request)
@@ -24,6 +25,6 @@ class ObservationController extends Controller
 
         $observation = $this->observationService->createObservation($validated);
 
-        return redirect()->back()->with('success', 'Observation ajoutée avec succès.');
+        return redirect()->back()->with('success', 'Observation added successfully.');
     }
 }

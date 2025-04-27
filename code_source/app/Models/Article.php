@@ -15,15 +15,10 @@ class Article extends Model
         'status',
         'date',
         'picture',
-        'user_id'
+        'views'
     ];
 
     protected $casts = [
         'date' => 'date'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

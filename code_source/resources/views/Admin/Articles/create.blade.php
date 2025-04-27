@@ -1,35 +1,17 @@
 @extends('Admin.layouts.aside')
 @section('title', 'RUBI Admin - Add Article')
 
-@section('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css" />
-    <style>
-        trix-editor {
-            min-height: 300px;
-            border-radius: 0.375rem;
-            border-color: #e5e7eb;
-            padding: 0.5rem;
-        }
-
-        trix-editor:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-    </style>
-@endsection
-
 @section('content')
     <main class="flex-1">
         <div class="flex-1">
             <!-- Navigation -->
             <div class="p-4 flex justify-between items-center border-b border-gray-200">
                 <div class="flex items-center space-x-2 text-xs">
-                    <a href="{{ route('articles.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                    <a href="{{ route('admin.articles.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
                         <i class="fas fa-arrow-left h-5 w-5"></i>
                     </a>
                     <div class="flex items-center text-gray-500">
-                        <a href="{{ route('articles.index') }}" class="hover:text-black hover:underline">Articles</a>
+                        <a href="{{ route('admin.articles.index') }}" class="hover:text-black hover:underline">Articles</a>
                         <span class="mx-2">&gt;</span>
                         <span class="text-gray-800">New Article</span>
                     </div>
@@ -45,7 +27,7 @@
                 </div>
 
                 <!-- Form -->
-                <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="grid grid-cols-12 gap-6">
@@ -86,7 +68,7 @@
                                     <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
                                     <input id="content" type="hidden" name="content" value="{{ old('content') }}">
                                     <trix-editor input="content" class="trix-content border border-gray-300 rounded-md min-h-[300px] @error('content') border-red-500 @enderror"></trix-editor>
-                                    <p class="text-xs text-gray-500 mt-1">You can insert text and images in the content</p>
+                                    <p class="text-xs text-gray-500 mt-1">You can insert text, images, and lists in the content</p>
                                     @error('content')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                     @enderror
@@ -166,7 +148,7 @@
                                         <i class="fas fa-save mr-2"></i>
                                         Save Article
                                     </button>
-                                    <a href="{{ route('articles.index') }}" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    <a href="{{ route('admin.articles.index') }}" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
                                         Cancel
                                     </a>
                                 </div>
@@ -184,6 +166,42 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Trix Editor initialized');
+
+            // Activer les outils de liste à puces et numérotées
+            const toolbarElement = document.querySelector("trix-toolbar");
+            if (toolbarElement) {
+                // Ajouter le bouton de liste à puces s'il n'existe pas déjà
+                if (!toolbarElement.querySelector(".trix-button--icon-bullet-list")) {
+                    const bulletListButton = document.createElement("button");
+                    bulletListButton.setAttribute("type", "button");
+                    bulletListButton.setAttribute("class", "trix-button trix-button--icon trix-button--icon-bullet-list");
+                    bulletListButton.setAttribute("data-trix-attribute", "bullet");
+                    bulletListButton.setAttribute("title", "Bullet List");
+                    bulletListButton.setAttribute("tabindex", "-1");
+                    bulletListButton.innerText = "Bullet List";
+
+                    const buttonGroup = toolbarElement.querySelector(".trix-button-group--block-tools");
+                    if (buttonGroup) {
+                        buttonGroup.appendChild(bulletListButton);
+                    }
+                }
+
+                // Ajouter le bouton de liste numérotée s'il n'existe pas déjà
+                if (!toolbarElement.querySelector(".trix-button--icon-number-list")) {
+                    const numberListButton = document.createElement("button");
+                    numberListButton.setAttribute("type", "button");
+                    numberListButton.setAttribute("class", "trix-button trix-button--icon trix-button--icon-number-list");
+                    numberListButton.setAttribute("data-trix-attribute", "number");
+                    numberListButton.setAttribute("title", "Number List");
+                    numberListButton.setAttribute("tabindex", "-1");
+                    numberListButton.innerText = "Number List";
+
+                    const buttonGroup = toolbarElement.querySelector(".trix-button-group--block-tools");
+                    if (buttonGroup) {
+                        buttonGroup.appendChild(numberListButton);
+                    }
+                }
+            }
 
             document.addEventListener('trix-attachment-add', function(event) {
                 if (event.attachment.file) {
@@ -205,7 +223,7 @@
             // Show upload progress
             attachment.setUploadProgress(0);
 
-            fetch('/admin/upload-trix-attachment', {
+            fetch('{{ route("admin.articles.upload-trix-attachment") }}', {
                 method: 'POST',
                 body: formData,
                 headers: {

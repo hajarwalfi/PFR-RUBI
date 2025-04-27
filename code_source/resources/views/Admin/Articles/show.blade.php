@@ -7,17 +7,17 @@
             <!-- Navigation -->
             <div class="p-4 flex justify-between items-center border-b border-gray-200">
                 <div class="flex items-center space-x-2 text-xs">
-                    <a href="{{ route('articles.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                    <a href="{{ route('admin.articles.index') }}" class="inline-flex items-center p-2 rounded-md hover:bg-gray-100">
                         <i class="fas fa-arrow-left h-5 w-5"></i>
                     </a>
                     <div class="flex items-center text-gray-500">
-                        <a href="{{ route('articles.index') }}" class="hover:text-black hover:underline">Articles</a>
+                        <a href="{{ route('admin.articles.index') }}" class="hover:text-black hover:underline">Articles</a>
                         <span class="mx-2">&gt;</span>
-                        <a href="{{ route('articles.show', $article->id) }}" class="hover:text-black hover:underline">{{ $article->title }}</a>
+                        <a href="{{ route('admin.articles.show', $article->id) }}" class="hover:text-black hover:underline">{{ $article->title }}</a>
                     </div>
                 </div>
 
-                <a href="{{ route('articles.edit', $article->id) }}" class="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2">
+                <a href="{{ route('admin.articles.edit', $article->id) }}" class="bg-black text-white px-4 py-2 rounded-md flex items-center space-x-2">
                     <i class="fas fa-edit h-5 w-5"></i>
                     <span>Edit Article</span>
                 </a>
@@ -112,7 +112,7 @@
                         <!-- Action Buttons -->
                         <div class="p-4 space-y-2">
                             @if($article->status == 'published')
-                                <form action="{{ route('articles.archive', $article->id) }}" method="POST">
+                                <form action="{{ route('admin.articles.archive', $article->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
@@ -121,7 +121,7 @@
                                     </button>
                                 </form>
                             @else
-                                <form action="{{ route('articles.publish', $article->id) }}" method="POST">
+                                <form action="{{ route('admin.articles.publish', $article->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="w-full flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
@@ -154,7 +154,7 @@
 
                         <!-- Content -->
                         <div class="p-6">
-                            <div class="prose max-w-none text-sm">
+                            <div class="prose article-content max-w-none text-sm">
                                 {!! $article->content !!}
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                 <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm" onclick="document.getElementById('deleteDialog').classList.remove('show')">
                     Cancel
                 </button>
-                <form action="{{ route('articles.destroy', $article->id) }}" method="POST">
+                <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md text-sm hover:bg-red-700">

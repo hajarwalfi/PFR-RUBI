@@ -1,7 +1,6 @@
 <?php
 
-
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\ArticleService;
@@ -13,6 +12,7 @@ class ArticleController extends Controller
 
     public function __construct(ArticleService $articleService)
     {
+        $this->middleware('admin');
         $this->articleService = $articleService;
     }
 
@@ -31,7 +31,7 @@ class ArticleController extends Controller
 
         $stats = $this->articleService->getArticleStats();
 
-        return view('admin.articles.index', compact('articles', 'stats'));
+        return view('Admin.Articles.index', compact('articles', 'stats'));
     }
 
     public function create()
@@ -54,12 +54,11 @@ class ArticleController extends Controller
             $validatedData['picture'] = $picturePath;
         }
 
-        $validatedData['user_id'] = 1;
 
         $article = $this->articleService->createArticle($validatedData);
 
-        return redirect()->route('articles.show', $article->id)
-            ->with('success', 'Article créé avec succès.');
+        return redirect()->route('admin.articles.show', $article->id)
+            ->with('success', 'Article created successfully.');
     }
 
     public function uploadTrixAttachment(Request $request)
@@ -104,7 +103,7 @@ class ArticleController extends Controller
             'content' => 'required|string',
             'status' => 'required|in:published,draft,archived',
             'date' => 'required|date',
-            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // L'image est optionnelle lors de l'édition
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image is optional when editing
         ]);
 
         if ($request->hasFile('picture')) {
@@ -120,14 +119,14 @@ class ArticleController extends Controller
 
         $this->articleService->updateArticle($id, $validated);
 
-        return redirect()->route('articles.show', $id)
-            ->with('success', 'Article mis à jour avec succès');
+        return redirect()->route('admin.articles.show', $id)
+            ->with('success', 'Article updated successfully.');
     }
 
     public function destroy($id)
     {
         $this->articleService->deleteArticle($id);
-        return redirect()->route('articles.index')->with('success', 'Publication supprimée avec succès');
+        return redirect()->route('admin.articles.index')->with('success', 'Article deleted successfully.');
     }
 
     public function archive($id)
@@ -136,7 +135,7 @@ class ArticleController extends Controller
 
         $this->articleService->archiveArticle($id);
 
-        return redirect()->route('articles.show', $id)
+        return redirect()->route('admin.articles.show', $id)
             ->with('success', 'Article has been archived.');
     }
 
@@ -146,8 +145,7 @@ class ArticleController extends Controller
 
         $this->articleService->publishArticle($id);
 
-        return redirect()->route('articles.show', $id)
+        return redirect()->route('admin.articles.show', $id)
             ->with('success', 'Article has been published.');
     }
-
 }

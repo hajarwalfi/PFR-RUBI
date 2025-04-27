@@ -67,22 +67,22 @@
                         <h2 class="text-xl font-bold">User Posts</h2>
                         <div class="bg-gray-100 rounded-lg p-2">
                             <div class="flex w-full justify-between">
-                                <a href="{{ route('moderation', ['status' => 'pending']) }}"
+                                <a href="{{ route('admin.posts.moderation', ['status' => 'pending']) }}"
                                    class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
                                     {{ $status === 'pending' ? 'bg-white text-gray-800 font-medium shadow-sm' : 'text-gray-600 hover:bg-gray-200' }}">
                                     <i class="far fa-clock mr-0.5"></i>Pending
                                 </a>
-                                <a href="{{ route('moderation', ['status' => 'approved']) }}"
+                                <a href="{{ route('admin.posts.moderation', ['status' => 'approved']) }}"
                                    class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
                                     {{ $status === 'approved' ? 'bg-white text-gray-800 font-medium shadow-sm' : 'text-gray-600 hover:bg-gray-200' }}">
                                     <i class="fas fa-check-circle mr-0.5"></i>Approved
                                 </a>
-                                <a href="{{ route('moderation', ['status' => 'rejected']) }}"
+                                <a href="{{ route('admin.posts.moderation', ['status' => 'rejected']) }}"
                                    class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
                                    {{ $status === 'rejected' ? 'bg-white text-gray-800 font-medium shadow-sm' : 'text-gray-600 hover:bg-gray-200' }}">
                                     <i class="fas fa-times-circle mr-0.5"></i>Rejected
                                 </a>
-                                <a href="{{ route('moderation', ['status' => 'archived']) }}"
+                                <a href="{{ route('admin.posts.moderation', ['status' => 'archived']) }}"
                                    class="text-center py-1 px-1.5 text-xs rounded-md transition-colors duration-200 ease-in-out flex-1 mx-0.5
                                     {{ $status === 'archived' ? 'bg-white text-gray-800 font-medium shadow-sm' : 'text-gray-600 hover:bg-gray-200' }}">
                                     <i class="fas fa-archive mr-0.5"></i>Archived
@@ -98,53 +98,53 @@
                             <div class="p-4 hover:bg-gray-50 post-item" data-status="{{ $post->status }}">
                                 <div class="flex justify-between mb-2">
                                     <h3 class="font-medium">
-                                        <a href="{{ route('moderation', ['status' => $status, 'post_id' => $post->id]) }}"
+                                        <a href="{{ route('admin.posts.moderation', ['status' => $status, 'post_id' => $post->id]) }}"
                                            class="hover:underline">
                                             {{ $post->title ?? 'Untitled Post' }}
                                         </a>
                                     </h3>
                                     <div class="flex space-x-3">
                                         @if($post->status == 'pending')
-                                            <form action="{{ route('posts.approve', $post->id) }}" method="POST" class="inline">
+                                            <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" class="text-green-500 hover:text-green-700" title="Approve">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('posts.reject', $post->id) }}" method="POST" class="inline">
+                                            <form action="{{ route('admin.posts.reject', $post->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" class="text-red-500 hover:text-red-700" title="Reject">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </form>
                                         @elseif($post->status == 'approved')
-                                            <form action="{{ route('posts.reject', $post->id) }}" method="POST" class="inline">
+                                            <form action="{{ route('admin.posts.reject', $post->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" class="text-red-500 hover:text-red-700" title="Reject">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('posts.archive', $post->id) }}" method="POST" class="inline">
+                                            <form action="{{ route('admin.posts.archive', $post->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" class="text-gray-400 hover:text-gray-600" title="Archive">
                                                     <i class="fas fa-archive"></i>
                                                 </button>
                                             </form>
                                         @elseif($post->status == 'rejected')
-                                            <form action="{{ route('posts.approve', $post->id) }}" method="POST" class="inline">
+                                            <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" class="text-green-500 hover:text-green-700" title="Approve">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             </form>
                                         @elseif($post->status == 'archived')
-                                            <form action="{{ route('posts.approve', $post->id) }}" method="POST" class="inline">
+                                            <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" class="text-green-500 hover:text-green-700" title="Restore">
                                                     <i class="fas fa-undo"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="inline">
+                                            <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-500 hover:text-red-700" title="Delete">
@@ -194,46 +194,46 @@
 
                                 <div class="flex space-x-2 ml-2">
                                     @if($selectedPost->status == 'pending')
-                                        <form action="{{ route('posts.approve', $selectedPost->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.posts.approve', $selectedPost->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="text-green-500 hover:text-green-700 transition-colors" title="Approve">
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('posts.reject', $selectedPost->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.posts.reject', $selectedPost->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="text-red-500 hover:text-red-700 transition-colors" title="Reject">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </form>
                                     @elseif($selectedPost->status == 'approved')
-                                        <form action="{{ route('posts.reject', $selectedPost->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.posts.reject', $selectedPost->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="text-red-500 hover:text-red-700 transition-colors" title="Reject">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('posts.archive', $selectedPost->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.posts.archive', $selectedPost->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="text-gray-400 hover:text-gray-600 transition-colors" title="Archive">
                                                 <i class="fas fa-archive"></i>
                                             </button>
                                         </form>
                                     @elseif($selectedPost->status == 'rejected')
-                                        <form action="{{ route('posts.approve', $selectedPost->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.posts.approve', $selectedPost->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="text-green-500 hover:text-green-700 transition-colors" title="Approve">
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         </form>
                                     @elseif($selectedPost->status == 'archived')
-                                        <form action="{{ route('posts.approve', $selectedPost->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.posts.approve', $selectedPost->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="text-green-500 hover:text-green-700 transition-colors" title="Restore">
                                                 <i class="fas fa-undo"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('posts.destroy', $selectedPost->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.posts.destroy', $selectedPost->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:text-red-700 transition-colors" title="Delete">
@@ -301,7 +301,7 @@
                                                         <p class="text-xs text-gray-500 mr-3">{{ $comment->created_at->format('Y-m-d H:i') }}</p>
 
                                                         <!-- Delete comment button -->
-                                                        <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="inline">
+                                                        <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST" class="inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="text-red-500 hover:text-red-700 transition-colors" title="Delete Comment">

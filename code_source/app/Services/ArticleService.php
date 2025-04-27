@@ -32,11 +32,6 @@ class ArticleService
 
     public function createArticle(array $articleData)
     {
-        // Ajouter l'utilisateur actuel comme auteur si non spécifié
-        if (!isset($articleData['user_id'])) {
-            $articleData['user_id'] = Auth::id();
-        }
-
         return $this->articleRepository->createArticle($articleData);
     }
 
@@ -69,6 +64,20 @@ class ArticleService
     public function publishArticle($id)
     {
         return $this->articleRepository->publishArticle($id);
+    }
+    public function getPublishedArticles()
+    {
+        return $this->articleRepository->getPublishedArticles();
+    }
+
+    public function getPublishedArticleById($id)
+    {
+        return $this->articleRepository->getPublishedArticleById($id);
+    }
+
+    public function incrementViewCount($id)
+    {
+        return $this->articleRepository->incrementViewCount($id);
     }
 
 }
