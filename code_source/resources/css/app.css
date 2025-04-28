@@ -5,13 +5,22 @@
 @source "../views";
 
 @font-face {
-    font-family: 'Geist Variable';
-    src: url('../fonts/geist/Geist-VariableFont_wght.woff2') format('woff2');
+    font-family: 'Playfair Display';
+    src: url('../fonts/playfairDisplay/PlayfairDisplay-VariableFont_wght.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter/AnyConv.com__Inter-VariableFont_opsz,wght.woff2') format('woff2');
     font-weight: 100 900;
     font-style: normal;
+    font-display: swap;
 }
 body {
-    font-family: 'Geist Variable', sans-serif;
+    font-family: 'Inter', 'Geist Variable', sans-serif;
     font-weight: 400;
 }
 
@@ -207,7 +216,7 @@ trix-toolbar .trix-dialog .trix-button.trix-button--cancel {
 trix-toolbar .trix-dialog .trix-button.trix-button--cancel:hover {
     background-color: #f3f4f6;
 }
-/* Centrer les images dans l'éditeur Trix et dans le contenu affiché */
+
 .trix-content figure.attachment,
 .trix-content figure.attachment--preview,
 .article-content figure.attachment,

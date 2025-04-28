@@ -17,6 +17,7 @@ use App\Http\Controllers\User\ArticleController as UserArticleController;
 
 // 🌷🌷🌷🌷🌷🌷🌷 Laravel Things 🌷🌷🌷🌷🌷🌷🌷
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\User\EligibilityController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -30,12 +31,12 @@ Route::get('/', function () {
 // 🌷🌷🌷🌷🌷🌷🌷 Routes d'authentification 🌷🌷🌷🌷🌷🌷🌷
 Route::middleware('guest')->group(function () {
     Route::get('/register', function () {
-        return view('client.register');
+        return view('register');
     })->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 
     Route::get('/login', function () {
-        return view('client.login');
+        return view('login');
     })->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 });
@@ -54,8 +55,27 @@ Route::prefix('articles')->name('articles.')->group(function () {
     Route::get('/', [UserArticleController::class, 'index'])->name('index');
     Route::get('/{id}', [UserArticleController::class, 'show'])->name('show');
 });
+
+// Routes pour la communauté
+Route::prefix('community')->name('user.community.')->middleware(['auth'])->group(function () {
+    Route::get('/', [App\Http\Controllers\User\PostController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\User\PostController::class, 'create'])->name('create');
+    Route::post('/store', [App\Http\Controllers\User\PostController::class, 'store'])->name('store');
+    Route::get('/post/{id}', [App\Http\Controllers\User\PostController::class, 'show'])->name('show');
+    Route::get('/post/{id}/edit', [App\Http\Controllers\User\PostController::class, 'edit'])->name('edit');
+    Route::put('/post/{id}', [App\Http\Controllers\User\PostController::class, 'update'])->name('update');
+    Route::delete('/post/{id}', [App\Http\Controllers\User\PostController::class, 'destroy'])->name('destroy');
+    Route::delete('/media/{id}', [App\Http\Controllers\User\PostController::class, 'deleteMedia'])->name('delete-media');
+    Route::get('/myPosts', [App\Http\Controllers\User\PostController::class, 'myPosts'])->name('my-posts');
+});
+
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/eligibility', [EligibilityController::class, 'showEligibilityForm'])->name('user.eligibility.form');
+    Route::post('/eligibility/check', [EligibilityController::class, 'checkEligibility'])->name('user.eligibility.check');
+});
 
 
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷  Routes d'administration  🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷

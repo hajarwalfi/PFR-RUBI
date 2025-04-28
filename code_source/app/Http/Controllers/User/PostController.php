@@ -1,0 +1,168 @@
+<?php
+
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Services\PostService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+class PostController extends Controller
+{
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+        $this->middleware('auth');
+    }
+
+    public function index()
+    {
+        $posts = $this->postService->getApprovedPosts();
+
+
+        $topContributors = User::select('users.*')
+            ->selectRaw('(SELECT COUNT(*) FROM posts WHERE users.id = posts.user_id) as posts_count')
+            ->selectRaw('(SELECT COUNT(*) FROM comments WHERE users.id = comments.user_id) as comments_count')
+            ->orderByRaw('(SELECT COUNT(*) FROM posts WHERE users.id = posts.user_id) + (SELECT COUNT(*) FROM comments WHERE users.id = comments.user_id) DESC')
+            ->take(4)
+            ->get();
+
+        return view('User.Community.index', compact('posts', 'topContributors'));
+    }
+
+
+    public function show($id)
+    {
+        $post = $this->postService->getPostById($id);
+
+        if ($post->status !== 'approved' && $post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('User.Community.show', compact('post'));
+    }
+
+
+    public function create()
+    {
+        return view('User.Community.create');
+    }
+
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string|max:1000',
+            'media.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        try {
+            $post = $this->postService->createPost(
+                $request->input('content'),
+                $request->file('media') ?? []
+            );
+
+            return redirect()->route('user.community.index')
+                ->with('success', 'Your post has been created successfully and is awaiting approval by an administrator. You can view all your posts <a href="' . route('user.community.my-posts') . '">here</a>.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'An error occurred while creating your post. Please try again.')
+                ->withInput();
+        }
+    }
+
+    public function edit($id)
+    {
+        $post = $this->postService->getPostById($id);
+
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('User.Community.edit', compact('post'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $post = $this->postService->getPostById($id);
+
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string|max:1000',
+            'media.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        try {
+            $this->postService->updatePost($id, $request->input('content'));
+
+            if ($request->hasFile('media')) {
+                foreach ($request->file('media') as $file) {
+                    $this->postService->addMediaToPost($id, $file);
+                }
+            }
+
+            return redirect()->route('user.community.my-posts')
+                ->with('success', 'Your post has been updated and is awaiting moderation.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'An error occurred while updating your post. Please try again.')
+                ->withInput();
+        }
+    }
+
+    public function destroy($id)
+    {
+        $post = $this->postService->getPostById($id);
+
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->postService->deletePost($id);
+
+        return redirect()->route('user.community.my-posts')
+            ->with('success', 'Your post has been deleted successfully.');
+    }
+
+
+    public function deleteMedia($mediaId)
+    {
+        $media = $this->postService->postMediaRepository->getMediaById($mediaId);
+        $post = $media->post;
+
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->postService->removeMediaFromPost($mediaId);
+
+        return redirect()->back()
+            ->with('success', 'Media has been removed from your post.');
+    }
+
+    public function myPosts()
+    {
+        $posts = $this->postService->getUserPosts();
+        return view('User.Community.my-posts', compact('posts'));
+    }
+}

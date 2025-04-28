@@ -1,0 +1,191 @@
+@import "tailwindcss";
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import 'remixicon/fonts/remixicon.css';
+@source "../views";
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('../fonts/playfairDisplay/static/PlayfairDisplay-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('../fonts/playfairDisplay/static/PlayfairDisplay-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('../fonts/playfairDisplay/static/PlayfairDisplay-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('../fonts/playfairDisplay/static/PlayfairDisplay-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Remplacer votre déclaration d'Inter par les versions statiques */
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter/static/AnyConv.com__Inter_18pt-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter/static/AnyConv.com__Inter_18pt-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter/static/AnyConv.com__Inter_18pt-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter/static/AnyConv.com__Inter_18pt-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* Style pour le menu utilisateur */
+#userMenu.hidden {
+    display: none;
+}
+
+/* Style pour le menu mobile */
+#mobileMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    z-index: 50;
+    padding-top: 5rem;
+}
+
+#mobileMenu.hidden {
+    display: none;
+}
+
+/* Style très simple pour le header sticky */
+@media (min-width: 768px) {
+    /* Header fixe en haut de l'écran */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background-color: white;
+        z-index: 40;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Espace pour compenser la hauteur du header */
+    main {
+        padding-top: 74px;
+    }
+}
+
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.font-playfair {
+    font-family: 'Playfair Display', 'Times New Roman', serif;
+}
+
+/* Specific styles for article titles */
+h1.font-playfair {
+    font-weight: 700; /* Featured article title - boldest */
+    letter-spacing: -0.01em; /* Slightly tighter letter spacing for headlines */
+}
+
+h2.font-playfair {
+    font-weight: 600; /* Regular article titles - semi-bold */
+}
+
+/* Add a subtle text shadow to make titles appear bolder without changing weight */
+h1.font-playfair, h2.font-playfair {
+    text-shadow: 0 0 0.1px currentColor;
+}
+
+/* Make titles darker for better contrast */
+h1.font-playfair, h2.font-playfair {
+    color: #111827; /* Very dark gray, almost black */
+}
+
+/* Le reste de votre CSS reste inchangé */
+.pagination {
+    display: inline-flex;
+}
+
+
+
+.pagination > * {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+}
+
+.pagination > .active {
+    color: #111827;
+    font-weight: 500;
+}
+
+.pagination > *:hover:not(.active):not(.disabled) {
+    color: #111827;
+}
+
+.pagination > .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    accent-color: #dc2626;
+}
+
+
+
+.footer-divider {
+    border-top-width: 1px;
+    border-color: #f3f4f6;
+    padding-top: 2rem;
+    margin-top: 5rem;
+}
+
+.footer-text {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.footer-highlight {
+    color: #111827;
+}

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class PostService
 {
     protected $postRepository;
-    protected $postMediaRepository;
+    public $postMediaRepository;
 
     public function __construct(
         PostRepositoryInterface $postRepository,

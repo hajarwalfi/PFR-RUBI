@@ -27,7 +27,7 @@ class UserController extends Controller
         $statistics = $this->userService->getUsersStatistics();
 
         // Chemin de vue avec majuscules
-        return view('Admin.User.index', [
+        return view('Admin.Users.index', [
             'users' => $users,
             'statistics' => $statistics,
             'request' => $request,
@@ -45,7 +45,7 @@ class UserController extends Controller
         }
 
         // Chemin de vue avec majuscules
-        return view('Admin.User.show', [
+        return view('Admin.Users.show', [
             'user' => $user,
             'userService' => $this->userService
         ]);
@@ -66,7 +66,7 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('Admin.User.create');
+        return view('Admin.Users.create');
     }
 
     public function store(Request $request)
@@ -100,7 +100,7 @@ class UserController extends Controller
                 ->with('error', 'User not found');
         }
 
-        return view('Admin.User.editUser', compact('user'));
+        return view('Admin.Users.editUser', compact('user'));
     }
 
     public function update(Request $request, $id)

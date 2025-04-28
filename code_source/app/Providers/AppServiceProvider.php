@@ -6,6 +6,7 @@ use App\Repositories\Eloquent\ArticleRepository;
 use App\Repositories\Eloquent\AuthRepository;
 use App\Repositories\Eloquent\CommentRepository;
 use App\Repositories\Eloquent\DonationRepository;
+use App\Repositories\Eloquent\EligibilityRepository;
 use App\Repositories\Eloquent\ObservationRepository;
 use App\Repositories\Eloquent\PostMediaRepository;
 use App\Repositories\Eloquent\PostRepository;
@@ -15,6 +16,7 @@ use App\Repositories\Interfaces\ArticleRepositoryInterface;
 use App\Repositories\Interfaces\AuthRepositoryInterface;
 use App\Repositories\Interfaces\CommentRepositoryInterface;
 use App\Repositories\Interfaces\DonationRepositoryInterface;
+use App\Repositories\Interfaces\EligibilityRepositoryInterface;
 use App\Repositories\Interfaces\ObservationRepositoryInterface;
 use App\Repositories\Interfaces\PostMediaRepositoryInterface;
 use App\Repositories\Interfaces\PostRepositoryInterface;
@@ -45,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
         $this->app->bind(PostMediaRepositoryInterface::class, PostMediaRepository::class);
         $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
+        $this->app->bind(EligibilityRepositoryInterface::class, EligibilityRepository::class);
     }
 
     /**

@@ -3,14 +3,10 @@ import '../css/app.css';
 import 'trix';
 import 'trix/dist/trix.css';
 
-// Attendre que le DOM soit chargé
 document.addEventListener('DOMContentLoaded', function() {
-    // Vérifier si l'éditeur Trix est présent sur la page
     const trixEditor = document.querySelector('trix-editor');
     if (trixEditor) {
         console.log('Trix Editor initialisé');
-
-        // Configurer l'événement d'upload de fichier
         document.addEventListener('trix-attachment-add', function(event) {
             if (event.attachment.file) {
                 uploadFileAttachment(event.attachment);
@@ -26,14 +22,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function uploadFileAttachment(attachment) {
     console.log('Début upload fichier:', attachment.file.name);
 
-    // Récupérer le token CSRF depuis la balise meta
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     const formData = new FormData();
     formData.append('file', attachment.file);
     formData.append('_token', token);
 
-    // Afficher la progression de l'upload
     attachment.setUploadProgress(0);
 
     fetch('/admin/upload-trix-attachment', {
@@ -67,7 +61,6 @@ function uploadFileAttachment(attachment) {
             attachment.remove();
         })
         .finally(() => {
-            // Terminer la progression
             attachment.setUploadProgress(100);
         });
 }
