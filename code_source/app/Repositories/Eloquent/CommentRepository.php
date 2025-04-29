@@ -14,7 +14,7 @@ class CommentRepository implements CommentRepositoryInterface
 
     public function getCommentById($commentId)
     {
-        return Comment::with('user')->findOrFail($commentId);
+        return Comment::with('user')->find($commentId);
     }
 
     public function createComment(array $commentData)

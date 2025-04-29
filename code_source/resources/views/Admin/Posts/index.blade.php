@@ -248,36 +248,37 @@
                         </div>
                         <div class="p-4 border-b border-gray-200">
                             <p class="mb-6">{{ $selectedPost->content ?? 'No content' }}</p>
+
                             @if($selectedPost->media && $selectedPost->media->count() > 0)
-                                <div>
-                                    <h3 class="text-sm font-medium mb-2">Media:</h3>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        @foreach($selectedPost->media as $media)
-                                            <div class="border rounded overflow-hidden">
-                                                @if(Str::contains($media->mime_type, 'image'))
-                                                    <img src="{{ $media->url }}" alt="Post media" class="w-full h-auto">
-                                                @elseif(Str::contains($media->mime_type, 'video'))
-                                                    <video controls class="w-full h-auto">
-                                                        <source src="{{ $media->url }}" type="{{ $media->mime_type }}">
-                                                        Your browser does not support the video tag.
-                                                    </video>
-                                                @else
-                                                    <div class="p-4 text-center text-gray-500">
-                                                        <i class="fas fa-file text-2xl mb-2"></i>
-                                                        <p>{{ $media->file_name }}</p>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        @endforeach
+                                <div class="mt-2 mb-4">
+                                    <div class="flex justify-center items-center">
+                                        <div class="grid grid-cols-2 gap-4 w-full max-w-3xl">
+                                            @foreach($selectedPost->media as $media)
+                                                <div class="rounded overflow-hidden mx-auto">
+                                                    @if($media->type == 'image')
+                                                        <img src="{{ Storage::url($media->path) }}" alt="Post media" class="w-full h-auto max-h-64 object-cover">
+                                                    @elseif($media->type == 'video')
+                                                        <video controls class="w-full h-auto max-h-64">
+                                                            <source src="{{ Storage::url($media->path) }}" type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    @else
+                                                        <div class="p-4 text-center text-gray-500">
+                                                            <i class="fas fa-file text-2xl mb-2"></i>
+                                                            <p>{{ basename($media->path) }}</p>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                             @endif
 
-
                             @if(in_array($selectedPost->status, ['approved', 'archived']))
-                                <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-4 mt-6"> <!-- Ajout de mt-6 pour créer plus d'espace en haut -->
                                     <div class="flex items-center">
-                                        <i class="ri-chat-4-line text-gray-400  ri-sm mr-2"></i>
+                                        <i class="ri-chat-4-line text-gray-400 ri-sm mr-2"></i>
                                         <span class="text-xs text-gray-500">{{ $selectedPost->comments->count() }}</span>
                                     </div>
 
@@ -287,7 +288,6 @@
                                     </div>
                                 </div>
                             @endif
-
 
                             @if(in_array($selectedPost->status, ['approved', 'archived']) && $selectedPost->comments && $selectedPost->comments->count() > 0)
                                 <div class="mt-8">

@@ -69,6 +69,11 @@ Route::prefix('community')->name('user.community.')->middleware(['auth'])->group
     Route::get('/myPosts', [App\Http\Controllers\User\PostController::class, 'myPosts'])->name('my-posts');
 });
 
+Route::post('/comments', [App\Http\Controllers\User\CommentController::class, 'store'])->name('user.comments.store');
+Route::get('/comments/{id}/edit', [App\Http\Controllers\User\CommentController::class, 'edit'])->name('user.comments.edit');
+Route::put('/comments/{id}', [App\Http\Controllers\User\CommentController::class, 'update'])->name('user.comments.update');
+Route::delete('/comments/{id}', [App\Http\Controllers\User\CommentController::class, 'destroy'])->name('user.comments.destroy');
+
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 

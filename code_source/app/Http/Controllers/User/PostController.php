@@ -35,12 +35,17 @@ class PostController extends Controller
     }
 
 
+
     public function show($id)
     {
         $post = $this->postService->getPostById($id);
 
         if ($post->status !== 'approved' && $post->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
+        }
+
+        if ($post->user_id !== Auth::id()) {
+            $this->postService->incrementViews($id);
         }
 
         return view('User.Community.show', compact('post'));
@@ -145,20 +150,7 @@ class PostController extends Controller
     }
 
 
-    public function deleteMedia($mediaId)
-    {
-        $media = $this->postService->postMediaRepository->getMediaById($mediaId);
-        $post = $media->post;
 
-        if ($post->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $this->postService->removeMediaFromPost($mediaId);
-
-        return redirect()->back()
-            ->with('success', 'Media has been removed from your post.');
-    }
 
     public function myPosts()
     {

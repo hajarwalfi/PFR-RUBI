@@ -17,4 +17,5 @@ interface PostRepositoryInterface
     public function approvePost($postId);
     public function rejectPost($postId);
     public function archivePost($postId);
+    public function incrementViews($postId);
 }

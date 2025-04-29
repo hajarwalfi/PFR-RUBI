@@ -81,4 +81,11 @@ class PostRepository implements PostRepositoryInterface
             'moderated_at' => Carbon::now(),
         ]);
     }
+
+    public function incrementViews($postId)
+    {
+        $post = Post::findOrFail($postId);
+        $post->increment('views');
+        return $post->views;
+    }
 }

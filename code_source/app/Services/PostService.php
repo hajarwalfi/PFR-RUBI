@@ -117,11 +117,6 @@ class PostService
         return $this->postMediaRepository->createMedia($postId, $file, $type);
     }
 
-    public function removeMediaFromPost($mediaId)
-    {
-        return $this->postMediaRepository->deleteMedia($mediaId);
-    }
-
     protected function determineFileType(UploadedFile $file)
     {
         $mimeType = $file->getMimeType();
@@ -134,5 +129,9 @@ class PostService
 
         // Default to image if can't determine
         return 'image';
+    }
+    public function incrementViews($postId)
+    {
+        return $this->postRepository->incrementViews($postId);
     }
 }

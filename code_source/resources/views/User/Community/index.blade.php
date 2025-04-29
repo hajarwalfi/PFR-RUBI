@@ -52,10 +52,10 @@
                             <div class="h-24 bg-gradient-to-r from-red-500 to-red-600"></div>
                             <div class="absolute -bottom-10 left-1/2 transform -translate-x-1/2">
                                 @if(Auth::user()->profile_photo_path)
-                                    <img src="{{ Storage::url(Auth::user()->profile_photo_path) }}" alt="{{ Auth::user()->name }}" class="h-20 w-20 rounded-full object-cover border-4 border-white">
+                                    <img src="{{ Storage::url(Auth::user()->profile_photo_path) }}" alt="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" class="h-20 w-20 rounded-full object-cover border-4 border-white">
                                 @else
                                     <div class="h-20 w-20 rounded-full bg-red-100 flex items-center justify-center border-4 border-white">
-                                        <span class="text-red-600 font-bold text-xl">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</span>
+                                        <span class="text-red-600 font-bold text-xl">{{ strtoupper(substr(Auth::user()->first_name, 0, 1) . substr(Auth::user()->last_name, 0, 1)) }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -63,8 +63,7 @@
 
                         <!-- Informations utilisateur -->
                         <div class="pt-12 pb-4 px-4 text-center">
-                            <h2 class="font-semibold text-lg text-gray-900">{{ Auth::user()->name }}</h2>
-                            <p class="text-sm text-gray-500">{{ Auth::user()->email }}</p>
+                            <h2 class="font-semibold text-lg text-gray-900">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h2>
 
                             <div class="mt-4 pt-4 border-t border-gray-100">
                                 <div class="grid grid-cols-3 gap-2 text-center">
@@ -116,14 +115,14 @@
                                 @csrf
                                 <div class="flex items-center space-x-3 mb-3">
                                     @if(Auth::user()->profile_photo_path)
-                                        <img src="{{ Storage::url(Auth::user()->profile_photo_path) }}" alt="{{ Auth::user()->name }}" class="h-10 w-10 rounded-full object-cover">
+                                        <img src="{{ Storage::url(Auth::user()->profile_photo_path) }}" alt="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" class="h-10 w-10 rounded-full object-cover">
                                     @else
                                         <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
-                                            <span class="text-red-600 font-medium text-sm">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</span>
+                                            <span class="text-red-600 font-medium text-sm">{{ strtoupper(substr(Auth::user()->first_name, 0, 1) . substr(Auth::user()->last_name, 0, 1)) }}</span>
                                         </div>
                                     @endif
                                     <div class="flex-grow">
-                                        <textarea id="content" name="content" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder="What's on your mind, {{ Auth::user()->name }}?"></textarea>
+                                        <textarea id="content" name="content" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder="What's on your mind, {{ Auth::user()->first_name }}?"></textarea>
                                     </div>
                                 </div>
 
@@ -158,15 +157,15 @@
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0">
                                                 @if($post->user->profile_photo_path)
-                                                    <img src="{{ Storage::url($post->user->profile_photo_path) }}" alt="{{ $post->user->name }}" class="h-10 w-10 rounded-full object-cover">
+                                                    <img src="{{ Storage::url($post->user->profile_photo_path) }}" alt="{{ $post->user->first_name }} {{ $post->user->last_name }}" class="h-10 w-10 rounded-full object-cover">
                                                 @else
                                                     <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
-                                                        <span class="text-red-600 font-medium text-sm">{{ strtoupper(substr($post->user->name, 0, 2)) }}</span>
+                                                        <span class="text-red-600 font-medium text-sm">{{ strtoupper(substr($post->user->first_name, 0, 1) . substr($post->user->last_name, 0, 1)) }}</span>
                                                     </div>
                                                 @endif
                                             </div>
                                             <div class="ml-3">
-                                                <p class="text-sm font-medium text-gray-900">{{ $post->user->name }}</p>
+                                                <p class="text-sm font-medium text-gray-900">{{ $post->user->first_name }} {{ $post->user->last_name }}</p>
                                                 <p class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
                                             </div>
                                         </div>
@@ -218,7 +217,7 @@
                                     <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
                                         <div class="flex justify-between mb-2">
                                             <div class="flex items-center text-sm text-gray-600">
-                                                <i class="ri-eye-line mr-1"></i> {{ rand(5, 100) }} Views
+                                                <i class="ri-eye-line mr-1"></i> {{ $post->views }} Views
                                             </div>
                                             <a href="{{ route('user.community.show', $post->id) }}" class="flex items-center text-sm text-gray-600 hover:text-blue-600">
                                                 <i class="ri-chat-1-line mr-1"></i>
@@ -252,15 +251,15 @@
                                 <div class="p-3 flex items-center">
                                     <div class="flex-shrink-0 mr-3">
                                         @if($contributor->profile_photo_path)
-                                            <img src="{{ Storage::url($contributor->profile_photo_path) }}" alt="{{ $contributor->name }}" class="h-10 w-10 rounded-full object-cover">
+                                            <img src="{{ Storage::url($contributor->profile_photo_path) }}" alt="{{ $contributor->first_name }} {{ $contributor->last_name }}" class="h-10 w-10 rounded-full object-cover">
                                         @else
                                             <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
-                                                <span class="text-red-600 font-medium text-sm">{{ strtoupper(substr($contributor->name, 0, 2)) }}</span>
+                                                <span class="text-red-600 font-medium text-sm">{{ strtoupper(substr($contributor->first_name, 0, 1) . substr($contributor->last_name, 0, 1)) }}</span>
                                             </div>
                                         @endif
                                     </div>
                                     <div>
-                                        <p class="text-sm font-medium text-gray-900">{{ $contributor->name }}</p>
+                                        <p class="text-sm font-medium text-gray-900">{{ $contributor->first_name }} {{ $contributor->last_name }}</p>
                                         <p class="text-xs text-gray-500">{{ $contributor->posts_count }} posts, {{ $contributor->comments_count }} comments</p>
                                     </div>
                                 </div>

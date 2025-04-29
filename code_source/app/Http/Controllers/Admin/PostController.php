@@ -79,7 +79,6 @@ class PostController extends Controller
         if ($request->has('post_id')) {
             $selectedPost = $this->postService->getPostById($request->query('post_id'));
         } else if ($posts->count() > 0) {
-            // Default to the first post in the list
             $selectedPost = $posts->first();
         }
 
