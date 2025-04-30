@@ -16,7 +16,8 @@ class Post extends Model
         'content',
         'status',
         'moderated_at',
-        'views'
+        'views',
+        'title'
     ];
 
     protected $casts = [

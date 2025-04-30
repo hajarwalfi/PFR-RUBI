@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Services\CommentService;
 use App\Services\PostService;
 use Illuminate\Http\Request;
@@ -129,5 +130,30 @@ class CommentController extends Controller
             return redirect()->back()
                 ->with('error', 'An error occurred while deleting your comment. Please try again.');
         }
+    }
+    /**
+     * Affiche tous les commentaires de l'utilisateur connecté
+     */
+    public function myComments(Request $request)
+    {
+        $query = Comment::with(['post', 'post.user'])
+            ->where('user_id', Auth::id());
+
+        // Recherche dans le contenu des commentaires
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('content', 'like', "%{$search}%");
+        }
+
+        // Tri par date
+        if ($request->input('sort') === 'oldest') {
+            $query->oldest();
+        } else {
+            $query->latest(); // Par défaut, les plus récents d'abord
+        }
+
+        $comments = $query->paginate(10);
+
+        return view('User.Dashboard.comments', compact('comments'));
     }
 }

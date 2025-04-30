@@ -57,13 +57,14 @@ class PostService
         return $this->postRepository->getUserPosts($userId);
     }
 
-    public function createPost($content, $files = [])
+    public function createPost($title,$content, $files = [])
     {
         DB::beginTransaction();
 
         try {
             $post = $this->postRepository->createPost([
                 'user_id' => Auth::id(),
+                'title' => $title,
                 'content' => $content,
                 'status' => 'pending',
             ]);
@@ -87,7 +88,7 @@ class PostService
     {
         return $this->postRepository->updatePost($postId, [
             'content' => $content,
-            'status' => 'pending', // Reset to pending for re-moderation
+            'status' => 'pending',
         ]);
     }
 
@@ -126,8 +127,6 @@ class PostService
         } elseif (strpos($mimeType, 'video/') === 0) {
             return 'video';
         }
-
-        // Default to image if can't determine
         return 'image';
     }
     public function incrementViews($postId)

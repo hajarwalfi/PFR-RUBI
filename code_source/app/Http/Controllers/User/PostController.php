@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use App\Models\User;
 use App\Services\PostService;
 use Illuminate\Http\Request;
@@ -61,6 +62,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'title' => 'nullable|string|max:255',
             'content' => 'required|string|max:1000',
             'media.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240',
         ]);
@@ -73,6 +75,7 @@ class PostController extends Controller
 
         try {
             $post = $this->postService->createPost(
+                $request->input('title'),
                 $request->input('content'),
                 $request->file('media') ?? []
             );
@@ -107,8 +110,8 @@ class PostController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
+            'title' => 'nullable|string|max:255',
             'content' => 'required|string|max:1000',
-            'media.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240',
         ]);
 
         if ($validator->fails()) {
@@ -152,9 +155,19 @@ class PostController extends Controller
 
 
 
-    public function myPosts()
+    public function myPosts(Request $request)
     {
-        $posts = $this->postService->getUserPosts();
-        return view('User.Community.my-posts', compact('posts'));
+        $status = $request->query('status');
+
+        $query = Post::with(['media', 'comments'])
+            ->where('user_id', Auth::id());
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        $posts = $query->latest()->get();
+
+        return view('User.Dashboard.posts', compact('posts'));
     }
 }

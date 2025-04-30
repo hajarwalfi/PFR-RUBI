@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\UserController;
 
 // 🌷🌷🌷🌷🌷🌷🌷 USER 🌷🌷🌷🌷🌷🌷🌷
 use App\Http\Controllers\User\ArticleController as UserArticleController;
+use App\Http\Controllers\User\PostController as UserPostController;
+use App\Http\Controllers\User\CommentController as UserCommentController;
 
 // 🌷🌷🌷🌷🌷🌷🌷 GUEST 🌷🌷🌷🌷🌷🌷🌷
 
@@ -44,9 +46,7 @@ Route::middleware('guest')->group(function () {
 
 
 //🌷🌷🌷🌷🌷🌷 Route de déconnexion 🌷🌷🌷🌷🌷🌷🌷
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->middleware('auth')
-    ->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 // 🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 
@@ -54,6 +54,21 @@ Route::post('/logout', [AuthController::class, 'logout'])
 Route::prefix('articles')->name('articles.')->group(function () {
     Route::get('/', [UserArticleController::class, 'index'])->name('index');
     Route::get('/{id}', [UserArticleController::class, 'show'])->name('show');
+});
+
+//Routes de dashboard client
+
+Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(function () {
+    //route pour voir les posts
+    Route::get('/myPosts', [UserPostController::class, 'myPosts'])->name('myPosts');
+    //route pour voir les commentaires
+    Route::get('/myComments', [UserCommentController::class, 'myComments'])->name('myComments');
+    //route pour voir le profile
+    Route::get('/myProfile', [UserCommentController::class, 'myProfile'])->name('myProfile');
+    //route pour voir les donations
+    Route::get('/myDonations', [App\Http\Controllers\User\DonationController::class, 'index'])->name('donations');
+    //route pour voir les details de chaque don
+    Route::get('/myDonations/{id}', [App\Http\Controllers\User\DonationController::class, 'show'])->name('details');
 });
 
 // Routes pour la communauté
@@ -65,15 +80,13 @@ Route::prefix('community')->name('user.community.')->middleware(['auth'])->group
     Route::get('/post/{id}/edit', [App\Http\Controllers\User\PostController::class, 'edit'])->name('edit');
     Route::put('/post/{id}', [App\Http\Controllers\User\PostController::class, 'update'])->name('update');
     Route::delete('/post/{id}', [App\Http\Controllers\User\PostController::class, 'destroy'])->name('destroy');
-    Route::delete('/media/{id}', [App\Http\Controllers\User\PostController::class, 'deleteMedia'])->name('delete-media');
-    Route::get('/myPosts', [App\Http\Controllers\User\PostController::class, 'myPosts'])->name('my-posts');
+
 });
 
 Route::post('/comments', [App\Http\Controllers\User\CommentController::class, 'store'])->name('user.comments.store');
 Route::get('/comments/{id}/edit', [App\Http\Controllers\User\CommentController::class, 'edit'])->name('user.comments.edit');
 Route::put('/comments/{id}', [App\Http\Controllers\User\CommentController::class, 'update'])->name('user.comments.update');
 Route::delete('/comments/{id}', [App\Http\Controllers\User\CommentController::class, 'destroy'])->name('user.comments.destroy');
-
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 
@@ -81,6 +94,38 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/eligibility', [EligibilityController::class, 'showEligibilityForm'])->name('user.eligibility.form');
     Route::post('/eligibility/check', [EligibilityController::class, 'checkEligibility'])->name('user.eligibility.check');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷  Routes d'administration  🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
@@ -138,3 +183,4 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
+
