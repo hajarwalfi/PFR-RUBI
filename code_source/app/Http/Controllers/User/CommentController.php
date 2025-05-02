@@ -131,26 +131,10 @@ class CommentController extends Controller
                 ->with('error', 'An error occurred while deleting your comment. Please try again.');
         }
     }
-    /**
-     * Affiche tous les commentaires de l'utilisateur connecté
-     */
     public function myComments(Request $request)
     {
         $query = Comment::with(['post', 'post.user'])
             ->where('user_id', Auth::id());
-
-        // Recherche dans le contenu des commentaires
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('content', 'like', "%{$search}%");
-        }
-
-        // Tri par date
-        if ($request->input('sort') === 'oldest') {
-            $query->oldest();
-        } else {
-            $query->latest(); // Par défaut, les plus récents d'abord
-        }
 
         $comments = $query->paginate(10);
 

@@ -133,4 +133,11 @@ class PostService
     {
         return $this->postRepository->incrementViews($postId);
     }
+    public function getPaginatedUserPosts($userId = null, $status = null, $perPage = 9)
+    {
+        $userId = $userId ?? Auth::id();
+        return $this->postRepository->getPaginatedUserPosts($userId, $status, $perPage);
+    }
+
+
 }

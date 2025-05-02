@@ -148,7 +148,7 @@ class PostController extends Controller
 
         $this->postService->deletePost($id);
 
-        return redirect()->route('user.community.my-posts')
+        return redirect()->route('user.community.index')
             ->with('success', 'Your post has been deleted successfully.');
     }
 
@@ -158,15 +158,9 @@ class PostController extends Controller
     public function myPosts(Request $request)
     {
         $status = $request->query('status');
+        $userId = Auth::id();
 
-        $query = Post::with(['media', 'comments'])
-            ->where('user_id', Auth::id());
-
-        if ($status) {
-            $query->where('status', $status);
-        }
-
-        $posts = $query->latest()->get();
+        $posts = $this->postService->getPaginatedUserPosts($userId, $status);
 
         return view('User.Dashboard.posts', compact('posts'));
     }

@@ -88,4 +88,16 @@ class PostRepository implements PostRepositoryInterface
         $post->increment('views');
         return $post->views;
     }
+
+    public function getPaginatedUserPosts($userId, $status = null, $perPage = 9)
+    {
+        $query = Post::with(['media', 'comments'])
+            ->where('user_id', $userId);
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->latest()->paginate($perPage);
+    }
 }

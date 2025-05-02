@@ -3,12 +3,9 @@
 @section('content')
     <div class="bg-white min-h-screen">
         <div class="container mx-auto px-6 py-12 max-w-6xl">
-            <!-- Two Column Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                <!-- Left Column - Featured Article (SMALLER) -->
                 <div class="lg:col-span-5">
                     @if($articles->isNotEmpty())
-                        <!-- Featured Article Image (REDUCED HEIGHT) -->
                         <div class="mb-4 relative">
                             @if($articles->first()->picture)
                                 <img
@@ -21,45 +18,35 @@
                             @endif
                         </div>
 
-                        <!-- Featured Tag (SMALLER MARGIN) -->
                         <div class="uppercase text-gray-500 text-xs tracking-widest mb-2 font-medium">Featured article</div>
 
-                        <!-- Featured Title (SMALLER FONT) -->
                         <h1 class="font-serif text-xl mb-3 leading-tight">
                             {{ $articles->first()->title }}
                         </h1>
 
-                        <!-- Featured Excerpt (REDUCED LENGTH) -->
                         <p class="text-gray-600 mb-3 text-sm leading-relaxed">
                             {{ Str::limit(strip_tags($articles->first()->content), 120) }}
                         </p>
 
-                        <!-- Read More Link -->
                         <a href="{{ route('articles.show', $articles->first()->id) }}" class="text-sm text-gray-900 hover:underline">
                             Read full article
                         </a>
                     @endif
                 </div>
 
-                <!-- Right Column - Article List -->
                 <div class="lg:col-span-7">
                     <div class="space-y-12">
                         @foreach($articles->skip(1)->take(5) as $index => $article)
-                            <!-- Article Item -->
                             <div class="grid grid-cols-12 gap-4 items-start">
-                                <!-- Article Number -->
                                 <div class="col-span-1">
                                     <span class="text-gray-400 font-serif text-xl">{{ sprintf('%02d', $index + 1) }}</span>
                                 </div>
 
-                                <!-- Article Content -->
                                 <div class="col-span-8">
-                                    <!-- Article Title -->
                                     <h2 class="font-serif text-lg mb-2 leading-tight">
                                         {{ $article->title }}
                                     </h2>
 
-                                    <!-- Article Excerpt -->
                                     <p class="text-gray-600 text-sm mb-2 leading-relaxed">
                                         {{ Str::limit(strip_tags($article->content), 120) }}
                                     </p>
@@ -70,7 +57,6 @@
                                     </a>
                                 </div>
 
-                                <!-- Article Thumbnail -->
                                 <div class="col-span-3">
                                     @if($article->picture)
                                         <img
@@ -135,7 +121,6 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Minimal Pagination */
         .pagination {
             @apply inline-flex;
         }

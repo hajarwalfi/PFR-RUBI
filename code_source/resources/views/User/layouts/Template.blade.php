@@ -6,6 +6,11 @@
     <title>@yield('title', 'RUBI')</title>
     @vite('resources/css/user.css')
     @vite('resources/js/user.js')
+    <style>
+        main {
+            padding-top: 80px;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,26 +18,23 @@
     <div class="container mx-auto px-6 py-3">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <a href="" class="flex-shrink-0">
+                <a href="{{route('home')}}" class="flex-shrink-0">
                     <img src="{{ asset('storage/logo.png') }}" alt="Logo" class="h-12 w-auto">
                 </a>
             </div>
 
             <nav class="hidden md:flex items-center space-x-8">
-                <a href="" class="text-red-600 font-medium text-sm hover:text-red-700 transition-colors px-1 py-2 border-b-2 border-red-500 font-serif">
-                    Accueil
+                <a href="{{route('home')}}" class="text-red-600 font-medium text-sm hover:text-red-700 transition-colors px-1 py-2 border-b-2 border-red-500 font-serif">
+                    Home
                 </a>
-                <a href="" class="text-gray-700 font-medium text-sm hover:text-red-600 transition-colors px-1 py-2 border-b-2 border-transparent hover:border-red-500 font-serif">
+                <a href="{{route('articles.index')}}" class="text-gray-700 font-medium text-sm hover:text-red-600 transition-colors px-1 py-2 border-b-2 border-transparent hover:border-red-500 font-serif">
                     Articles
                 </a>
-                <a href="" class="text-gray-700 font-medium text-sm hover:text-red-600 transition-colors px-1 py-2 border-b-2 border-transparent hover:border-red-500 font-serif">
-                    Communauté
+                <a href="{{route('user.community.index')}}" class="text-gray-700 font-medium text-sm hover:text-red-600 transition-colors px-1 py-2 border-b-2 border-transparent hover:border-red-500 font-serif">
+                    Community
                 </a>
-                <a href="" class="text-gray-700 font-medium text-sm hover:text-red-600 transition-colors px-1 py-2 border-b-2 border-transparent hover:border-red-500 font-serif">
-                    Éligibilité
-                </a>
-                <a href="" class="text-gray-700 font-medium text-sm hover:text-red-600 transition-colors px-1 py-2 border-b-2 border-transparent hover:border-red-500 font-serif">
-                    À propos
+                <a href="{{route('user.eligibility.form')}}" class="text-gray-700 font-medium text-sm hover:text-red-600 transition-colors px-1 py-2 border-b-2 border-transparent hover:border-red-500 font-serif">
+                    Eligibility
                 </a>
             </nav>
 
@@ -46,29 +48,29 @@
                             <span class="ml-2 text-sm hidden lg:inline font-serif">{{ Auth::user()->name }}</span>
                         </button>
                         <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
-                            <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600">
-                                Mon profil
+                            <a href="{{route('dashboard.myPosts')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600">
+                                My Profile
                             </a>
                             <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600">
-                                Mes rendez-vous
+                                My Appointments
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600">
-                                    Déconnexion
+                                    Logout
                                 </button>
                             </form>
                         </div>
                     </div>
                 @else
                     <a href="{{ route('login') }}" class="hidden md:block text-sm font-medium text-gray-700 hover:text-red-600 transition-colors font-serif">
-                        Connexion
+                        Login
                     </a>
                 @endauth
 
                 <a href="{{ route('register') }}" class="hidden sm:inline-flex items-center px-5 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-[1.02] shadow-sm font-serif tracking-wide">
-                    Devenir Donneur
+                    Become a Donor
                 </a>
             </div>
 
@@ -90,42 +92,42 @@
         </div>
         <div class="flex flex-col space-y-4">
             <a href="" class="text-red-600 font-medium py-2 border-l-4 border-red-500 pl-3 font-serif">
-                Accueil
+                Home
             </a>
             <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
                 Articles
             </a>
             <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
-                Communauté
+                Community
             </a>
             <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
-                Éligibilité
+                Eligibility
             </a>
             <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
-                À propos
+                About
             </a>
 
             @auth
                 <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
-                    <i class="ri-user-line mr-2"></i> Mon profil
+                    <i class="ri-user-line mr-2"></i> My Profile
                 </a>
                 <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
-                    <i class="ri-calendar-line mr-2"></i> Mes rendez-vous
+                    <i class="ri-calendar-line mr-2"></i> My Appointments
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full text-left text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
-                        <i class="ri-logout-box-line mr-2"></i> Déconnexion
+                        <i class="ri-logout-box-line mr-2"></i> Logout
                     </button>
                 </form>
             @else
                 <div class="border-t border-gray-100 pt-4 mt-2">
                     <div class="flex flex-col space-y-3">
                         <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 font-medium py-2 font-serif">
-                            <i class="ri-login-box-line mr-2"></i> Connexion
+                            <i class="ri-login-box-line mr-2"></i> Login
                         </a>
                         <a href="{{ route('register') }}" class="bg-gradient-to-r from-red-600 to-red-700 text-white font-medium py-3 px-4 rounded-lg text-center shadow-sm font-serif tracking-wide">
-                            Devenir Donneur
+                            Become a Donor
                         </a>
                     </div>
                 </div>
@@ -148,7 +150,7 @@
                         <h3 class="font-serif text-xl text-gray-900">RUBI</h3>
                     </div>
                     <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        Notre mission est de sensibiliser le public à l'importance du don de sang et de faciliter ce processus vital qui sauve des vies chaque jour.
+                        Our mission is to raise public awareness about the importance of blood donation and to facilitate this vital process that saves lives every day.
                     </p>
                     <div class="flex space-x-4">
                         <a href="#" class="text-gray-400 hover:text-gray-900">
@@ -169,10 +171,10 @@
                 <div class="md:col-span-3 md:ml-auto">
                     <h4 class="font-serif text-sm text-gray-900 uppercase tracking-wider mb-5">Navigation</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Accueil</a></li>
-                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">À propos</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Home</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">About</a></li>
                         <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Articles</a></li>
-                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Événements</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Events</a></li>
                         <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Contact</a></li>
                     </ul>
                 </div>
@@ -199,18 +201,35 @@
             <div class="border-t border-gray-100 pt-8">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <p class="text-xs text-gray-500 mb-4 md:mb-0">
-                        © {{ date('Y') }} RUBI. Tous droits réservés.
+                        © {{ date('Y') }} RUBI. All rights reserved.
                     </p>
                     <div class="flex space-x-6">
-                        <a href="#" class="text-xs text-gray-500 hover:text-gray-900">Politique de confidentialité</a>
-                        <a href="#" class="text-xs text-gray-500 hover:text-gray-900">Conditions d'utilisation</a>
-                        <a href="#" class="text-xs text-gray-500 hover:text-gray-900">Mentions légales</a>
+                        <a href="#" class="text-xs text-gray-500 hover:text-gray-900">Privacy Policy</a>
+                        <a href="#" class="text-xs text-gray-500 hover:text-gray-900">Terms of Use</a>
+                        <a href="#" class="text-xs text-gray-500 hover:text-gray-900">Legal Notice</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const header = document.querySelector('header');
+        const main = document.querySelector('main');
+
+        if (header && main) {
+            const headerHeight = header.offsetHeight;
+            main.style.paddingTop = headerHeight + 'px';
+
+            window.addEventListener('resize', function() {
+                const updatedHeaderHeight = header.offsetHeight;
+                main.style.paddingTop = updatedHeaderHeight + 'px';
+            });
+        }
+    });
+</script>
 
 </body>
 </html>

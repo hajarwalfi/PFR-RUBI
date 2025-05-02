@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\User\ArticleController as UserArticleController;
 use App\Http\Controllers\User\PostController as UserPostController;
 use App\Http\Controllers\User\CommentController as UserCommentController;
+use App\Http\Controllers\User\DonationController as UserDonationController;
+use App\Http\Controllers\User\UserController as UserUserController;
 
 // 🌷🌷🌷🌷🌷🌷🌷 GUEST 🌷🌷🌷🌷🌷🌷🌷
 
@@ -25,9 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // 🌷🌷🌷🌷🌷🌷🌷 Route d'accueil 🌷🌷🌷🌷🌷🌷🌷
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [UserArticleController::class, 'home'])->name('home');
 
 
 // 🌷🌷🌷🌷🌷🌷🌷 Routes d'authentification 🌷🌷🌷🌷🌷🌷🌷
@@ -50,14 +50,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 // 🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 
-//🌷🌷🌷🌷🌷🌷🌷🌷🌷 Routes des articles (côté utilisateur) 🌷🌷🌷🌷🌷🌷🌷🌷🌷
+//🌷🌷🌷🌷🌷🌷🌷🌷🌷 Routes des articles  🌷🌷🌷🌷🌷🌷🌷🌷🌷
 Route::prefix('articles')->name('articles.')->group(function () {
     Route::get('/', [UserArticleController::class, 'index'])->name('index');
     Route::get('/{id}', [UserArticleController::class, 'show'])->name('show');
 });
 
 //Routes de dashboard client
-
 Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(function () {
     //route pour voir les posts
     Route::get('/myPosts', [UserPostController::class, 'myPosts'])->name('myPosts');
@@ -66,27 +65,30 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
     //route pour voir le profile
     Route::get('/myProfile', [UserCommentController::class, 'myProfile'])->name('myProfile');
     //route pour voir les donations
-    Route::get('/myDonations', [App\Http\Controllers\User\DonationController::class, 'index'])->name('donations');
+    Route::get('/myDonations', [UserDonationController::class, 'index'])->name('donations');
     //route pour voir les details de chaque don
-    Route::get('/myDonations/{id}', [App\Http\Controllers\User\DonationController::class, 'show'])->name('details');
+    Route::get('/myDonations/{id}', [UserDonationController::class, 'show'])->name('details');
+    //route pour voir le profil
+    Route::get('/profile',[UserUserController::class, 'index'])->name('profile');
+    Route::get('/profile/edit',[UserUserController::class, 'edit'])->name('edit');
+    Route::put('/profile', [UserPostController::class, 'update'])->name('update');
 });
 
 // Routes pour la communauté
 Route::prefix('community')->name('user.community.')->middleware(['auth'])->group(function () {
-    Route::get('/', [App\Http\Controllers\User\PostController::class, 'index'])->name('index');
-    Route::get('/create', [App\Http\Controllers\User\PostController::class, 'create'])->name('create');
-    Route::post('/store', [App\Http\Controllers\User\PostController::class, 'store'])->name('store');
-    Route::get('/post/{id}', [App\Http\Controllers\User\PostController::class, 'show'])->name('show');
-    Route::get('/post/{id}/edit', [App\Http\Controllers\User\PostController::class, 'edit'])->name('edit');
-    Route::put('/post/{id}', [App\Http\Controllers\User\PostController::class, 'update'])->name('update');
-    Route::delete('/post/{id}', [App\Http\Controllers\User\PostController::class, 'destroy'])->name('destroy');
-
+    Route::get('/', [UserPostController::class, 'index'])->name('index');
+    Route::get('/create', [UserPostController::class, 'create'])->name('create');
+    Route::post('/store', [UserPostController::class, 'store'])->name('store');
+    Route::get('/post/{id}', [UserPostController::class, 'show'])->name('show');
+    Route::get('/post/{id}/edit', [UserPostController::class, 'edit'])->name('edit');
+    Route::put('/post/{id}', [UserPostController::class, 'update'])->name('update');
+    Route::delete('/post/{id}', [UserPostController::class, 'destroy'])->name('destroy');
+    Route::post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
+    Route::get('/comments/{id}/edit', [UserCommentController::class, 'edit'])->name('comments.edit');
+    Route::put('/comments/{id}', [UserCommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{id}', [UserCommentController::class, 'destroy'])->name('comments.destroy');
 });
 
-Route::post('/comments', [App\Http\Controllers\User\CommentController::class, 'store'])->name('user.comments.store');
-Route::get('/comments/{id}/edit', [App\Http\Controllers\User\CommentController::class, 'edit'])->name('user.comments.edit');
-Route::put('/comments/{id}', [App\Http\Controllers\User\CommentController::class, 'update'])->name('user.comments.update');
-Route::delete('/comments/{id}', [App\Http\Controllers\User\CommentController::class, 'destroy'])->name('user.comments.destroy');
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 

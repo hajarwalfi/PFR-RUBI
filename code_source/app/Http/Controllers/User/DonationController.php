@@ -19,21 +19,10 @@ class DonationController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $donations = $this->donationService->getDonationsByUserId($userId);
+        $donations = $this->donationService->getDonationsByUserId($userId, 6);
 
-        return view('User.Dashboard.donations', compact('donations'));
-    }
+        $totalDonations = $donations->total();
 
-    public function show($id)
-    {
-        $userId = Auth::id();
-        $donation = $this->donationService->getDonationById($id);
-
-        if (!$donation || $donation->user_id !== $userId) {
-            return redirect()->route('user.donations.index')
-                ->with('error', 'Vous n\'êtes pas autorisé à voir cette donation.');
-        }
-
-        return view('User.Dashboard.show', compact('donation'));
+        return view('User.Dashboard.donations', compact('donations', 'totalDonations'));
     }
 }

@@ -18,4 +18,5 @@ interface PostRepositoryInterface
     public function rejectPost($postId);
     public function archivePost($postId);
     public function incrementViews($postId);
+    public function getPaginatedUserPosts($userId, $status = null, $perPage = 9);
 }

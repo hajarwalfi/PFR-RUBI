@@ -54,7 +54,6 @@ class ArticleService
     {
         return $this->articleRepository->searchArticles($query, $status);
     }
-    // In App\Services\ArticleService.php
 
     public function archiveArticle($id)
     {
@@ -80,4 +79,10 @@ class ArticleService
         return $this->articleRepository->incrementViewCount($id);
     }
 
+    public function getHomePageArticles($limit = 4)
+    {
+        return $this->articleRepository->getPublishedArticlesQuery()
+            ->take($limit)
+            ->get();
+    }
 }

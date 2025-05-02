@@ -35,7 +35,7 @@
     font-display: swap;
 }
 
-/* Remplacer votre déclaration d'Inter par les versions statiques */
+
 @font-face {
     font-family: 'Inter';
     src: url('../fonts/inter/static/AnyConv.com__Inter_18pt-Regular.woff2') format('woff2');
@@ -69,12 +69,10 @@
 }
 
 
-/* Style pour le menu utilisateur */
 #userMenu.hidden {
     display: none;
 }
 
-/* Style pour le menu mobile */
 #mobileMenu {
     position: fixed;
     top: 0;
@@ -90,9 +88,7 @@
     display: none;
 }
 
-/* Style très simple pour le header sticky */
 @media (min-width: 768px) {
-    /* Header fixe en haut de l'écran */
     header {
         position: fixed;
         top: 0;
@@ -104,10 +100,6 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    /* Espace pour compenser la hauteur du header */
-    main {
-        padding-top: 74px;
-    }
 }
 
 
@@ -119,27 +111,23 @@ body {
     font-family: 'Playfair Display', 'Times New Roman', serif;
 }
 
-/* Specific styles for article titles */
 h1.font-playfair {
-    font-weight: 700; /* Featured article title - boldest */
-    letter-spacing: -0.01em; /* Slightly tighter letter spacing for headlines */
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 h2.font-playfair {
-    font-weight: 600; /* Regular article titles - semi-bold */
+    font-weight: 600;
 }
 
-/* Add a subtle text shadow to make titles appear bolder without changing weight */
 h1.font-playfair, h2.font-playfair {
     text-shadow: 0 0 0.1px currentColor;
 }
 
-/* Make titles darker for better contrast */
 h1.font-playfair, h2.font-playfair {
-    color: #111827; /* Very dark gray, almost black */
+    color: #111827;
 }
 
-/* Le reste de votre CSS reste inchangé */
 .pagination {
     display: inline-flex;
 }

@@ -20,4 +20,6 @@ interface UserRepositoryInterface
     public function updateUser($id, array $data);
 
     public function getLatestUserIdentifier(): ?string;
+    public function find($id);
+    public function update($id, array $data);
 }

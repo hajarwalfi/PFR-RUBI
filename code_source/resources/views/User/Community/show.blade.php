@@ -5,7 +5,6 @@
 @section('content')
     <div class="bg-white min-h-screen">
         <div class="container mx-auto px-4 py-8">
-            <!-- Réduit la largeur maximale de 3xl (768px) à 2xl (672px) ou xl (576px) -->
             <div class="max-w-2xl mx-auto">
                 <div class="mb-6">
                     <a href="{{ route('user.community.index') }}" class="flex items-center text-sm text-gray-600 hover:text-red-600 mb-4">
@@ -59,10 +58,7 @@
 
                         @if($post->user_id === Auth::id())
                             <div class="flex space-x-2">
-                                <a href="{{ route('user.community.edit', $post->id) }}" class="text-sm text-blue-600 hover:text-blue-800">
-                                    <i class="ri-edit-line"></i> Edit
-                                </a>
-                                <form action="{{ route('user.community.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                <form action="{{ route('user.community.destroy', $post->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-sm text-red-600 hover:text-red-800">
@@ -154,13 +150,12 @@
                                             @if($comment->user_id === Auth::id())
                                                 <div class="flex space-x-2">
                                                     @if(request('edit_comment') == $comment->id)
-                                                        <!-- Déjà en mode édition, pas besoin de bouton d'édition -->
                                                     @else
                                                         <a href="{{ route('user.community.show', ['id' => $post->id, 'edit_comment' => $comment->id]) }}" class="text-xs text-blue-600 hover:text-blue-800">
                                                             <i class="ri-edit-line"></i> Edit
                                                         </a>
                                                     @endif
-                                                    <form action="{{ route('user.comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                    <form action="{{ route('user.community.comments.destroy', $comment->id) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="text-xs text-red-600 hover:text-red-800">
@@ -172,8 +167,7 @@
                                         </div>
 
                                         @if(request('edit_comment') == $comment->id && $comment->user_id === Auth::id())
-                                            <!-- Formulaire d'édition -->
-                                            <form action="{{ route('user.comments.update', $comment->id) }}" method="POST">
+                                            <form action="{{ route('user.community.comments.update', $comment->id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <textarea name="content" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">{{ $comment->content }}</textarea>
@@ -187,7 +181,6 @@
                                                 </div>
                                             </form>
                                         @else
-                                            <!-- Affichage du commentaire -->
                                             <p class="text-sm text-gray-800">{{ $comment->content }}</p>
                                         @endif
                                     </div>
@@ -201,7 +194,7 @@
                     </div>
 
                     <div class="p-4 bg-gray-50 border-t border-gray-100">
-                        <form action="{{ route('user.comments.store') }}" method="POST">
+                        <form action="{{ route('user.community.comments.store') }}" method="POST">
                             @csrf
                             <input type="hidden" name="post_id" value="{{ $post->id }}">
                             <div class="flex items-start space-x-3">

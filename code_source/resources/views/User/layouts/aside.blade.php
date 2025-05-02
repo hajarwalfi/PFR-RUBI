@@ -11,7 +11,7 @@
 
 <body class="font-sans">
 <div class="flex min-h-screen">
-    <aside class="bg-white h-screen fixed left-0 top-0 w-[250px] lg:w-[250px] shadow-md flex flex-col z-20 " id="sideMenu">
+    <aside class="bg-white h-full fixed left-0 top-0 w-[250px] lg:w-[250px] shadow-md flex flex-col z-20 " id="sideMenu">
         <div class="border-b border-red-100 py-4">
             <div class="flex justify-center items-center">
                 <a href="" class="flex items-center">
@@ -29,8 +29,8 @@
                     <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 px-1">Medical Record</div>
                     <ul>
                         <li>
-                            <a href="" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50 {{ request()->routeIs('user.donations.*') ? 'bg-red-50 font-medium' : 'text-gray-700' }}">
-                                <i class="ri-heart-pulse-line text-lg mr-3 {{ request()->routeIs('user.donations.*') ? 'text-red-600' : 'text-gray-500' }}"></i>
+                            <a href="{{route('dashboard.donations')}}" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50">
+                                <i class="ri-heart-pulse-line text-lg mr-3 text-gray-500"></i>
                                 <span>My Donations</span>
                             </a>
                         </li>
@@ -95,40 +95,30 @@
     </aside>
 
 
-    <div id="openSideMenu" class="fixed top-4 left-4 z-30 lg:hidden bg-white p-2 rounded-full shadow-lg text-gray-700 w-10 h-10 flex items-center justify-center cursor-pointer">
+    <div id="openSideMenu" class=" z-30 lg:hidden bg-white p-2 rounded-full shadow-lg text-gray-700 w-10 h-10 flex items-center justify-center cursor-pointer">
         <i class="ri-menu-line text-xl"></i>
     </div>
 
 
-    <main class="flex-1 lg:ml-[250px]">
+    <main class="flex-1 lg:ml-[250px] pt-4">
         @yield('content')
     </main>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Get elements
         const sideMenu = document.getElementById('sideMenu');
         const openBtn = document.getElementById('openSideMenu');
         const closeBtn = document.getElementById('closeSideMenu');
 
-        openBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            sideMenu.classList.remove('-translate-x-full');
-
-            return false;
+        openBtn.addEventListener('click', function() {
+            sideMenu.style.display = 'flex';
         });
 
-        closeBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            closeMenu();
-            return false;
+        closeBtn.addEventListener('click', function() {
+            sideMenu.style.display = 'none';
         });
-
-        function closeMenu() {
-            sideMenu.classList.add('-translate-x-full');
-        }
     });
 </script>
 </body>

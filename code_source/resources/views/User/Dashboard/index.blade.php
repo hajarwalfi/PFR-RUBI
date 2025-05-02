@@ -94,7 +94,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('user.community.my-posts') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600">
+                                    <a href="{{ route('dashboard.myPosts') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600">
                                         <i class="ri-file-list-line mr-3 text-gray-400"></i> My Posts
                                     </a>
                                 </li>

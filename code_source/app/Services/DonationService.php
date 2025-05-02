@@ -38,14 +38,15 @@ class DonationService
         return $this->donationRepository->getDonationWithRelations($id, ['user', 'serology', 'observations']);
     }
 
-    public function getDonationsByUserId(int $userId): Collection
+    public function getDonationsByUserId($userId, $perPage = 6)
     {
-        return $this->donationRepository->getDonationsByUserId($userId);
+        return Donation::where('user_id', $userId)
+            ->orderBy('date', 'desc')
+            ->paginate($perPage);
     }
 
     public function createDonation(array $data): Donation
     {
-        // Générer un identifiant unique pour le don
         if (!isset($data['identifier'])) {
             $year = date('Y');
             $count = Donation::whereYear('created_at', $year)->count() + 1;
@@ -54,12 +55,10 @@ class DonationService
 
         $donation = $this->donationRepository->createDonation($data);
 
-        // Créer la sérologie si les données sont fournies
         if (isset($data['serology'])) {
             $serologyData = $data['serology'];
             $serologyData['donation_id'] = $donation->id;
 
-            // Déterminer le résultat global de la sérologie
             if (!isset($serologyData['result'])) {
                 $serologyData['result'] = $this->determineSerologyResult($serologyData);
             }
@@ -67,7 +66,6 @@ class DonationService
             $this->serologyRepository->createSerology($serologyData);
         }
 
-        // Créer les observations si les données sont fournies
         if (isset($data['observations']) && is_array($data['observations'])) {
             foreach ($data['observations'] as $observationData) {
                 $observationData['donation_id'] = $donation->id;
@@ -82,13 +80,12 @@ class DonationService
     {
         $result = $this->donationRepository->updateDonation($id, $data);
 
-        // Mettre à jour la sérologie si les données sont fournies
+
         if (isset($data['serology'])) {
             $serologyData = $data['serology'];
             $serology = $this->serologyRepository->getSerologyByDonationId($id);
 
             if ($serology) {
-                // Déterminer le résultat global de la sérologie
                 if (!isset($serologyData['result'])) {
                     $serologyData['result'] = $this->determineSerologyResult($serologyData);
                 }
@@ -97,7 +94,6 @@ class DonationService
             } else {
                 $serologyData['donation_id'] = $id;
 
-                // Déterminer le résultat global de la sérologie
                 if (!isset($serologyData['result'])) {
                     $serologyData['result'] = $this->determineSerologyResult($serologyData);
                 }
@@ -106,15 +102,14 @@ class DonationService
             }
         }
 
-        // Gérer les observations
+
         if (isset($data['observations']) && is_array($data['observations'])) {
-            // Supprimer les observations existantes
+
             $existingObservations = $this->observationRepository->getObservationsByDonationId($id);
             foreach ($existingObservations as $observation) {
                 $this->observationRepository->deleteObservation($observation->id);
             }
 
-            // Créer les nouvelles observations
             foreach ($data['observations'] as $observationData) {
                 $observationData['donation_id'] = $id;
                 $this->observationRepository->createObservation($observationData);
@@ -134,9 +129,6 @@ class DonationService
         return $this->donationRepository->getLatestDonations($limit);
     }
 
-    /**
-     * Détermine le résultat global de la sérologie en fonction des tests individuels
-     */
     private function determineSerologyResult(array $serologyData): string
     {
         // Si l'un des tests est positif, le résultat global est positif
@@ -149,7 +141,6 @@ class DonationService
             return 'positive';
         }
 
-        // Si tous les tests sont négatifs, le résultat global est négatif
         if (
             (isset($serologyData['tpha']) && $serologyData['tpha'] === 'negative') &&
             (isset($serologyData['hb']) && $serologyData['hb'] === 'negative') &&
@@ -159,16 +150,11 @@ class DonationService
             return 'negative';
         }
 
-        // Si certains tests sont manquants, le résultat est en attente
         return 'pending';
     }
 
-    /**
-     * Vérifie si un don est éligible pour être utilisé
-     */
     public function isDonationEligible(Donation $donation): bool
     {
-        // Un don est éligible si sa sérologie est négative
         if ($donation->serology && $donation->serology->result === 'negative') {
             return true;
         }

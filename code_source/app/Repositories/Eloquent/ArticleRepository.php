@@ -130,4 +130,10 @@ class ArticleRepository implements ArticleRepositoryInterface
         }
         return false;
     }
+
+    public function getPublishedArticlesQuery()
+    {
+        return Article::where('status', 'published')
+            ->orderBy('created_at', 'desc');
+    }
 }

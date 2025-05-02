@@ -40,4 +40,11 @@ class ArticleController extends Controller
             abort(404, 'Article not found');
         }
     }
+
+    public function home(): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $articles = $this->articleService->getHomePageArticles(4);
+
+        return view('home', compact('articles'));
+    }
 }

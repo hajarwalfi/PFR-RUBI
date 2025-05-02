@@ -73,7 +73,7 @@
                         <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
                             <ul class="space-y-2">
                                 <li>
-                                    <a href="{{ route('user.community.my-posts') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600">
+                                    <a href="{{ route('dashboard.myPosts') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600">
                                         <i class="ri-file-list-line mr-3 text-gray-400"></i> My Posts
                                     </a>
                                 </li>
@@ -83,7 +83,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="" class="flex items-center text-sm text-gray-700 hover:text-red-600">
+                                    <a href="{{route('dashboard.donations')}}" class="flex items-center text-sm text-gray-700 hover:text-red-600">
                                         <i class="ri-heart-pulse-line mr-3 text-gray-400"></i> Donation History
                                     </a>
                                 </li>
