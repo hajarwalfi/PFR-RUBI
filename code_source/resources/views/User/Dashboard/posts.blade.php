@@ -147,7 +147,7 @@
                     <h3 class="mt-4 text-lg font-medium text-red-800">No posts found</h3>
                     <p class="mt-1 text-sm text-red-600">You haven't created any posts with this status yet.</p>
                     <div class="mt-6">
-                        <a href="{{route('user.community.create')}}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        <a href="{{route('user.community.index')}}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                             Create a post
                         </a>
                     </div>

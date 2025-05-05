@@ -2,13 +2,14 @@
 
 namespace App\Repositories\Interfaces;
 
+use Illuminate\Http\UploadedFile;
+
 interface PostRepositoryInterface
 {
-    public function getAllPosts();
-    public function getPendingPosts();
-    public function getApprovedPosts();
-    public function getRejectedPosts();
-    public function getArchivedPosts();
+    public function getPendingPosts($perPage = 10);
+    public function getApprovedPosts($perPage = 10);
+    public function getRejectedPosts($perPage = 10);
+    public function getArchivedPosts($perPage = 10);
     public function getPostById($postId);
     public function getUserPosts($userId);
     public function createPost(array $postData);
@@ -19,4 +20,5 @@ interface PostRepositoryInterface
     public function archivePost($postId);
     public function incrementViews($postId);
     public function getPaginatedUserPosts($userId, $status = null, $perPage = 9);
+    public function storeMedia(UploadedFile $file);
 }

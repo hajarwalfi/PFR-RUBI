@@ -22,10 +22,24 @@ class ArticleController extends Controller
         if ($search) {
             $articles = $this->articleService->searchArticles($search, 'published');
         } else {
-            $articles = $this->articleService->getPublishedArticles();
+
+            $articles = $this->articleService->getHomePageArticles(4);
         }
 
         return view('User.Articles.index', compact('articles'));
+    }
+
+    public function allArticles(Request $request)
+    {
+        $search = $request->query('search');
+
+        if ($search) {
+            $articles = $this->articleService->searchArticles($search, 'published');
+        } else {
+            $articles = $this->articleService->getPublishedArticles();
+        }
+
+        return view('User.Articles.more', compact('articles'));
     }
 
     public function show($id)

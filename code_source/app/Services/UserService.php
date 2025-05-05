@@ -26,8 +26,6 @@ class UserService
         $eligible = $this->userRepository->getEligibleUsersCount();
         $ineligible = $this->userRepository->getIneligibleUsersCount();
         $unconfirmed = $this->userRepository->getUnconfirmedUsersCount();
-
-        // Calcul des pourcentages
         $eligiblePercent = $total > 0 ? round(($eligible / $total) * 100) : 0;
         $ineligiblePercent = $total > 0 ? round(($ineligible / $total) * 100) : 0;
 
@@ -46,28 +44,23 @@ class UserService
         return $this->userRepository->getUserById($id);
     }
 
-    public function deleteUser($id)
-    {
-        return $this->userRepository->deleteUser($id);
-    }
-
     public function determineUserStatus($user)
     {
         $donationCount = $user->donations->count();
 
         if ($donationCount > 3) {
             return [
-                'status' => 'Régulier',
+                'status' => 'Regular',
                 'class' => 'bg-blue-50 text-blue-700'
             ];
         } elseif ($donationCount > 0) {
             return [
-                'status' => 'Occasionnel',
+                'status' => 'Occasional',
                 'class' => 'bg-amber-50 text-amber-700'
             ];
         } else {
             return [
-                'status' => 'Nouveau',
+                'status' => 'New',
                 'class' => 'bg-green-50 text-green-700'
             ];
         }
@@ -113,7 +106,6 @@ class UserService
     {
         foreach ($user->donations as $donation) {
             if ($donation->serology) {
-                // Si un seul des tests est positif, le résultat global est positif
                 if ($donation->serology->tpha === 'positive' ||
                     $donation->serology->hb === 'positive' ||
                     $donation->serology->hc === 'positive' ||
@@ -134,8 +126,10 @@ class UserService
         if (isset($userData['password'])) {
             $userData['password'] = Hash::make($userData['password']);
         }
+        $user = $this->userRepository->createUser($userData);
 
-        return $this->userRepository->createUser($userData);
+        $user->roles()->attach(2);
+        return $user;
     }
 
     private function generateSequentialIdentifier(): string
@@ -169,8 +163,6 @@ class UserService
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
-
-        // Déléguer la création au repository
         return $this->userRepository->createUser($data);
     }
 
@@ -191,8 +183,8 @@ class UserService
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'phone' => $data['phone'] ?? null,
-            'date_of_birth' => $data['date_of_birth'] ?? null,
-            'blood_type' => $data['blood_type'] ?? null,
+            'birth_date' => $data['birth_date'] ?? null,
+            'blood_group' => $data['blood_group'] ?? null,
             'gender' => $data['gender'] ?? null,
             'address' => $data['address'] ?? null,
         ]);
@@ -202,9 +194,6 @@ class UserService
     {
         return $this->userRepository->update($userId, [
             'email' => $data['email'],
-            'language' => $data['language'] ?? 'en',
-            'email_notifications' => $data['email_notifications'] ?? false,
-            'sms_notifications' => $data['sms_notifications'] ?? false,
         ]);
     }
 
@@ -215,5 +204,6 @@ class UserService
             'password' => Hash::make($password),
         ]);
     }
+
 
 }

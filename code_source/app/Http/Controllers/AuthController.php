@@ -36,18 +36,15 @@ class AuthController extends Controller
                 ->withInput();
         }
 
-        // Handle empty blood group as null
         if ($request->blood_group === '') {
             $request->merge(['blood_group' => null]);
         }
 
-        // Register the user with auto-generated identifier
         $user = $this->userService->registerUser($request->all());
 
-        // Log the user in
         Auth::login($user);
 
-        return redirect()->route('welcome')->with('success', 'Registration successful!');
+        return  redirect('/')->with('success', 'Registration successful!');
     }
 
     public function login(Request $request)
@@ -59,7 +56,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('home');
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([

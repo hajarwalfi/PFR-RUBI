@@ -31,13 +31,4 @@ class ObservationService
         return $this->observationRepository->createObservation($data);
     }
 
-    public function updateObservation(int $id, array $data): bool
-    {
-        return $this->observationRepository->updateObservation($id, $data);
-    }
-
-    public function deleteObservation(int $id): bool
-    {
-        return $this->observationRepository->deleteObservation($id);
-    }
 }

@@ -53,7 +53,7 @@
                     Personal Information
                 </h2>
 
-                <form action="" method="POST" class="space-y-8">
+                <form action="{{ route('dashboard.profile.update-personal') }}" method="POST" class="space-y-8">
                     @csrf
                     @method('PUT')
 
@@ -87,12 +87,14 @@
 
                         <div>
                             <label for="birth_date" class="block text-sm text-gray-500 mb-1.5">Date of Birth</label>
-                            <input type="date" name="birth_date" id="birth_date" value="{{ auth()->user()->birth_date }}"
+                            <input type="date" name="birth_date" id="birth_date"
+                                   value="{{ auth()->user()->birth_date ? auth()->user()->birth_date->format('Y-m-d') : '' }}"
                                    class="w-full px-0 py-2 bg-transparent border-0 border-b border-gray-200 focus:ring-0 focus:border-red-300 text-gray-800">
                             @error('birth_date')
                             <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
+
 
                         <div>
                             <label for="blood_group" class="block text-sm text-gray-500 mb-1.5">Blood Type</label>
@@ -163,7 +165,7 @@
                     Account Settings
                 </h2>
 
-                <form action="" method="POST" class="space-y-8">
+                <form action="{{ route('dashboard.profile.update-account') }}" method="POST" class="space-y-8">
                     @csrf
                     @method('PUT')
 
@@ -193,7 +195,7 @@
                     Change Password
                 </h2>
 
-                <form action="" method="POST" class="space-y-8">
+                <form action="{{ route('dashboard.profile.update-password') }}" method="POST" class="space-y-8">
                     @csrf
                     @method('PUT')
 
@@ -231,33 +233,3 @@
         </div>
     </div>
 @endsection
-
-@push('styles')
-    <style>
-        /* Elegant Typography */
-        .font-serif {
-            font-family: 'Playfair Display', 'Times New Roman', serif;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        /* Remove default browser styling for date inputs */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            opacity: 0.6;
-        }
-
-        /* Custom select styling */
-        select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-            background-position: right 0 center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-            padding-right: 2rem;
-        }
-    </style>
-@endpush

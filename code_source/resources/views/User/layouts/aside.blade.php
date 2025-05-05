@@ -14,24 +14,42 @@
     <aside class="bg-white h-full fixed left-0 top-0 w-[250px] lg:w-[250px] shadow-md flex flex-col z-20 " id="sideMenu">
         <div class="border-b border-red-100 py-4">
             <div class="flex justify-center items-center">
-                <a href="" class="flex items-center">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-md">
-                        <i class="ri-drop-fill text-white text-lg"></i>
-                    </div>
-                    <h1 class="text-lg font-bold ml-2.5 text-gray-800">RUBI</h1>
+                <a href="{{route('home')}}" class="flex items-center">
+                    <img src="{{ asset('storage/logo.png') }}" alt="RUBI Logo" class="h-10 w-10">
+                    <h1 class="text-lg font-bold ml-1 text-gray-800">RUBI</h1>
                 </a>
             </div>
         </div>
 
         <div class="flex-1 flex flex-col justify-center">
             <nav class="px-4">
+                @if(Auth::user()->isAdmin())
+                    <div class="mb-5">
+                        <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 px-1">Administration</div>
+                        <ul>
+                            <li>
+                                <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2 text-sm rounded-md bg-red-50 text-red-600 hover:bg-red-100">
+                                    <i class="ri-dashboard-line text-lg mr-3"></i>
+                                    <span>Admin Dashboard</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
+
                 <div class="mb-5">
                     <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 px-1">Medical Record</div>
-                    <ul>
+                    <ul class="space-y-1">
                         <li>
                             <a href="{{route('dashboard.donations')}}" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50">
                                 <i class="ri-heart-pulse-line text-lg mr-3 text-gray-500"></i>
                                 <span>My Donations</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('dashboard.appointments')}}" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50 text-gray-700' }}">
+                                <i class="ri-calendar-check-line text-lg mr-3 text-gray-500"></i>
+                                <span>My Appointments</span>
                             </a>
                         </li>
                     </ul>
@@ -42,13 +60,13 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="{{ route('dashboard.myPosts')}}" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50 {{ request()->routeIs('user.community.my-posts') ? 'bg-red-50 font-medium' : 'text-gray-700' }}">
-                                <i class="ri-file-paper-2-line text-lg mr-3 {{ request()->routeIs('dashboard.myPosts') ? 'text-red-600' : 'text-gray-500' }}"></i>
+                                <i class="ri-file-paper-2-line text-lg mr-3 "></i>
                                 <span>My Posts</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('dashboard.myComments')}}" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50 {{ request()->routeIs('user.community.my-comments') ? 'bg-red-50 font-medium' : 'text-gray-700' }}">
-                                <i class="ri-chat-1-line text-lg mr-3 {{ request()->routeIs('dashboard.myComments') ? 'text-red-600' : 'text-gray-500' }}"></i>
+                                <i class="ri-chat-1-line text-lg mr-3 "></i>
                                 <span>My Comments</span>
                             </a>
                         </li>
@@ -59,8 +77,8 @@
                     <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 px-1">Personal Information</div>
                     <ul>
                         <li>
-                            <a href="" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50 {{ request()->routeIs('user.profile.*') ? 'bg-red-50 font-medium' : 'text-gray-700' }}">
-                                <i class="ri-user-line text-lg mr-3 {{ request()->routeIs('user.profile.*') ? 'text-red-600' : 'text-gray-500' }}"></i>
+                            <a href="{{route('dashboard.profile')}}" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50 {{ request()->routeIs('user.profile.*') ? 'bg-red-50 font-medium' : 'text-gray-700' }}">
+                                <i class="ri-user-line text-lg mr-3"></i>
                                 <span>My Profile</span>
                             </a>
                         </li>
@@ -71,12 +89,6 @@
 
         <div class="border-t border-red-100 px-4 py-4">
             <ul class="space-y-2.5">
-                <li>
-                    <a href="" class="flex items-center px-3 py-2 text-sm rounded-md hover:bg-red-50 {{ request()->routeIs('user.settings') ? 'bg-red-50 font-medium' : 'text-gray-700' }}">
-                        <i class="ri-settings-3-line text-lg mr-3 {{ request()->routeIs('user.settings') ? 'text-red-600' : 'text-gray-500' }}"></i>
-                        <span>Settings</span>
-                    </a>
-                </li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf

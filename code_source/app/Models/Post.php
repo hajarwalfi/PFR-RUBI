@@ -13,15 +13,17 @@ class Post extends Model
 
     protected $fillable = [
         'user_id',
+        'title',
         'content',
+        'media',
         'status',
         'moderated_at',
         'views',
-        'title'
     ];
 
     protected $casts = [
         'moderated_at' => 'datetime',
+        'media' => 'array',
     ];
 
     public function user(): BelongsTo
@@ -29,14 +31,18 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function media(): HasMany
-    {
-        return $this->hasMany(PostMedia::class);
-    }
-
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function getMediaAttribute($value)
+    {
+        if (is_string($value)) {
+            $value = json_decode($value, true) ?? [];
+        }
+
+        return collect($value);
     }
 
     public function scopePending($query)

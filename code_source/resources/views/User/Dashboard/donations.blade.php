@@ -185,7 +185,7 @@
                 @endforeach
             </div>
 
-            <div class="mt-8 flex justify-center">
+            <div class="mt-8 mb-4 flex justify-center">
                 {{ $donations->links() }}
             </div>
         @endif

@@ -9,7 +9,7 @@ class ArticleRepository implements ArticleRepositoryInterface
 {
     public function getAllArticles()
     {
-        return Article::orderBy('created_at', 'desc')->get();
+        return Article::orderBy('created_at', 'desc')->paginate(6);
     }
 
     public function getArticleById($id)
@@ -19,7 +19,7 @@ class ArticleRepository implements ArticleRepositoryInterface
 
     public function getArticlesByStatus($status)
     {
-        return Article::where('status', $status)->orderBy('created_at', 'desc')->get();
+        return Article::where('status', $status)->orderBy('created_at', 'desc')->paginate(6);
     }
 
     public function createArticle(array $articleData)

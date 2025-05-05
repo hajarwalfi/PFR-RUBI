@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
 use App\Models\User;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -24,18 +24,8 @@ class PostController extends Controller
     {
         $posts = $this->postService->getApprovedPosts();
 
-
-        $topContributors = User::select('users.*')
-            ->selectRaw('(SELECT COUNT(*) FROM posts WHERE users.id = posts.user_id) as posts_count')
-            ->selectRaw('(SELECT COUNT(*) FROM comments WHERE users.id = comments.user_id) as comments_count')
-            ->orderByRaw('(SELECT COUNT(*) FROM posts WHERE users.id = posts.user_id) + (SELECT COUNT(*) FROM comments WHERE users.id = comments.user_id) DESC')
-            ->take(4)
-            ->get();
-
-        return view('User.Community.index', compact('posts', 'topContributors'));
+        return view('User.Community.index', compact('posts'));
     }
-
-
 
     public function show($id)
     {
@@ -52,15 +42,22 @@ class PostController extends Controller
         return view('User.Community.show', compact('post'));
     }
 
-
     public function create()
     {
         return view('User.Community.create');
     }
 
-
     public function store(Request $request)
     {
+        Log::info('Post creation started', [
+            'user_id' => Auth::id(),
+            'has_title' => !empty($request->input('title')),
+            'content_length' => strlen($request->input('content')),
+            'has_media' => $request->hasFile('media'),
+            'media_count' => $request->hasFile('media') ? count($request->file('media')) : 0,
+            'all_request_data' => $request->all() // Pour déboguer
+        ]);
+
         $validator = Validator::make($request->all(), [
             'title' => 'nullable|string|max:255',
             'content' => 'required|string|max:1000',
@@ -68,23 +65,50 @@ class PostController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Log::warning('Post validation failed', [
+                'errors' => $validator->errors()->toArray()
+            ]);
+
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
 
         try {
+            // Vérifiez si les fichiers sont correctement reçus
+            if ($request->hasFile('media')) {
+                foreach ($request->file('media') as $index => $file) {
+                    Log::info('Media file details', [
+                        'index' => $index,
+                        'name' => $file->getClientOriginalName(),
+                        'size' => $file->getSize(),
+                        'mime' => $file->getMimeType(),
+                        'is_valid' => $file->isValid(),
+                        'error' => $file->getError()
+                    ]);
+                }
+            }
+
             $post = $this->postService->createPost(
                 $request->input('title'),
                 $request->input('content'),
                 $request->file('media') ?? []
             );
 
+            Log::info('Post created successfully', ['post_id' => $post->id]);
+
             return redirect()->route('user.community.index')
-                ->with('success', 'Your post has been created successfully and is awaiting approval by an administrator. You can view all your posts <a href="' . route('user.community.my-posts') . '">here</a>.');
+                ->with('success', 'Your post has been created successfully and is awaiting approval by an administrator.');
         } catch (\Exception $e) {
+            Log::error('Post creation failed', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return redirect()->back()
-                ->with('error', 'An error occurred while creating your post. Please try again.')
+                ->with('error', 'An error occurred while creating your post: ' . $e->getMessage())
                 ->withInput();
         }
     }
@@ -99,7 +123,6 @@ class PostController extends Controller
 
         return view('User.Community.edit', compact('post'));
     }
-
 
     public function update(Request $request, $id)
     {
@@ -121,19 +144,24 @@ class PostController extends Controller
         }
 
         try {
-            $this->postService->updatePost($id, $request->input('content'));
+            $this->postService->updatePost(
+                $id,
+                $request->input('title'),
+                $request->input('content')
+            );
 
-            if ($request->hasFile('media')) {
-                foreach ($request->file('media') as $file) {
-                    $this->postService->addMediaToPost($id, $file);
-                }
-            }
-
-            return redirect()->route('user.community.my-posts')
+            return redirect()->route('dashboard.myPosts')
                 ->with('success', 'Your post has been updated and is awaiting moderation.');
         } catch (\Exception $e) {
+            Log::error('Post update failed', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return redirect()->back()
-                ->with('error', 'An error occurred while updating your post. Please try again.')
+                ->with('error', 'An error occurred while updating your post: ' . $e->getMessage())
                 ->withInput();
         }
     }
@@ -151,9 +179,6 @@ class PostController extends Controller
         return redirect()->route('user.community.index')
             ->with('success', 'Your post has been deleted successfully.');
     }
-
-
-
 
     public function myPosts(Request $request)
     {

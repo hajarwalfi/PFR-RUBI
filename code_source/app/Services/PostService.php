@@ -3,22 +3,18 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\PostRepositoryInterface;
-use App\Repositories\Interfaces\PostMediaRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PostService
 {
     protected $postRepository;
-    public $postMediaRepository;
 
-    public function __construct(
-        PostRepositoryInterface $postRepository,
-        PostMediaRepositoryInterface $postMediaRepository
-    ) {
+    public function __construct(PostRepositoryInterface $postRepository)
+    {
         $this->postRepository = $postRepository;
-        $this->postMediaRepository = $postMediaRepository;
     }
 
     public function getAllPosts()
@@ -57,39 +53,103 @@ class PostService
         return $this->postRepository->getUserPosts($userId);
     }
 
-    public function createPost($title,$content, $files = [])
+    public function createPost($title, $content, $files = [])
     {
         DB::beginTransaction();
 
         try {
+            Log::info('Starting post creation in service', [
+                'user_id' => Auth::id(),
+                'title' => $title,
+                'content_length' => strlen($content),
+                'files_count' => count($files)
+            ]);
+
+            // Process media files
+            $mediaItems = [];
+            if (!empty($files)) {
+                foreach ($files as $index => $file) {
+                    Log::info('Processing file', [
+                        'index' => $index,
+                        'is_valid' => $file->isValid(),
+                        'original_name' => $file->getClientOriginalName(),
+                        'mime_type' => $file->getMimeType(),
+                        'size' => $file->getSize()
+                    ]);
+
+                    if ($file->isValid()) {
+                        try {
+                            $mediaItem = $this->postRepository->storeMedia($file);
+                            Log::info('Media stored successfully', ['media_item' => $mediaItem]);
+                            $mediaItems[] = $mediaItem;
+                        } catch (\Exception $e) {
+                            Log::error('Error storing media file', [
+                                'exception' => $e->getMessage(),
+                                'file' => $file->getClientOriginalName()
+                            ]);
+                            throw $e;
+                        }
+                    } else {
+                        Log::warning('Invalid file uploaded', [
+                            'error' => $file->getError(),
+                            'error_message' => $file->getErrorMessage()
+                        ]);
+                    }
+                }
+            }
+
+            Log::info('Creating post with media', [
+                'media_count' => count($mediaItems)
+            ]);
+
+            // Create post with media
             $post = $this->postRepository->createPost([
                 'user_id' => Auth::id(),
                 'title' => $title,
                 'content' => $content,
                 'status' => 'pending',
+                'media' => !empty($mediaItems) ? $mediaItems : null,
+                'views' => 0,
             ]);
 
-            if (!empty($files)) {
-                foreach ($files as $file) {
-                    $type = $this->determineFileType($file);
-                    $this->postMediaRepository->createMedia($post->id, $file, $type);
-                }
-            }
+            Log::info('Post created successfully', ['post_id' => $post->id]);
 
             DB::commit();
             return $post;
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Error creating post: ' . $e->getMessage(), [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
             throw $e;
         }
     }
 
-    public function updatePost($postId, $content)
+    public function updatePost($postId, $title, $content)
     {
-        return $this->postRepository->updatePost($postId, [
-            'content' => $content,
-            'status' => 'pending',
-        ]);
+        try {
+            // Get existing post
+            $post = $this->postRepository->getPostById($postId);
+
+            // Update only text content
+            return $this->postRepository->updatePost($postId, [
+                'title' => $title,
+                'content' => $content,
+                'status' => 'pending', // Reset to pending for moderation
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error updating post: ' . $e->getMessage(), [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+                'post_id' => $postId
+            ]);
+            throw $e;
+        }
     }
 
     public function deletePost($postId)
@@ -112,32 +172,14 @@ class PostService
         return $this->postRepository->archivePost($postId);
     }
 
-    public function addMediaToPost($postId, UploadedFile $file)
-    {
-        $type = $this->determineFileType($file);
-        return $this->postMediaRepository->createMedia($postId, $file, $type);
-    }
-
-    protected function determineFileType(UploadedFile $file)
-    {
-        $mimeType = $file->getMimeType();
-
-        if (strpos($mimeType, 'image/') === 0) {
-            return 'image';
-        } elseif (strpos($mimeType, 'video/') === 0) {
-            return 'video';
-        }
-        return 'image';
-    }
     public function incrementViews($postId)
     {
         return $this->postRepository->incrementViews($postId);
     }
+
     public function getPaginatedUserPosts($userId = null, $status = null, $perPage = 9)
     {
         $userId = $userId ?? Auth::id();
         return $this->postRepository->getPaginatedUserPosts($userId, $status, $perPage);
     }
-
-
 }

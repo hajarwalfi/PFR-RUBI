@@ -19,9 +19,10 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function show()
     {
-        return view('User.Dashboard.profile');
+        $user = Auth::user();
+        return view('User.Dashboard.profile', compact('user'));
     }
 
     public function updatePersonalInfo(Request $request)
@@ -30,15 +31,17 @@ class UserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'date_of_birth' => ['nullable', 'date'],
-            'blood_type' => ['nullable', 'string', 'max:5'],
+            'birth_date' => ['nullable', 'date'],
+            'blood_group' => ['nullable', 'string', 'max:5'],
             'gender' => ['nullable', 'string', 'in:male,female,other'],
             'address' => ['nullable', 'string', 'max:500'],
+            'cni' => ['nullable', 'string', 'max:255'],
         ]);
+
 
         $this->userService->updatePersonalInfo(Auth::id(), $request->all());
 
-        return redirect()->route('user.profile.show')->with('success', 'Personal information updated successfully.');
+        return redirect()->route('dashboard.profile')->with('success', 'Personal information updated successfully.');
     }
 
     public function updateAccountSettings(Request $request)
@@ -47,9 +50,9 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
         ]);
 
-        $this->userService->updateAccountSettings(Auth::id(), $data);
+        $this->userService->updateAccountSettings(Auth::id(), $request->all());
 
-        return redirect()->route('user.profile.show')->with('success', 'Account settings updated successfully.');
+        return redirect()->route('dashboard.profile')->with('success', 'Account settings updated successfully.');
     }
 
     public function updatePassword(Request $request)
@@ -65,6 +68,6 @@ class UserController extends Controller
 
         $this->userService->updatePassword(Auth::id(), $request->password);
 
-        return redirect()->route('user.profile.show')->with('success', 'Password updated successfully.');
+        return redirect()->route('dashboard.profile')->with('success', 'Password updated successfully.');
     }
 }

@@ -146,11 +146,6 @@ class UserRepository implements UserRepositoryInterface
         }, 'donations.serology'])->findOrFail($id);
     }
 
-    public function deleteUser($id)
-    {
-        return User::destroy($id);
-    }
-
     public function createUser(array $data)
     {
         return User::create($data);
@@ -172,5 +167,12 @@ class UserRepository implements UserRepositoryInterface
     public function find($id)
     {
         return User::findOrFail($id);
+    }
+
+    public function update($id, array $data)
+    {
+        $user = $this->find($id);
+        $user->update($data);
+        return $user;
     }
 }

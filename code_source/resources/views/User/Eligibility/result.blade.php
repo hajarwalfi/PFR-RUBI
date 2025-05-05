@@ -135,11 +135,11 @@
                         Take the Test Again
                     </a>
                     @if($isEligible)
-                        <a href="#" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700">
+                        <a href="{{route('appointments.create')}}" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700">
                             Schedule a Donation
                         </a>
                     @else
-                        <a href="" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700">
+                        <a href="{{route('articles.index')}}" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700">
                             Read Our Articles
                         </a>
                     @endif

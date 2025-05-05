@@ -51,7 +51,7 @@
                             <a href="{{route('dashboard.myPosts')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600">
                                 My Profile
                             </a>
-                            <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600">
+                            <a href="{{route('dashboard.appointments')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600">
                                 My Appointments
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>
@@ -67,11 +67,12 @@
                     <a href="{{ route('login') }}" class="hidden md:block text-sm font-medium text-gray-700 hover:text-red-600 transition-colors font-serif">
                         Login
                     </a>
+                    <a href="{{ route('register') }}" class="hidden sm:inline-flex items-center px-5 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-[1.02] shadow-sm font-serif tracking-wide">
+                        Become a Donor
+                    </a>
                 @endauth
 
-                <a href="{{ route('register') }}" class="hidden sm:inline-flex items-center px-5 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-medium rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-[1.02] shadow-sm font-serif tracking-wide">
-                    Become a Donor
-                </a>
+
             </div>
 
             <div class="md:hidden flex items-center">
@@ -91,27 +92,24 @@
             </button>
         </div>
         <div class="flex flex-col space-y-4">
-            <a href="" class="text-red-600 font-medium py-2 border-l-4 border-red-500 pl-3 font-serif">
+            <a href="{{route('home')}}" class="text-red-600 font-medium py-2 border-l-4 border-red-500 pl-3 font-serif">
                 Home
             </a>
-            <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
+            <a href="{{route('articles.index')}}" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
                 Articles
             </a>
-            <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
+            <a href="{{route('user.community.index')}}" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
                 Community
             </a>
-            <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
+            <a href="{{route('user.eligibility.form')}}" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
                 Eligibility
-            </a>
-            <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
-                About
             </a>
 
             @auth
-                <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
+                <a href="{{route('dashboard.myPosts')}}" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
                     <i class="ri-user-line mr-2"></i> My Profile
                 </a>
-                <a href="" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
+                <a href="{{route('dashboard.appointments')}}" class="text-gray-700 hover:text-red-600 py-2 border-l-4 border-transparent hover:border-red-500 pl-3 transition-colors font-serif">
                     <i class="ri-calendar-line mr-2"></i> My Appointments
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
@@ -171,11 +169,11 @@
                 <div class="md:col-span-3 md:ml-auto">
                     <h4 class="font-serif text-sm text-gray-900 uppercase tracking-wider mb-5">Navigation</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Home</a></li>
+                        <li><a href="{{route('home')}}" class="text-sm text-gray-600 hover:text-gray-900">Home</a></li>
                         <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">About</a></li>
-                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Articles</a></li>
-                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Events</a></li>
-                        <li><a href="#" class="text-sm text-gray-600 hover:text-gray-900">Contact</a></li>
+                        <li><a href="{{route('articles.index')}}" class="text-sm text-gray-600 hover:text-gray-900">Articles</a></li>
+                        <li><a href="{{route('user.community.index')}}" class="text-sm text-gray-600 hover:text-gray-900">Community</a></li>
+                        <li><a href="{{route('user.eligibility.form')}}" class="text-sm text-gray-600 hover:text-gray-900">Eligibility</a></li>
                     </ul>
                 </div>
 

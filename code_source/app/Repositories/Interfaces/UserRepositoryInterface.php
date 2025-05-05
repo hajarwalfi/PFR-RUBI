@@ -14,12 +14,9 @@ interface UserRepositoryInterface
     public function getUsersByEligibility($eligible = true);
 
     public function getUserById($id);
-    public function deleteUser($id);
 
     public function createUser(array $data);
     public function updateUser($id, array $data);
 
     public function getLatestUserIdentifier(): ?string;
-    public function find($id);
-    public function update($id, array $data);
 }

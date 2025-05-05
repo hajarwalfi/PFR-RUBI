@@ -6,24 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('content')->nullable();
+            $table->string('title')->nullable();
+            $table->text('content');
+            $table->jsonb('media')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected', 'archived'])->default('pending');
             $table->timestamp('moderated_at')->nullable();
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('posts');

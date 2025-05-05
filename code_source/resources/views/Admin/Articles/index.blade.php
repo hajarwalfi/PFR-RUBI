@@ -210,6 +210,7 @@
                     </div>
                 @endif
             </div>
+
         </div>
 
         <!-- Delete Confirmation Dialog -->

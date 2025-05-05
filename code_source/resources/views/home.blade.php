@@ -21,11 +21,8 @@
                     family to keep hope.
                 </p>
                 <div class="flex space-x-4">
-                    <a href="#" class="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white text-base font-medium rounded-md shadow-lg hover:bg-red-700 transition-all duration-300">
+                    <a href="{{route('register')}}" class="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white text-base font-medium rounded-md shadow-lg hover:bg-red-700 transition-all duration-300">
                         <i class="fas fa-heart mr-2"></i> Become a Donor
-                    </a>
-                    <a href="#eligibility" class="inline-flex items-center justify-center px-6 py-4 border border-white/70 text-white text-base font-medium rounded-md hover:bg-white/10 transition-all duration-300">
-                        Learn More
                     </a>
                 </div>
             </div>
@@ -239,7 +236,7 @@
             </div>
 
             <div class="text-center mt-14">
-                <a href="#" class="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white text-base font-medium rounded-lg shadow-md hover:bg-red-700 transition-all duration-300">
+                <a href="{{route('user.eligibility.form')}}" class="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white text-base font-medium rounded-lg shadow-md hover:bg-red-700 transition-all duration-300">
                     <i class="fas fa-clipboard-check mr-2"></i> Check My Eligibility
                 </a>
             </div>
@@ -307,7 +304,7 @@
             </div>
 
             <div class="text-center mt-12">
-                <a href="#" class="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white text-base font-medium rounded-lg shadow-md hover:bg-red-700 transition-all duration-300">
+                <a href="{{route('register')}}" class="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white text-base font-medium rounded-lg shadow-md hover:bg-red-700 transition-all duration-300">
                     <i class="fas fa-user-plus mr-2"></i> Become a Donor
                 </a>
             </div>
@@ -401,11 +398,8 @@
                 Your donation can save up to three lives. Join our community of donors today and be part of something meaningful.
             </p>
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-                <a href="#" class="inline-flex items-center justify-center px-10 py-4 bg-white text-red-700 text-base font-medium rounded-lg shadow-md hover:bg-red-50 transition-all duration-300">
+                <a href="{{route('appointments.create')}}" class="inline-flex items-center justify-center px-10 py-4 bg-white text-red-700 text-base font-medium rounded-lg shadow-md hover:bg-red-50 transition-all duration-300">
                     <i class="fas fa-calendar-alt mr-2"></i> Schedule a Donation
-                </a>
-                <a href="#" class="inline-flex items-center justify-center px-10 py-4 border-2 border-white text-white text-base font-medium rounded-lg hover:bg-white/10 transition-all duration-300">
-                    <i class="fas fa-info-circle mr-2"></i> Learn More
                 </a>
             </div>
         </div>
@@ -437,9 +431,6 @@
                         <p class="text-gray-600 mb-4">
                             Become a leader in your community. Your commitment to donation inspires others and earns you recognition as a hero who saves lives.
                         </p>
-                        <a href="#" class="inline-block text-red-600 font-medium hover:text-red-700 group-hover:underline">
-                            Learn more <i class="fas fa-arrow-right ml-1 text-xs"></i>
-                        </a>
                     </div>
                 </div>
 
@@ -454,9 +445,6 @@
                         <p class="text-gray-600 mb-4">
                             Display your engagement proudly and demonstrate the real impact you're making in your community through regular blood donation.
                         </p>
-                        <a href="#" class="inline-block text-red-600 font-medium hover:text-red-700 group-hover:underline">
-                            Learn more <i class="fas fa-arrow-right ml-1 text-xs"></i>
-                        </a>
                     </div>
                 </div>
 
@@ -471,15 +459,12 @@
                         <p class="text-gray-600 mb-4">
                             Your personal journey can motivate hundreds or even thousands of others to join the cause and become blood donors themselves.
                         </p>
-                        <a href="#" class="inline-block text-red-600 font-medium hover:text-red-700 group-hover:underline">
-                            Learn more <i class="fas fa-arrow-right ml-1 text-xs"></i>
-                        </a>
                     </div>
                 </div>
             </div>
 
             <div class="text-center mt-14">
-                <a href="#" class="inline-flex items-center justify-center px-10 py-4 bg-red-600 text-white text-base font-medium rounded-lg shadow-md hover:bg-red-700 transition-all duration-300">
+                <a href="{{route('register')}}" class="inline-flex items-center justify-center px-10 py-4 bg-red-600 text-white text-base font-medium rounded-lg shadow-md hover:bg-red-700 transition-all duration-300">
                     <i class="fas fa-star mr-2"></i> Become an Elite Donor
                 </a>
             </div>

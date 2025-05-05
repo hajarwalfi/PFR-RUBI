@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ObservationController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SerologyController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AppointmentController;
 
 // 🌷🌷🌷🌷🌷🌷🌷 USER 🌷🌷🌷🌷🌷🌷🌷
 use App\Http\Controllers\User\ArticleController as UserArticleController;
@@ -15,8 +16,7 @@ use App\Http\Controllers\User\PostController as UserPostController;
 use App\Http\Controllers\User\CommentController as UserCommentController;
 use App\Http\Controllers\User\DonationController as UserDonationController;
 use App\Http\Controllers\User\UserController as UserUserController;
-
-// 🌷🌷🌷🌷🌷🌷🌷 GUEST 🌷🌷🌷🌷🌷🌷🌷
+use App\Http\Controllers\User\AppointmentController as UserAppointmentController;
 
 
 // 🌷🌷🌷🌷🌷🌷🌷 Laravel Things 🌷🌷🌷🌷🌷🌷🌷
@@ -53,6 +53,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷 Routes des articles  🌷🌷🌷🌷🌷🌷🌷🌷🌷
 Route::prefix('articles')->name('articles.')->group(function () {
     Route::get('/', [UserArticleController::class, 'index'])->name('index');
+    Route::get('/articles/all', [App\Http\Controllers\User\ArticleController::class, 'allArticles'])->name('more');
     Route::get('/{id}', [UserArticleController::class, 'show'])->name('show');
 });
 
@@ -69,9 +70,13 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(func
     //route pour voir les details de chaque don
     Route::get('/myDonations/{id}', [UserDonationController::class, 'show'])->name('details');
     //route pour voir le profil
-    Route::get('/profile',[UserUserController::class, 'index'])->name('profile');
-    Route::get('/profile/edit',[UserUserController::class, 'edit'])->name('edit');
-    Route::put('/profile', [UserPostController::class, 'update'])->name('update');
+    Route::get('/profile', [UserUserController::class, 'show'])->name('profile');
+    Route::put('/profile/personal', [UserUserController::class, 'updatePersonalInfo'])->name('profile.update-personal');
+    Route::put('/profile/account', [UserUserController::class, 'updateAccountSettings'])->name('profile.update-account');
+    Route::put('/profile/password', [UserUserController::class, 'updatePassword'])->name('profile.update-password');
+    // route pour voir mes rendez-vous
+    Route::get('/appointments', [UserAppointmentController::class, 'index'])->name('appointments');
+
 });
 
 // Routes pour la communauté
@@ -89,12 +94,11 @@ Route::prefix('community')->name('user.community.')->middleware(['auth'])->group
     Route::delete('/comments/{id}', [UserCommentController::class, 'destroy'])->name('comments.destroy');
 });
 
-//🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
-
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/eligibility', [EligibilityController::class, 'showEligibilityForm'])->name('user.eligibility.form');
     Route::post('/eligibility/check', [EligibilityController::class, 'checkEligibility'])->name('user.eligibility.check');
+    Route::get('/appointments/create', [App\Http\Controllers\User\AppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments', [App\Http\Controllers\User\AppointmentController::class, 'store'])->name('appointments.store');
 });
 
 
@@ -133,10 +137,6 @@ Route::middleware(['auth'])->group(function () {
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷  Routes d'administration  🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 
 Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Dashboard admin
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
 
     // Routes pour les utilisateurs
     Route::prefix('users')->name('users.')->group(function () {
@@ -183,6 +183,9 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
 
     // Routes pour les commentaires
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Routes pour les rendez-Vous
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
 });
 //🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷
 

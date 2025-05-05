@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
+        return $this->belongsToMany(Role::class, 'user_roles')->withTimestamps();
     }
     public function hasRole(string $role): bool
     {
@@ -75,8 +75,7 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-
-    public function comments()
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Comment::class);
     }

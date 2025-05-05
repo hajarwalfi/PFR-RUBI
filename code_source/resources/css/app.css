@@ -243,3 +243,17 @@ trix-toolbar .trix-dialog .trix-button.trix-button--cancel:hover {
     margin-right: auto;
     max-width: 100%;
 }
+
+tbody tr {
+    position: relative;
+}
+
+tbody tr:hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #ef4444;
+}

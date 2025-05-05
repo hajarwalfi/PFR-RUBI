@@ -179,6 +179,9 @@
                             </div>
                         @endforelse
                     </div>
+                    <div class="p-4 border-t border-gray-200">
+                        {{ $posts->appends(['status' => $status, 'post_id' => request('post_id')])->links() }}
+                    </div>
 
                 </div>
 
@@ -272,17 +275,17 @@
                                             {{-- Si un seul média, l'afficher au centre avec une largeur maximale --}}
                                             @php $media = $selectedPost->media->first(); @endphp
                                             <div class="rounded overflow-hidden mx-auto max-w-2xl w-full">
-                                                @if($media->type == 'image')
-                                                    <img src="{{ Storage::url($media->path) }}" alt="Post media" class="w-full h-auto max-h-96 object-contain mx-auto">
-                                                @elseif($media->type == 'video')
+                                                @if($media['type'] == 'image')
+                                                    <img src="{{ Storage::url($media['path']) }}" alt="Post media" class="w-full h-auto max-h-96 object-contain mx-auto">
+                                                @elseif($media['type'] == 'video')
                                                     <video controls class="w-full h-auto max-h-96 mx-auto">
-                                                        <source src="{{ Storage::url($media->path) }}" type="video/mp4">
+                                                        <source src="{{ Storage::url($media['path']) }}" type="video/mp4">
                                                         Your browser does not support the video tag.
                                                     </video>
                                                 @else
                                                     <div class="p-4 text-center text-gray-500">
                                                         <i class="fas fa-file text-2xl mb-2"></i>
-                                                        <p>{{ basename($media->path) }}</p>
+                                                        <p>{{ basename($media['path']) }}</p>
                                                     </div>
                                                 @endif
                                             </div>
@@ -291,17 +294,17 @@
                                             <div class="grid grid-cols-2 gap-4 w-full max-w-3xl">
                                                 @foreach($selectedPost->media as $media)
                                                     <div class="rounded overflow-hidden mx-auto">
-                                                        @if($media->type == 'image')
-                                                            <img src="{{ Storage::url($media->path) }}" alt="Post media" class="w-full h-auto max-h-64 object-cover">
-                                                        @elseif($media->type == 'video')
+                                                        @if($media['type'] == 'image')
+                                                            <img src="{{ Storage::url($media['path']) }}" alt="Post media" class="w-full h-auto max-h-64 object-cover">
+                                                        @elseif($media['type'] == 'video')
                                                             <video controls class="w-full h-auto max-h-64">
-                                                                <source src="{{ Storage::url($media->path) }}" type="video/mp4">
+                                                                <source src="{{ Storage::url($media['path']) }}" type="video/mp4">
                                                                 Your browser does not support the video tag.
                                                             </video>
                                                         @else
                                                             <div class="p-4 text-center text-gray-500">
                                                                 <i class="fas fa-file text-2xl mb-2"></i>
-                                                                <p>{{ basename($media->path) }}</p>
+                                                                <p>{{ basename($media['path']) }}</p>
                                                             </div>
                                                         @endif
                                                     </div>

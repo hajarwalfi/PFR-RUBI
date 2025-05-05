@@ -26,7 +26,6 @@ class UserController extends Controller
         $users = $this->userService->getAllUsers($filters);
         $statistics = $this->userService->getUsersStatistics();
 
-        // Chemin de vue avec majuscules
         return view('Admin.Users.index', [
             'users' => $users,
             'statistics' => $statistics,
@@ -44,24 +43,10 @@ class UserController extends Controller
                 ->with('error', 'User not found');
         }
 
-        // Chemin de vue avec majuscules
         return view('Admin.Users.show', [
             'user' => $user,
             'userService' => $this->userService
         ]);
-    }
-
-    public function destroy($id)
-    {
-        $result = $this->userService->deleteUser($id);
-
-        if ($result) {
-            return redirect()->route('admin.users.index')
-                ->with('success', 'User deleted successfully');
-        } else {
-            return redirect()->route('admin.users.index')
-                ->with('error', 'Error deleting user');
-        }
     }
 
     public function create()
@@ -71,7 +56,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // Validate form data
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -84,7 +68,6 @@ class UserController extends Controller
             'gender' => 'nullable|in:male,female',
         ]);
 
-        // Use the service to create the user
         $user = $this->userService->createUser($validated);
 
         return redirect()->route('admin.users.index')

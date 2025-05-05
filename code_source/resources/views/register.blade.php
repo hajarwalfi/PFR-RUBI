@@ -217,7 +217,7 @@
                 <!-- Login Link -->
                 <div class="text-gray-600 text-sm text-center mt-4">
                     Already have an account?
-                    <a href="" class="text-rose-600 font-medium hover:underline">
+                    <a href="{{route('login')}}" class="text-rose-600 font-medium hover:underline">
                         Sign in
                     </a>
                 </div>

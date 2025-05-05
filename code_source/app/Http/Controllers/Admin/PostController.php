@@ -48,6 +48,9 @@ class PostController extends Controller
     /**
      * Tableau de bord de modération
      */
+    /**
+     * Tableau de bord de modération
+     */
     public function moderationDashboard(Request $request)
     {
         $status = $request->query('status', 'pending');
@@ -91,42 +94,6 @@ class PostController extends Controller
             'archivedCount',
             'status'
         ));
-    }
-
-    /**
-     * Affiche les posts en attente
-     */
-    public function pendingPosts()
-    {
-        $posts = $this->postService->getPendingPosts();
-        return view('Admin.Posts.pending', compact('posts'));
-    }
-
-    /**
-     * Affiche les posts approuvés
-     */
-    public function approvedPosts()
-    {
-        $posts = $this->postService->getApprovedPosts();
-        return view('Admin.Posts.approved', compact('posts'));
-    }
-
-    /**
-     * Affiche les posts rejetés
-     */
-    public function rejectedPosts()
-    {
-        $posts = $this->postService->getRejectedPosts();
-        return view('Admin.Posts.rejected', compact('posts'));
-    }
-
-    /**
-     * Affiche les posts archivés
-     */
-    public function archivedPosts()
-    {
-        $posts = $this->postService->getArchivedPosts();
-        return view('Admin.Posts.archived', compact('posts'));
     }
 
     /**
