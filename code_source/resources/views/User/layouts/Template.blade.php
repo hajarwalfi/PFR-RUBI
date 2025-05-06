@@ -182,7 +182,7 @@
                     <ul class="space-y-3">
                         <li class="flex items-start">
                             <i class="ri-map-pin-line text-gray-400 mr-3 mt-0.5"></i>
-                            <span class="text-sm text-gray-600">123 Blood Donation Street<br>75000 Paris, France</span>
+                            <span class="text-sm text-gray-600">123 Blood Donation Street<br>75000 SAFI, MAROC</span>
                         </li>
                         <li class="flex items-start">
                             <i class="ri-mail-line text-gray-400 mr-3 mt-0.5"></i>
@@ -190,7 +190,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="ri-phone-line text-gray-400 mr-3 mt-0.5"></i>
-                            <span class="text-sm text-gray-600">+33 (0)1 23 45 67 89</span>
+                            <span class="text-sm text-gray-600">05 21 45 78 14 </span>
                         </li>
                     </ul>
                 </div>
