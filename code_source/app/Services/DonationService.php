@@ -48,12 +48,30 @@ class DonationService
     public function createDonation(array $data): Donation
     {
         if (!isset($data['identifier'])) {
-            $year = date('Y');
-            $count = Donation::whereYear('created_at', $year)->count() + 1;
-            $data['identifier'] = 'DON-' . $year . '-' . str_pad($count, 3, '0', STR_PAD_LEFT);
+
+            try {
+                $year = date('Y');
+                $nextVal = \DB::selectOne("SELECT nextval('donation_identifier_seq') as next_val")->next_val;
+                $data['identifier'] = 'DON-' . $year . '-' . str_pad($nextVal, 3, '0', STR_PAD_LEFT);
+            } catch (\Exception $e) {
+                \DB::statement("CREATE SEQUENCE IF NOT EXISTS donation_identifier_seq");
+                $nextVal = \DB::selectOne("SELECT nextval('donation_identifier_seq') as next_val")->next_val;
+                $data['identifier'] = 'DON-' . $year . '-' . str_pad($nextVal, 3, '0', STR_PAD_LEFT);
+            }
         }
 
-        $donation = $this->donationRepository->createDonation($data);
+        try {
+            $donation = $this->donationRepository->createDonation($data);
+        } catch (\Illuminate\Database\QueryException $e) {
+            if (strpos($e->getMessage(), 'donations_identifier_unique') !== false) {
+                $year = date('Y');
+                $nextVal = \DB::selectOne("SELECT nextval('donation_identifier_seq') as next_val")->next_val;
+                $data['identifier'] = 'DON-' . $year . '-' . str_pad($nextVal, 3, '0', STR_PAD_LEFT);
+                $donation = $this->donationRepository->createDonation($data);
+            } else {
+                throw $e;
+            }
+        }
 
         if (isset($data['serology'])) {
             $serologyData = $data['serology'];

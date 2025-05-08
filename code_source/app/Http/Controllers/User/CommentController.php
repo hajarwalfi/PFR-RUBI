@@ -52,8 +52,9 @@ class CommentController extends Controller
             return redirect()->back()
                 ->with('success', 'Your comment has been posted successfully.');
         } catch (\Exception $e) {
+            \Log::error('Comment creation error: ' . $e->getMessage());
             return redirect()->back()
-                ->with('error', 'An error occurred while posting your comment. Please try again.')
+                ->with('error', 'An error occurred while posting your comment. Please try again: ' . $e->getMessage())
                 ->withInput();
         }
     }
